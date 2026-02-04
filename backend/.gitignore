@@ -51,3 +51,5 @@ Thumbs.db
 *.psql
 *.pgdata
 *.pgpass
+
+/generated/prisma
