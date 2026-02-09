@@ -24,7 +24,6 @@ pnpm-debug.log*
 # =========================
 # Prisma
 # =========================
-prisma/migrations/
 prisma/dev.db        
 *.prisma-client/
 
