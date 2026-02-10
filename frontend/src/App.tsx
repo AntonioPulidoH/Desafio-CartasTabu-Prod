@@ -2,7 +2,7 @@ import { Footer } from './components/footer'
 import { BarraNavegacion } from './components/barra-navegacion'
 import { BannerPrincipal } from './components/banner-principal'
 import { CarruselCaracteristicas } from './components/carousel-caracteristicas'
-import { SeccionCta } from './components/seccion-cta'
+import { SeccionEmpezar } from './components/seccion-Empezar'
 
 function App() {
 
@@ -12,7 +12,7 @@ function App() {
       <BarraNavegacion/>
       <BannerPrincipal/>
       <CarruselCaracteristicas />
-      <SeccionCta/>
+      <SeccionEmpezar/>
       <Footer />
     </>
   )

@@ -394,11 +394,11 @@ a:hover {
 
 
 
-.seccion-cta {
+.seccion-empezar {
   padding: 6rem 0;
 }
 
-.cta-contenedor {
+.empezar-contenedor {
   position: relative;
   bottom:70px;
   overflow: hidden;
@@ -408,7 +408,7 @@ a:hover {
   backdrop-filter: blur(8px);
 }
 
-.cta-glow-1 {
+.empezar-glow-1 {
   position: absolute;
   top: -80px;
   right: -80px;
@@ -420,7 +420,7 @@ a:hover {
   pointer-events: none;
 }
 
-.cta-glow-2 {
+.empezar-glow-2 {
   position: absolute;
   bottom: -80px;
   left: -80px;
@@ -432,7 +432,7 @@ a:hover {
   pointer-events: none;
 }
 
-.cta-interior {
+.empezar-interior {
   position: relative;
   z-index: 2;
   display: flex;
@@ -444,24 +444,24 @@ a:hover {
 }
 
 @media (min-width: 768px) {
-  .cta-interior {
+  .empezar-interior {
     padding: 5rem 2rem;
   }
 }
 
-.cta-titulo {
+.empezar-titulo {
   font-size: 2rem;
   font-weight: 700;
   text-wrap: balance;
 }
 
 @media (min-width: 768px) {
-  .cta-titulo {
+  .empezar-titulo {
     font-size: 3rem;
   }
 }
 
-.cta-descripcion {
+.empezar-descripcion {
   color: var(--color-texto-suave);
   max-width: 480px;
 }
@@ -476,7 +476,7 @@ a:hover {
   gap: 12px;
 }
 
-.cta-nota {
+.empezar-nota {
   font-size: 0.75rem;
   color: var(--color-texto-suave);
 }
