@@ -2757,7 +2757,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ansis@npm:4.2.0":
+"ansis@npm:4.2.0, ansis@npm:^4.2.0":
   version: 4.2.0
   resolution: "ansis@npm:4.2.0"
   checksum: 10c0/cd6a7a681ecd36e72e0d79c1e34f1f3bcb1b15bcbb6f0f8969b4228062d3bfebbef468e09771b00d93b2294370b34f707599d4a113542a876de26823b795b5d2
@@ -2942,6 +2942,7 @@ __metadata:
     "@types/node": "npm:^22.10.7"
     "@types/pg": "npm:^8.16.0"
     "@types/supertest": "npm:^6.0.2"
+    ansis: "npm:^4.2.0"
     dotenv: "npm:^17.2.4"
     eslint: "npm:^9.18.0"
     globals: "npm:^16.0.0"
