@@ -44,6 +44,7 @@ services:
       sh -c "yarn install &&
          yarn exec prisma generate &&
          yarn exec prisma migrate deploy &&
+         node prisma/seeds/seed.cjs && 
          yarn start:dev"
 
   ### FRONTEND

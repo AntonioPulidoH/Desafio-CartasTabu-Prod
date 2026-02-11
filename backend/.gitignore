@@ -20,6 +20,7 @@ pnpm-debug.log*
 .yarn/plugins/
 .pnp.*
 .yarnrc.yml
+.yarn/install-state.gz
 
 # =========================
 # Prisma
@@ -51,3 +52,5 @@ Thumbs.db
 *.pgpass
 
 /generated/prisma
+
+install-state.gz
