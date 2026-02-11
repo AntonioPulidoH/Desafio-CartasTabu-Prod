@@ -35,16 +35,16 @@ services:
       CHOKIDAR_USEPOLLING: "true"
     volumes:
       - ./backend:/app
-      - backend_node_modules:/app/node_modules
     depends_on:
       db:
         condition: service_healthy
       redis:
         condition: service_started
     command: >
-      sh -c "yarn exec prisma generate &&
-             yarn exec prisma migrate deploy &&
-             yarn start:dev"
+      sh -c "yarn install &&
+         yarn exec prisma generate &&
+         yarn exec prisma migrate deploy &&
+         yarn start:dev"
 
   ### FRONTEND
   frontend:
