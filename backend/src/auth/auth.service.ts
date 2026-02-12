@@ -14,12 +14,19 @@ export class AuthService {
         throw new UnauthorizedException('Invalid credentials');
     }
 
-    if (pass === user.password) {
-        const { password, ...result } = user;
-        return result;
-    }
+    const isHashedPassword = user.password.startsWith('$2a$') ||
+      user.password.startsWith('$2b$') ||
+      user.password.startsWith('$2y$');
 
-    throw new UnauthorizedException('Invalid credentials');
+    const isValidPassword = 
+      pass === user.password || (isHashedPassword && await compare(pass, user.password))
+
+    if(!isValidPassword) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+    
+    const { password, ...safeUser} = user
+    return safeUser
   }
 
   async login(user: any) {
