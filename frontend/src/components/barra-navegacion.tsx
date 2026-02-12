@@ -1,10 +1,12 @@
+import { GraduationCap } from 'lucide-react';
 export function BarraNavegacion() {
   return (
-    <nav className="navbar navbar-expand-lg barra-nav fixed-top border-bottom" style={{borderColor: 'var(--color-borde)'}}>
+    <nav className="navbar navbar-expand-lg navbar-dark barra-nav fixed-top border-bottom" style={{borderColor: 'var(--color-borde)'}}>
       <div className="container">
         <a className="navbar-brand d-flex align-items-center gap-2 fs-5 fw-bold text-light" href="#inicio">
           <span className="icono-logo d-flex align-items-center justify-content-center">
             {/*Aquí tenemos que poner el logo*/}
+            <GraduationCap size={20} />
           </span >
           Tabu-Studio
         </a>

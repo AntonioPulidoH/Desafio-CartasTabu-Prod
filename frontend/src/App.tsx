@@ -1,8 +1,8 @@
 import { Footer } from './components/footer'
 import { BarraNavegacion } from './components/barra-navegacion'
-import { BannerPrincipal } from './components/banner-principal'
-import { CarruselCaracteristicas } from './components/carousel-caracteristicas'
-import { SeccionEmpezar } from './components/seccion-Empezar'
+import { BannerPrincipal } from './inicio/banner-principal'
+import { CarruselCaracteristicas } from './inicio/carousel-caracteristicas'
+import { SeccionEmpezar } from './inicio/seccion-Empezar'
 
 function App() {
 
