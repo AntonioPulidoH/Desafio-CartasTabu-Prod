@@ -5,10 +5,109 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
+  
+  moduleFormat = "cjs"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+// ROL
+model Role {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+
+  users User[]
+
+  @@map("roles")
+}
+
+// FAMILIA PROFESIONAL
+model VocationalFamily {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+
+
+  users  User[] 
+  themes Theme[] 
+
+  @@map("vocational_families")
+}
+
+// USUARIO
+model User {
+  id                Int     @id @default(autoincrement())
+  name              String  
+  lastName          String  
+  email             String  @unique
+  password          String
+  educationalCenter String? 
+  
+  roleId Int
+  role   Role @relation(fields: [roleId], references: [id])
+
+  vocationalFamilyId Int? 
+  vocationalFamily   VocationalFamily? @relation(fields: [vocationalFamilyId], references: [id])
+
+  createdThemes Theme[]
+  createdCards  Card[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+// TEMÁTICA
+model Theme {
+  id          Int     @id @default(autoincrement())
+  name        String  
+  description String? 
+
+  vocationalFamilyId Int
+  vocationalFamily   VocationalFamily @relation(fields: [vocationalFamilyId], references: [id])
+
+  creatorId Int
+  creator   User @relation(fields: [creatorId], references: [id])
+
+  cards Card[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("themes")
+}
+
+// TARJETA/CARTA
+model Card {
+  id      Int    @id @default(autoincrement())
+  keyword String 
+
+  themeId Int
+  theme   Theme @relation(fields: [themeId], references: [id], onDelete: Cascade)
+  // onDelete: Cascade. Si se borra la temática, se borran sus tarjetas.
+
+  creatorId Int
+  creator   User @relation(fields: [creatorId], references: [id])
+
+  forbiddenWords ForbiddenWord[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("cards")
+}
+
+// PALABRAS PROHIBIDAS
+model ForbiddenWord {
+  id   Int    @id @default(autoincrement())
+  word String 
+
+  cardId Int
+  card   Card @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  // Si se borra la tarjeta, se borran sus palabras prohibidas.
+
+  @@map("forbidden_words")
 }
