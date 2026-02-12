@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Varela+Round&display=swap');
+
 :root {
   --color-primario: #281952;
   --color-secundario: #746baa;
@@ -8,6 +10,8 @@
   --color-borde: rgba(116, 107, 170, 0.35);
   --color-texto-suave: rgba(253, 251, 247, 0.6);
   --radio-borde: 12px;
+  --font-open-sans: 'Open Sans';
+  --font-varela-round: 'Varela Round';
 }
 
 body {
