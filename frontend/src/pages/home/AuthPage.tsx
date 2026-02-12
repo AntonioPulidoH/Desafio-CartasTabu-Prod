@@ -12,7 +12,7 @@ export default function Login() {
         const token = localStorage.getItem('access_token')
 
         if(token) {
-            navigate('/principal', {replace: true}) //redireccion temporal
+            navigate('/', {replace: true}) //redireccion temporal
         }
     }, [navigate])
 
@@ -22,7 +22,7 @@ export default function Login() {
 
             <main>
                 <h1>Iniciar Sesión</h1>
-                <LoginForm onSuccess={() => navigate('/principal', {replace: true})}></LoginForm>
+                <LoginForm onSuccess={() => navigate('/', {replace: true})}></LoginForm>
             </main>
 
             <Footer></Footer>
