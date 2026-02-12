@@ -61,14 +61,14 @@ export function CarruselCaracteristicas() {
   const slides = agruparEnSlides(caracteristicas, 3)
 
   return (
-    <section id="caracteristicas" className="seccion-caracteristicas">
+    <section id="caracteristicas" className="py-5 py-lg-6">
       <div className="container">
         <div className="text-center mb-5">
-          <p className="seccion-titulo-superior">Caracteristicas</p>
-          <h2 className="seccion-titulo">
+          <p className="seccion-titulo-superior small fw-semibold mb-2">Características</p>
+          <h2 className="seccion-titulo display-5 fw-bold">
             {"Todo lo que necesitas para tus tarjetas"}
           </h2>
-          <p className="seccion-subtitulo">
+          <p className="seccion-subtitulo mt-3 mx-auto" style={{maxWidth: '560px', color: 'var(--color-texto-suave)'}}>
             Una plataforma completa para crear, gestionar y compartir mazos de
             Tabú adaptados a cualquier situación.
           </p>
@@ -76,11 +76,12 @@ export function CarruselCaracteristicas() {
 
         <div
           id="carruselCaracteristicas"
-          className="carousel slide"
+          className="carousel slide position-relative pb-5"
           data-bs-ride="carousel"
         >
-
+          
           <div className="carousel-indicators indicadores-carrusel">
+            {/*Esta función es para dividir las tarjetas con */}
             {slides.map((_, indice) => (
               <button
                 key={indice}
@@ -98,18 +99,18 @@ export function CarruselCaracteristicas() {
             {slides.map((grupo, indiceSlide) => (
               <div
                 key={indiceSlide}
-                className={`carousel-item  ${indiceSlide === 0 ? "active" : ""}`
-              }data-bs-interval="3000"
+                className={`carousel-item ${indiceSlide === 0 ? "active" : ""}`}
+                data-bs-interval="2500"
               >
                 <div className="row justify-content-center g-4 px-2">
                   {grupo.map((item) => (
                     <div key={item.titulo} className="col-12 col-md-6 col-lg-4">
-                      <div className="tarjeta-caracteristica h-100">
-                        <div className="tarjeta-icono">
+                      <div className="tarjeta-caracteristica h-100 p-4">
+                        <div className="tarjeta-icono d-flex align-items-center justify-content-center mb-3">
                           <item.icono />
                         </div>
-                        <h3 className="tarjeta-titulo">{item.titulo}</h3>
-                        <p className="tarjeta-descripcion">
+                        <h3 className="tarjeta-titulo fs-5 fw-bold mb-2">{item.titulo}</h3>
+                        <p className="tarjeta-descripcion small mb-0" style={{lineHeight: 1.6, color: 'var(--color-texto-suave)'}}>
                           {item.descripcion}
                         </p>
                       </div>
@@ -120,9 +121,8 @@ export function CarruselCaracteristicas() {
             ))}
           </div>
 
-
           <button
-            className="carousel-control-prev control-carrusel"
+            className="carousel-control-prev control-carrusel position-absolute top-50 translate-middle-y"
             type="button"
             data-bs-target="#carruselCaracteristicas"
             data-bs-slide="prev"
@@ -131,7 +131,7 @@ export function CarruselCaracteristicas() {
             <span className="visually-hidden">Anterior</span>
           </button>
           <button
-            className="carousel-control-next control-carrusel"
+            className="carousel-control-next control-carrusel position-absolute top-50 translate-middle-y"
             type="button"
             data-bs-target="#carruselCaracteristicas"
             data-bs-slide="next"
