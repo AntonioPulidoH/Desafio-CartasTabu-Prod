@@ -24,7 +24,7 @@ export class UsersService {
       email: data.email,
       password: hashedPassword,
       educationalCenter: data.educationalCenter,
-      roleId: data.roleId,
+      roleId: 1,
       vocationalFamilyId: data.vocationalFamilyId ?? null,
     },
   });
