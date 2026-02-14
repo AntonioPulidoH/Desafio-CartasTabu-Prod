@@ -19,7 +19,7 @@ export default function LoginForm({onSuccess}: LoginFormProps) {
         try {
             const data = await login({email, password})
 
-            localStorage.setItem('access_token', data.access_token)
+            sessionStorage.setItem('access_token', data.access_token)
             if(onSuccess) onSuccess()
         } catch (error) {
             setError('Email o contraseña incorrectos.')
@@ -33,7 +33,7 @@ export default function LoginForm({onSuccess}: LoginFormProps) {
             <div className='container py-5'>
                 <div className='row justify-content-center'>
                     <div className='col-md-6 col-lg-5'>
-                        <div className='card auth-card border-0 shadow-sm'>
+                        <div className='card auth-card border-0 shadow-sm '>
                             <div className='card-body p-5'>
                                 <h2 className='card-title mb-4 text-center fw-bold'>Iniciar Sesión</h2>
                                 <form className='auth-form' onSubmit={handleSubmit}>
@@ -66,7 +66,7 @@ export default function LoginForm({onSuccess}: LoginFormProps) {
                                     <button className='btn btn-auth-submit w-100 py-2' type='submit' disabled={loading}>
                                         {loading ? 'Entrando...' : 'Entrar'}
                                     </button>
-                                    <p className='text-center mt-3 mb-0 text-dark'>
+                                    <p className='text-center mt-3 mb-0 '>
                                         ¿Aún no tienes cuenta?{' '}
                                         <a href='/register'>Regístrate</a>
                                     </p>

@@ -9,7 +9,7 @@ export default function Register() {
     const navigate = useNavigate()
 
     useEffect(() => {
-        const token = localStorage.getItem('access_token')
+        const token = sessionStorage.getItem('access_token')
 
         if(token) {
             navigate('/', {replace: true}) //redireccion temporal
