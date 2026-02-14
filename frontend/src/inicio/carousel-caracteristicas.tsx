@@ -99,7 +99,7 @@ export function CarruselCaracteristicas() {
             {slides.map((grupo, indiceSlide) => (
               <div
                 key={indiceSlide}
-                className={`carousel-item ${indiceSlide === 0 ? "active" : ""}`}
+                className={`carousel-item ${indiceSlide === 0 ? "active" : ""} data-bs-interval="3000"` }
                 data-bs-interval="2500"
               >
                 <div className="row justify-content-center g-4 px-2">

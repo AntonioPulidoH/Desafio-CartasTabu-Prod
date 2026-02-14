@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import LoginForm from "../../components/LoginForm";
 import { BarraNavegacion } from "../../components/barra-navegacion";
 import { Footer } from "../../components/footer";
 import '../../styles/auth.css'
+import RegisterForm from "../../components/RegisterForm";
 
-export default function Login() {
+export default function Register() {
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -22,7 +22,7 @@ export default function Login() {
 
             <main>
                 <h1>Iniciar Sesión</h1>
-                <LoginForm onSuccess={() => navigate('/', {replace: true})}></LoginForm>
+                <RegisterForm onSuccess={() => navigate('/', {replace: true})}></RegisterForm>
             </main>
 
             <Footer></Footer>

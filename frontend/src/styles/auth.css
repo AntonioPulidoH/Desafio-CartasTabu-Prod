@@ -1,5 +1,5 @@
 .auth-container {
-  background: linear-gradient(135deg, var(--color-primario) 0%, var(--color-secundario) 100%);
+  background: linear-gradient(135deg, var(--color-fondo) 15%, var(--color-secundario) 100%);
   min-height: calc(100vh - 200px);
   display: flex;
   align-items: center;
@@ -7,9 +7,9 @@
 }
 
 .auth-card {
-  background-color: var(--color-fondo);
+  background-color: var(--color-fondo) !important;
   border: 1px solid var(--color-borde);
-  border-radius: 12px;
+  border-radius: 20px !important;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
@@ -21,7 +21,7 @@
 
 .auth-card .auth-form .form-control {
   background-color: rgba(116, 107, 170, 0.2);
-  color: var(--color-primario);
+  color: var(--color-claro);
   border: 2px solid var(--color-borde);
   border-radius: 8px;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
@@ -29,7 +29,7 @@
 
 .auth-card .auth-form .form-control:focus {
   background-color: rgba(116, 107, 170, 0.28);
-  color: var(--color-primario);
+  color: var(--color-claro);
   border-color: var(--color-acento);
   box-shadow: 0 0 0 0.2rem rgba(255, 89, 77, 0.25);
 }
@@ -65,4 +65,21 @@
 
 .auth-card .text-danger {
   margin-bottom: 0.75rem;
+}
+
+.auth-card .card-title,
+.auth-card .card-body {
+  color: var(--color-claro);
+}
+
+
+.auth-card p {
+  color: var(--color-claro);
+}
+
+.auth-card a{
+  color:var(--color-acento)
+}
+.auth-card a:hover{
+  color:var(--color-claro)
 }
