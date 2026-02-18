@@ -16,12 +16,6 @@ services:
       timeout: 3s
       retries: 20
 
-  ### REDIS
-  redis:
-    image: redis:7
-    ports:
-      - "6379:6379"
-
   ###BACKEND
   backend:
     build:
@@ -38,8 +32,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      redis:
-        condition: service_started
     command: >
       sh -c "yarn install &&
          yarn exec prisma generate &&
@@ -64,6 +56,9 @@ services:
       WATCHPACK_POLLING: "true"
     depends_on:
       - backend
+    command: >
+      sh -c "yarn install && 
+             yarn dev --host 0.0.0.0 --port 5173"
 
   ### NGINX
   nginx:
