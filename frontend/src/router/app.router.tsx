@@ -3,6 +3,8 @@ import { createBrowserRouter } from 'react-router-dom'
 import HomePage from '../pages/home/HomePage'
 import Register from '../pages/home/RegisterPage'
 import Rules from '../pages/home/RulesPage'
+import ProfilePage from '../pages/profile/ProfilePage'
+import PrivateRoute from './PrivateRoute'
 
 export const appRouter = createBrowserRouter([
     {
@@ -20,5 +22,12 @@ export const appRouter = createBrowserRouter([
     {
         path: 'rules',
         element: <Rules></Rules>
+    },
+    {
+        path:'/profile',
+        element: 
+        <PrivateRoute>
+            <ProfilePage></ProfilePage>
+        </PrivateRoute>
     }
 ])
