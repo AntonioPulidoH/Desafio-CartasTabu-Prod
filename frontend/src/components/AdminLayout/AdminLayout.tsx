@@ -1,6 +1,7 @@
 import { AdminSidebar } from "../AdminSidebar/AdminSidebar";
 import { StatCard } from "../StatCard/StatCard";
-import { UserTable } from "../UserTable/UserTable";
+import { ThemeTable } from "../ThemeTable/ThemeTable";
+// import { UserTable } from "../UserTable/UserTable";
 
 export const AdminLayout = () => {
   return (
@@ -27,8 +28,12 @@ export const AdminLayout = () => {
           </div>
 
           {/* Tabla Usuarios */}
+          <div id="table-placeholder">{/* <UserTable /> */}</div>
+
+          {/* Tabla Temáticas */}
           <div id="table-placeholder">
-            <UserTable />
+            {/* <UserTable /> */}
+            <ThemeTable />
           </div>
         </div>
       </main>
