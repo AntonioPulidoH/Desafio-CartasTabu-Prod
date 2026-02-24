@@ -1,4 +1,4 @@
-import { Home, Users, Globe, Settings } from 'lucide-react';
+import { Users, Globe, Settings } from 'lucide-react';
 import './AdminSidebar.css';
 
 export const AdminSidebar = () => {
@@ -9,14 +9,14 @@ export const AdminSidebar = () => {
       </div>
 
       <ul className="nav flex-column mb-auto gap-2">
-        <li className="nav-item">
+        {/* <li className="nav-item">
           <button className="tabu-menu-item is-active d-flex align-items-center w-100 text-start">
             <Home className="me-3" size={20} />
             Dashboard
           </button>
-        </li>
+        </li> */}
         <li className="nav-item">
-          <button className="tabu-menu-item d-flex align-items-center w-100 text-start">
+          <button className="tabu-menu-item is-active d-flex align-items-center w-100 text-start">
             <Users className="me-3" size={20} />
             Gestión de Usuarios
           </button>
@@ -24,7 +24,7 @@ export const AdminSidebar = () => {
         <li className="nav-item">
           <button className="tabu-menu-item d-flex align-items-center w-100 text-start">
             <Globe className="me-3" size={20} />
-            Temas Globales
+            Gestión de Temáticas
           </button>
         </li>
         <li className="nav-item">
