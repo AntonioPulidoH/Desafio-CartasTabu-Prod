@@ -3,15 +3,22 @@ import { StatCard } from "../StatCard/StatCard";
 import { Outlet } from "react-router-dom";
 
 export const AdminLayout = () => {
+
   return (
-    <div className="d-flex" style={{ minHeight: "100vh", width: "100vw" }}>
+    <div
+      className="d-flex flex-column flex-md-row"
+      style={{ minHeight: "100vh", width: "100vw" }}
+    >
       {/* Columna izquierda*/}
       <AdminSidebar />
 
       {/* Columna derecha */}
-      <main className="flex-grow-1 p-4">
-        <div className="container-fluid max-w-7xl mx-auto">
-          <h2 className="mb-4">Dashboard General</h2>
+      <main
+        className="flex-grow-1 p-3 p-md-4 w-100"
+        style={{ overflowX: "hidden" }}
+      >
+        <div className="container-fluid max-w-7xl mx-auto px-0">
+          <h2 className="mb-4 fw-bold">Dashboard General</h2>
 
           {/* StatCards */}
           <div className="row g-4 mb-5">
@@ -27,7 +34,7 @@ export const AdminLayout = () => {
           </div>
 
           {/* Tablas Dinámicas */}
-          <div id="dynamic-content">
+          <div>
             <Outlet />
           </div>
         </div>

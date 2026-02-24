@@ -7,10 +7,10 @@
   --tabu-gray-hover: #d1d5db;  
   --tabu-gray-border: #e5e7eb;
 
-  width: 260px;
-  min-height: 100vh;
+  width: 100%;
   background-color: var(--tabu-primary);
-  border-right: 1px solid var(--tabu-gray-border); 
+  border-right: none;
+  border-bottom: 1px solid var(--tabu-gray-border);
 }
 
 .tabu-menu-item {
@@ -35,4 +35,11 @@
   background-color: var(--tabu-accent);
   color: var(--tabu-light);
   font-weight: 600;
+}
+
+@media (min-width: 768px) {
+  .admin-sidebar {
+    min-height: 100vh;
+    width: 260px;
+  }
 }
