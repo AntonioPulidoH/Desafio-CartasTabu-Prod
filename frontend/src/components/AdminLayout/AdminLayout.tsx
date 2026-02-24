@@ -1,7 +1,6 @@
 import { AdminSidebar } from "../AdminSidebar/AdminSidebar";
 import { StatCard } from "../StatCard/StatCard";
-import { ThemeTable } from "../ThemeTable/ThemeTable";
-// import { UserTable } from "../UserTable/UserTable";
+import { Outlet } from "react-router-dom";
 
 export const AdminLayout = () => {
   return (
@@ -27,13 +26,9 @@ export const AdminLayout = () => {
             </div>
           </div>
 
-          {/* Tabla Usuarios */}
-          <div id="table-placeholder">{/* <UserTable /> */}</div>
-
-          {/* Tabla Temáticas */}
-          <div id="table-placeholder">
-            {/* <UserTable /> */}
-            <ThemeTable />
+          {/* Tablas Dinámicas */}
+          <div id="dynamic-content">
+            <Outlet />
           </div>
         </div>
       </main>
