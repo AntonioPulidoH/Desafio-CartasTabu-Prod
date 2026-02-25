@@ -2,8 +2,11 @@ import { AdminSidebar } from "../AdminSidebar/AdminSidebar";
 import { StatCard } from "../StatCard/StatCard";
 import { Toaster } from "react-hot-toast";
 import { Outlet } from "react-router-dom";
+import { useUsers } from "../UserTable/hooks/useUsers";
 
 export const AdminLayout = () => {
+  const { users, loading } = useUsers();
+
   return (
     <div
       className="d-flex flex-column flex-md-row"
@@ -26,7 +29,10 @@ export const AdminLayout = () => {
           {/* StatCards (meter componente Grid)*/}
           <div className="row g-4 mb-5">
             <div className="col-12 col-md-4">
-              <StatCard title="Usuarios Totales:" value="150" />
+              <StatCard
+                title="Usuarios Totales:"
+                value={loading ? "..." : users.length}
+              />
             </div>
             <div className="col-12 col-md-4">
               <StatCard title="Tarjetas Generadas:" value="1,200" />
