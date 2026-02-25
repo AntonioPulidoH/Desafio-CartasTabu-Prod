@@ -307,7 +307,7 @@ export const UserTable = () => {
               name="educationalCenter"
               value={formData.educationalCenter}
               onChange={handleInputChange}
-              placeholder="Ej. IES Francisco"
+              placeholder="Ej. IES Gregorio Prieto"
             />
           </div>
         </div>

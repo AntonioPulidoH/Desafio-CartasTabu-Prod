@@ -1,14 +1,17 @@
 import { AdminSidebar } from "../AdminSidebar/AdminSidebar";
 import { StatCard } from "../StatCard/StatCard";
+import { Toaster } from "react-hot-toast";
 import { Outlet } from "react-router-dom";
 
 export const AdminLayout = () => {
-
   return (
     <div
       className="d-flex flex-column flex-md-row"
       style={{ minHeight: "100vh", width: "100vw" }}
     >
+      {/* Toaster */}
+      <Toaster position="top-right" reverseOrder={false} />
+
       {/* Columna izquierda*/}
       <AdminSidebar />
 

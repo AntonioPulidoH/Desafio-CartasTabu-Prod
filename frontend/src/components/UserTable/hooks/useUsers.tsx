@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from "react";
 import { userService, type User } from "../services/user-service";
+import toast from "react-hot-toast";
 
 export const useUsers = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -17,6 +18,7 @@ export const useUsers = () => {
     } catch (err) {
       console.error("Error al cargar los usuarios:", err);
       setError("No se pudieron cargar los usuarios.");
+      toast.error("Error al conectar con el servidor.");
     } finally {
       setLoading(false);
     }
@@ -33,13 +35,16 @@ export const useUsers = () => {
       await userService.createUser(userData);
       await fetchUsers();
 
+      toast.success("Usuario creado correctamente.");
+
       return true;
     } catch (err: any) {
       console.error("Error al crear el usuario", err);
       const backendError =
         err.response?.data?.message || "Error al crear el usuario";
 
-      alert(`No se pudo crear: ${backendError}`);
+      toast.error(`No se pudo crear: ${backendError}`);
+
       return false;
     }
   };
@@ -49,10 +54,12 @@ export const useUsers = () => {
     try {
       await userService.deleteUser(id);
       await fetchUsers();
+
+      toast.success("Usuario eliminado correctamente.");
       return true;
     } catch (err) {
       console.error("Error al eliminar el usuario", err);
-      alert("Error al eliminar el usuario");
+      toast.error("Error al eliminar al usuario.");
       return false;
     }
   };
@@ -62,10 +69,12 @@ export const useUsers = () => {
     try {
       await userService.updateUserRole(id, roleId);
       await fetchUsers();
+
+      toast.success("Rol actualizado correctamente.")
       return true;
     } catch (err) {
       console.error("Error al actualizar el rol", err);
-      alert("Error al actualizar el rol");
+      toast.error("Error al actualizar el rol");
       return false;
     }
   };
