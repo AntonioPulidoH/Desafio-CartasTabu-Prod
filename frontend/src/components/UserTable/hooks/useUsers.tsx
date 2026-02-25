@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from "react";
 import { userService, type User } from "../services/user-service";
 
@@ -25,6 +26,23 @@ export const useUsers = () => {
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  // Crear Usuario
+  const addUser = async (userData: any) => {
+    try {
+      await userService.createUser(userData);
+      await fetchUsers();
+
+      return true;
+    } catch (err: any) {
+      console.error("Error al crear el usuario", err);
+      const backendError =
+        err.response?.data?.message || "Error al crear el usuario";
+
+      alert(`No se pudo crear: ${backendError}`);
+      return false;
+    }
+  };
 
   // Eliminar usuario
   const deleteUserById = async (id: number) => {
@@ -58,6 +76,7 @@ export const useUsers = () => {
     error,
     deleteUserById,
     updateRole,
+    addUser,
     fetchUsers,
   };
 };

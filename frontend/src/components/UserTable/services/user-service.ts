@@ -47,4 +47,10 @@ export const userService = {
     );
     return response.data;
   },
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  createUser: async (userData: any): Promise<User> => {
+    const response = await axios.post<User>(`${API_URL}/register`, userData);
+    return response.data;
+  },
 };
