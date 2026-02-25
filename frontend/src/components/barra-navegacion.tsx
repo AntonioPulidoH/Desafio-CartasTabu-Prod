@@ -33,7 +33,7 @@ export function BarraNavegacion() {
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link small px-3 py-2" href="#empezar">
+              <a className="nav-link small px-3 py-2" href="/dashboard">
                 Crear
               </a>
             </li>

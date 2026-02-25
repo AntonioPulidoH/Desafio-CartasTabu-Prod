@@ -2,6 +2,7 @@ import AuthPage from '../pages/home/AuthPage'
 import { createBrowserRouter } from 'react-router-dom'
 import HomePage from '../pages/home/HomePage'
 import Register from '../pages/home/RegisterPage'
+import DashboardPage from '../pages/Dashboard'
 
 export const appRouter = createBrowserRouter([
     {
@@ -15,5 +16,9 @@ export const appRouter = createBrowserRouter([
     {
         path:'register',
         element: <Register></Register>
+    },
+    {
+        path:"/dashboard",
+        element: <DashboardPage/>
     }
 ])
