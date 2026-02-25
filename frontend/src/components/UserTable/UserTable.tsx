@@ -1,41 +1,14 @@
 import { Edit, Trash2, UserPlus } from "lucide-react";
+import { useUsers } from "./hooks/useUsers";
 import "./UserTable.css";
 
-// Mock para probar
-const mockUsers = [
-  {
-    id: 1,
-    name: "Anna Pamez",
-    email: "nomrs21@gmail.com",
-    role: "Admin",
-  },
-  {
-    id: 2,
-    name: "John Mimca",
-    email: "marwhca@gmail.com",
-    role: "Usuario Creador",
-  },
-  {
-    id: 3,
-    name: "Bedez Ahrkam",
-    email: "borfererr@gmail.com",
-    role: "Usuario",
-  },
-  {
-    id: 4,
-    name: "Martín Broránez",
-    email: "noow11@gmail.com",
-    role: "Usuario",
-  },
-  {
-    id: 5,
-    name: "Josse Melle",
-    email: "janaMaa@gmail.com",
-    role: "Usuario creador",
-  },
-];
-
 export const UserTable = () => {
+  const { users, loading, error, handleDelete, handleEditRole } = useUsers();
+
+  if (loading)
+    return <div className="p-4 text-center">Cargando usuarios...</div>;
+  if (error) return <div className="p-4 text-center text-danger">{error}</div>;
+
   return (
     <div className="tabu-table-container bg-white p-4 shadow-sm mt-4">
       {/* Cabecera Tabla */}
@@ -52,29 +25,31 @@ export const UserTable = () => {
         <table className="table tabu-table align-middle mb-0">
           <thead>
             <tr>
-              <th>Nombre</th>
+              <th>Nombre Completo</th>
               <th>Email</th>
               <th>Rol</th>
               <th className="text-center">Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {mockUsers.map((user) => (
+            {users.map((user) => (
               <tr key={user.id}>
-                <td className="fw-medium">{user.name}</td>
+                <td className="fw-medium">{`${user.name} ${user.lastName}`}</td>
                 <td>{user.email}</td>
-                <td>{user.role}</td>
+                <td>{user.role?.name || "Sin Rol"}</td>
                 <td>
                   <div className="d-flex justify-content-center gap-2">
                     <button
                       className="btn btn-sm tabu-action-btn edit-btn"
-                      title="Editar"
+                      title="Editar Rol"
+                      onClick={() => handleEditRole(user.id)}
                     >
                       <Edit size={16} />
                     </button>
                     <button
                       className="btn btn-sm tabu-action-btn delete-btn"
                       title="Eliminar"
+                      onClick={() => handleDelete(user.id)}
                     >
                       <Trash2 size={16} />
                     </button>
@@ -82,6 +57,14 @@ export const UserTable = () => {
                 </td>
               </tr>
             ))}
+
+            {users.length === 0 && (
+              <tr>
+                <td colSpan={4} className="text-center p-3 text-muted">
+                  No hay usuarios registrados.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
