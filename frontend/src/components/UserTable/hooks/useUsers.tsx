@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { userService, type User } from "../services/user-service";
 
-
 export const useUsers = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -41,31 +40,24 @@ export const useUsers = () => {
   };
 
   // Editar el rol
-  const handleEditRole = async (id: number) => {
-    const newRoleIdStr = window.prompt("Introduce el ID del nuevo rol (ej. 1=ADMIN, 2=CREATOR, 3=USER):");
-    if (newRoleIdStr) {
-      const newRoleId = parseInt(newRoleIdStr, 10);
-      if (!isNaN(newRoleId)) {
-        try {
-          await userService.updateUserRole(id, newRoleId);
-          fetchUsers();
-        } catch (err) {
-          console.error("Error al actualizar el rol", err);
-          alert("Error al actualizar el rol");
-        }
-      } else {
-        alert("ID de rol no válido");
-      }
+  const updateRole = async (id: number, roleId: number) => {
+    try {
+      await userService.updateUserRole(id, roleId);
+      await fetchUsers(); 
+      return true;
+    } catch (err) {
+      console.error("Error al actualizar el rol", err);
+      alert("Error al actualizar el rol");
+      return false; 
     }
   };
-
 
   return {
     users,
     loading,
     error,
     handleDelete,
-    handleEditRole,
-    fetchUsers
+    updateRole,
+    fetchUsers,
   };
 };
