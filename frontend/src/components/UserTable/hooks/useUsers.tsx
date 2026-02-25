@@ -27,15 +27,15 @@ export const useUsers = () => {
   }, []);
 
   // Eliminar usuario
-  const handleDelete = async (id: number) => {
-    if (window.confirm("¿Estás seguro de que deseas eliminar este usuario?")) {
-      try {
-        await userService.deleteUser(id);
-        fetchUsers();
-      } catch (err) {
-        console.error("Error al eliminar el usuario", err);
-        alert("Error al eliminar el usuario");
-      }
+  const deleteUserById = async (id: number) => {
+    try {
+      await userService.deleteUser(id);
+      await fetchUsers();
+      return true;
+    } catch (err) {
+      console.error("Error al eliminar el usuario", err);
+      alert("Error al eliminar el usuario");
+      return false;
     }
   };
 
@@ -43,12 +43,12 @@ export const useUsers = () => {
   const updateRole = async (id: number, roleId: number) => {
     try {
       await userService.updateUserRole(id, roleId);
-      await fetchUsers(); 
+      await fetchUsers();
       return true;
     } catch (err) {
       console.error("Error al actualizar el rol", err);
       alert("Error al actualizar el rol");
-      return false; 
+      return false;
     }
   };
 
@@ -56,7 +56,7 @@ export const useUsers = () => {
     users,
     loading,
     error,
-    handleDelete,
+    deleteUserById,
     updateRole,
     fetchUsers,
   };

@@ -1,10 +1,15 @@
 import { Edit, Trash2, UserPlus } from "lucide-react";
 import { useUsers } from "./hooks/useUsers";
 import { useRoleModal } from "./hooks/useRoleModal";
+import { Modal } from "../ui/Modal/Modal";
+import { useDeleteModal } from "./hooks/useDeleteModal";
 import "./UserTable.css";
 
 export const UserTable = () => {
-  const { users, loading, error, handleDelete, updateRole } = useUsers();
+  // Hook CRUD usuarios
+  const { users, loading, error, deleteUserById, updateRole } = useUsers();
+
+  // Hook modal cambiar rol usuario
   const {
     isOpen,
     selectedUser,
@@ -14,6 +19,10 @@ export const UserTable = () => {
     closeModal,
   } = useRoleModal();
 
+  // Hook modal borrar usuario
+  const { isDeleteOpen, userToDelete, openDeleteModal, closeDeleteModal } =
+    useDeleteModal();
+
   // Conecta el modal con la API
   const handleSaveRole = async () => {
     if (selectedUser && newRoleId !== "") {
@@ -21,6 +30,14 @@ export const UserTable = () => {
       if (success) {
         closeModal();
       }
+    }
+  };
+
+  // Confirmar borrado usuario
+  const handleConfirmDelete = async () => {
+    if (userToDelete) {
+      const success = await deleteUserById(userToDelete.id);
+      if (success) closeDeleteModal();
     }
   };
 
@@ -68,7 +85,7 @@ export const UserTable = () => {
                     <button
                       className="btn btn-sm tabu-action-btn delete-btn"
                       title="Eliminar"
-                      onClick={() => handleDelete(user.id)}
+                      onClick={() => openDeleteModal(user)}
                     >
                       <Trash2 size={16} />
                     </button>
@@ -81,74 +98,90 @@ export const UserTable = () => {
       </div>
 
       {/* Modal Editar Rol */}
-      {isOpen && (
-        <div
-          className="modal show d-block"
-          tabIndex={-1}
-          style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+      <Modal
+        isOpen={isOpen}
+        title="Editar Rol de Usuario"
+        onClose={closeModal}
+        footer={
+          <>
+            <button
+              type="button"
+              className="btn btn-light"
+              onClick={closeModal}
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              className="btn tabu-btn-primary px-4"
+              onClick={handleSaveRole}
+              disabled={newRoleId === ""}
+            >
+              Guardar Cambios
+            </button>
+          </>
+        }
+      >
+        {selectedUser && (
+          <p className="mb-3 text-muted">
+            Estás modificando los permisos de{" "}
+            <strong>
+              {selectedUser.name} {selectedUser.lastName}
+            </strong>
+            .
+          </p>
+        )}
+        <label className="form-label fw-medium">Selecciona el nuevo rol:</label>
+        <select
+          className="form-select form-select-lg"
+          value={newRoleId}
+          onChange={(e) => setNewRoleId(Number(e.target.value))}
         >
-          <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content border-0 shadow">
-              <div className="modal-header border-bottom-0">
-                <h5 className="modal-title fw-bold tabu-text-primary">
-                  Editar Rol de Usuario
-                </h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  onClick={closeModal}
-                ></button>
-              </div>
+          <option value="" disabled>
+            Seleccione un rol...
+          </option>
+          <option value={1}>ADMIN</option>
+          <option value={2}>CREATOR</option>
+          <option value={3}>USER</option>
+        </select>
+      </Modal>
 
-              <div className="modal-body">
-                {selectedUser && (
-                  <p className="mb-3 text-muted">
-                    Estás modificando los permisos de{" "}
-                    <strong>
-                      {selectedUser.name} {selectedUser.lastName}
-                    </strong>
-                    .
-                  </p>
-                )}
-
-                <label className="form-label fw-medium">
-                  Selecciona el nuevo rol:
-                </label>
-                <select
-                  className="form-select form-select-lg"
-                  value={newRoleId}
-                  onChange={(e) => setNewRoleId(Number(e.target.value))}
-                >
-                  <option value="" disabled>
-                    Seleccione un rol...
-                  </option>
-                  <option value={1}>ADMIN</option>
-                  <option value={2}>CREATOR</option>
-                  <option value={3}>USER</option>
-                </select>
-              </div>
-
-              <div className="modal-footer border-top-0">
-                <button
-                  type="button"
-                  className="btn btn-light"
-                  onClick={closeModal}
-                >
-                  Cancelar
-                </button>
-                <button
-                  type="button"
-                  className="btn tabu-btn-primary px-4"
-                  onClick={handleSaveRole}
-                  disabled={newRoleId === ""}
-                >
-                  Guardar Cambios
-                </button>
-              </div>
-            </div>
+      {/* Modal Borrar Usuario */}
+      <Modal
+        isOpen={isDeleteOpen}
+        title="Eliminar Usuario"
+        onClose={closeDeleteModal}
+        footer={
+          <>
+            <button
+              type="button"
+              className="btn btn-light"
+              onClick={closeDeleteModal}
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              className="btn btn-danger px-4"
+              onClick={handleConfirmDelete}
+            >
+              Eliminar Definitivamente
+            </button>
+          </>
+        }
+      >
+        {userToDelete && (
+          <div>
+            <p className="mb-1 text-muted">
+              ¿Estás seguro de que deseas eliminar al usuario{" "}
+              <strong>
+                {userToDelete.name} {userToDelete.lastName}
+              </strong>
+              ?
+            </p>
           </div>
-        </div>
-      )}
+        )}
+      </Modal>
     </div>
   );
 };
