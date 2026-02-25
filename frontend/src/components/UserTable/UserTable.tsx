@@ -4,6 +4,7 @@ import { useRoleModal } from "./hooks/useRoleModal";
 import { Modal } from "../ui/Modal/Modal";
 import { useDeleteModal } from "./hooks/useDeleteModal";
 import { useAddUserModal } from "./hooks/useAddUserModal";
+import { usePagination } from "./hooks/usePagination";
 import "./UserTable.css";
 
 export const UserTable = () => {
@@ -33,6 +34,17 @@ export const UserTable = () => {
     closeAddModal,
     handleInputChange,
   } = useAddUserModal();
+
+  // Hook paginación
+  const {
+    currentPage,
+    totalPages,
+    currentItems: currentUsers, // Esto renombra
+    indexOfFirstItem,
+    indexOfLastItem,
+    goToNextPage,
+    goToPrevPage,
+  } = usePagination(users, 5);
 
   // Conecta el modal con la API
   const handleSaveRole = async () => {
@@ -90,7 +102,7 @@ export const UserTable = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {currentUsers.map((user) => (
               <tr key={user.id}>
                 <td className="fw-medium">{`${user.name} ${user.lastName}`}</td>
                 <td>{user.email}</td>
@@ -115,9 +127,56 @@ export const UserTable = () => {
                 </td>
               </tr>
             ))}
+
+            {users.length === 0 && (
+              <tr>
+                <td colSpan={4} className="text-center py-4 text-muted">
+                  No hay usuarios registrados todavía.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
+
+      {/* Controles Paginación */}
+      {totalPages > 1 && (
+        <div className="d-flex justify-content-between align-items-center mt-4">
+          <span className="text-muted small">
+            Mostrando del {indexOfFirstItem + 1} al{" "}
+            {Math.min(indexOfLastItem, users.length)} de {users.length} usuarios
+          </span>
+          <nav>
+            <ul className="pagination pagination-sm mb-0">
+              <li
+                className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+              >
+                <button
+                  className="page-link shadow-none"
+                  onClick={goToPrevPage}
+                >
+                  Anterior
+                </button>
+              </li>
+              <li className="page-item disabled">
+                <span className="page-link text-dark bg-light border-light">
+                  Página {currentPage} de {totalPages}
+                </span>
+              </li>
+              <li
+                className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}
+              >
+                <button
+                  className="page-link shadow-none"
+                  onClick={goToNextPage}
+                >
+                  Siguiente
+                </button>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      )}
 
       {/* Modal Editar Rol */}
       <Modal
