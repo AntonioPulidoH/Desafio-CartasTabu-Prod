@@ -1,0 +1,16 @@
+.card.tabu-stat-card {
+  border: 2px solid #281952 !important;
+  border-radius: 8px;
+  background-color: #ffffff;
+}
+
+.tabu-stat-card .tabu-stat-title {
+  color: #281952 !important;
+  font-weight: 500;
+}
+
+.tabu-stat-card .tabu-stat-value {
+  color: #281952 !important;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
