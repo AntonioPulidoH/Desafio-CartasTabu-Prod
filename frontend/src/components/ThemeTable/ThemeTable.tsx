@@ -3,6 +3,7 @@ import { useThemes } from "./hooks/useThemes";
 import { useThemeModal } from "./hooks/useThemeModal";
 import { useDeleteThemeModal } from "./hooks/useDeleteThemeModal";
 import { useVocationalFamilies } from "./hooks/useVocationalFamilies";
+import { usePagination } from "../UserTable/hooks/usePagination";
 import { Modal } from "../ui/Modal/Modal";
 import "../UserTable/UserTable.css";
 
@@ -10,6 +11,17 @@ export const ThemeTable = () => {
   // Hook Datos y CRUD
   const { themes, loading, error, createTheme, editTheme, deleteThemeById } =
     useThemes();
+
+  // Hook Paginación
+  const {
+    currentPage,
+    totalPages,
+    currentItems: currentThemes,
+    indexOfFirstItem,
+    indexOfLastItem,
+    goToNextPage,
+    goToPrevPage,
+  } = usePagination(themes, 5);
 
   // Hook Modal Crear/Editar
   const {
@@ -86,7 +98,7 @@ export const ThemeTable = () => {
                 </td>
               </tr>
             ) : (
-              themes.map((theme) => (
+              currentThemes.map((theme) => (
                 <tr key={theme.id}>
                   <td className="fw-medium">{theme.name}</td>
                   <td>{theme.vocationalFamily?.name || "Sin Familia"}</td>
@@ -118,6 +130,46 @@ export const ThemeTable = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Controles Paginación*/}
+      {totalPages > 1 && (
+        <div className="d-flex justify-content-between align-items-center mt-4">
+          <span className="text-muted small">
+            Mostrando del {indexOfFirstItem + 1} al{" "}
+            {Math.min(indexOfLastItem, themes.length)} de {themes.length}{" "}
+            temáticas
+          </span>
+          <nav>
+            <ul className="pagination pagination-sm mb-0">
+              <li
+                className={`page-item ${currentPage === 1 ? "disabled" : ""}`}
+              >
+                <button
+                  className="page-link shadow-none"
+                  onClick={goToPrevPage}
+                >
+                  Anterior
+                </button>
+              </li>
+              <li className="page-item disabled">
+                <span className="page-link text-dark bg-light border-light">
+                  Página {currentPage} de {totalPages}
+                </span>
+              </li>
+              <li
+                className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}
+              >
+                <button
+                  className="page-link shadow-none"
+                  onClick={goToNextPage}
+                >
+                  Siguiente
+                </button>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      )}
 
       {/* Modal Crear/Editar Temática */}
       <Modal
