@@ -20,11 +20,11 @@ export class CreateThemeDto {
   @IsNotEmpty({ message: "La familia profesional es obligatoria" })
   vocationalFamilyId: number;
 
-  @IsInt()
-  @IsNotEmpty({ message: "El ID del creador es obligatorio" })
-  creatorId: number;
-
   // Para probar el CRUD por ahora
   // Cuando tengamos validación JWT, creatorId no vendrá del frontend,
   // sino que lo sacaremos del Token (JWT) del usuario logueado
+  // SÓLO HAY QUE BORRAR
+  @IsInt()
+  @IsNotEmpty({ message: "El ID del creador es obligatorio" })
+  creatorId: number;
 }
