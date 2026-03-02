@@ -1,26 +1,67 @@
-import { Injectable } from '@nestjs/common';
-import { CreateThemeDto } from './dto/create-theme.dto';
-import { UpdateThemeDto } from './dto/update-theme.dto';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { CreateThemeDto } from "./dto/create-theme.dto";
+import { UpdateThemeDto } from "./dto/update-theme.dto";
+import { PrismaService } from "src/prisma/prisma.service";
 
 @Injectable()
 export class ThemesService {
-  create(createThemeDto: CreateThemeDto) {
-    return 'This action adds a new theme';
+  constructor(private readonly prisma: PrismaService) {}
+
+  async create(createThemeDto: CreateThemeDto) {
+    return this.prisma.theme.create({
+      data: createThemeDto,
+    });
   }
 
-  findAll() {
-    return `This action returns all themes`;
+  async findAll() {
+    return this.prisma.theme.findMany({
+      include: {
+        vocationalFamily: {
+          select: { id: true, name: true },
+        },
+        creator: {
+          select: { id: true, name: true, lastName: true },
+        },
+        _count: {
+          select: { cards: true },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} theme`;
+  async findOne(id: number) {
+    const theme = await this.prisma.theme.findUnique({
+      where: { id },
+      include: {
+        vocationalFamily: true,
+        creator: true,
+        cards: true,
+      },
+    });
+
+    if (!theme) {
+      throw new NotFoundException(`La temática con ID ${id} no existe`);
+    }
+    return theme;
   }
 
-  update(id: number, updateThemeDto: UpdateThemeDto) {
-    return `This action updates a #${id} theme`;
+  async update(id: number, updateThemeDto: UpdateThemeDto) {
+    await this.findOne(id);
+
+    return this.prisma.theme.update({
+      where: { id },
+      data: updateThemeDto,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} theme`;
+  async remove(id: number) {
+    await this.findOne(id);
+
+    return this.prisma.theme.delete({
+      where: { id },
+    });
   }
 }
