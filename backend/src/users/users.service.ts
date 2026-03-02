@@ -14,6 +14,25 @@ export class UsersService {
         });
     }
 
+    async findById(id: number) {
+      return this.prisma.user.findUnique({
+        where: { id },
+        select: {
+          id: true,
+          name: true,
+          lastName: true,
+          email: true,
+          educationalCenter: true,
+          vocationalFamilyId: true,
+          role: {
+            select: {
+              name:true
+            }
+          }
+        }
+      })
+    }
+
     async create(data: CreateUserDto) {
   const isValidEmail = (email: string): boolean => {
     const emailVerified = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
