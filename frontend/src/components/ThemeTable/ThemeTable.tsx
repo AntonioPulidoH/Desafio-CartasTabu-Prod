@@ -86,7 +86,6 @@ export const ThemeTable = () => {
               <th>Nombre del Tema</th>
               <th>Familia Profesional</th>
               <th>Nº Cartas</th>
-              <th>Estado</th>
               <th className="text-center">Acciones</th>
             </tr>
           </thead>
@@ -103,9 +102,6 @@ export const ThemeTable = () => {
                   <td className="fw-medium">{theme.name}</td>
                   <td>{theme.vocationalFamily?.name || "Sin Familia"}</td>
                   <td>{theme._count?.cards || 0}</td>
-                  <td>
-                    <span className="badge bg-success">Activo</span>
-                  </td>
                   <td>
                     <div className="d-flex justify-content-center gap-2">
                       <button

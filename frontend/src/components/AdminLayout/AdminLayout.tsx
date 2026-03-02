@@ -3,9 +3,17 @@ import { StatCard } from "../StatCard/StatCard";
 import { Toaster } from "react-hot-toast";
 import { Outlet } from "react-router-dom";
 import { useUsers } from "../UserTable/hooks/useUsers";
+import { useThemes } from "../ThemeTable/hooks/useThemes";
 
 export const AdminLayout = () => {
-  const { users, loading } = useUsers();
+  const { users, loading: loadingUsers } = useUsers();
+  const { themes, loading: loadingThemes } = useThemes();
+
+  // Total Cartas
+  const totalCards = themes.reduce(
+    (sum, theme) => sum + (theme._count?.cards || 0),
+    0,
+  );
 
   return (
     <div
@@ -26,19 +34,25 @@ export const AdminLayout = () => {
         <div className="container-fluid max-w-7xl mx-auto px-0">
           <h2 className="mb-4 fw-bold">Dashboard General</h2>
 
-          {/* StatCards (meter componente Grid)*/}
+          {/* StatCards */}
           <div className="row g-4 mb-5">
             <div className="col-12 col-md-4">
               <StatCard
                 title="Usuarios Totales:"
-                value={loading ? "..." : users.length}
+                value={loadingUsers ? "..." : users.length}
               />
             </div>
             <div className="col-12 col-md-4">
-              <StatCard title="Tarjetas Generadas:" value="1,200" />
+              <StatCard
+                title="Tarjetas Generadas:"
+                value={loadingThemes ? "..." : totalCards}
+              />
             </div>
             <div className="col-12 col-md-4">
-              <StatCard title="Temas Activos:" value="25" />
+              <StatCard
+                title="Temas Totales:"
+                value={loadingThemes ? "..." : themes.length}
+              />
             </div>
           </div>
 
