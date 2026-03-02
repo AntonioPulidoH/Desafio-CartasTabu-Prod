@@ -2,6 +2,7 @@ import { Edit, Trash2, PlusCircle } from "lucide-react";
 import { useThemes } from "./hooks/useThemes";
 import { useThemeModal } from "./hooks/useThemeModal";
 import { useDeleteThemeModal } from "./hooks/useDeleteThemeModal";
+import { useVocationalFamilies } from "./hooks/useVocationalFamilies";
 import { Modal } from "../ui/Modal/Modal";
 import "../UserTable/UserTable.css";
 
@@ -25,6 +26,9 @@ export const ThemeTable = () => {
   // Hook Modal Borrar
   const { isDeleteOpen, themeToDelete, openDeleteModal, closeDeleteModal } =
     useDeleteThemeModal();
+
+  // Hook Cargar Familias Prof
+  const { families, loadingFamilies } = useVocationalFamilies();
 
   const handleSubmit = async () => {
     let success = false;
@@ -178,11 +182,19 @@ export const ThemeTable = () => {
               name="vocationalFamilyId"
               value={formData.vocationalFamilyId}
               onChange={handleInputChange}
+              disabled={loadingFamilies}
             >
-              <option value={1}>Informática y Comunicaciones</option>
-              <option value={2}>Hostelería y Turismo</option>
-              <option value={3}>Sanidad</option>
-              <option value={4}>Administración y Gestión</option>
+              {loadingFamilies ? (
+                <option value="">Cargando familias...</option>
+              ) : families.length === 0 ? (
+                <option value="">No hay familias disponibles</option>
+              ) : (
+                families.map((family) => (
+                  <option key={family.id} value={family.id}>
+                    {family.name}
+                  </option>
+                ))
+              )}
             </select>
           </div>
         </div>
