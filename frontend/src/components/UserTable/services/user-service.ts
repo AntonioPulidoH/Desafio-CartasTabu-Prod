@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3000/users";
+const API_URL = `${import.meta.env.VITE_LOCAL_API_URL}/users`;
 
 export interface Role {
   id: number;
