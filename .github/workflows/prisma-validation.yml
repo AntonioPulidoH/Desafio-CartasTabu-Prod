@@ -1,0 +1,47 @@
+name: Prisma Validation
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+
+jobs:
+  validate-prisma:
+    name: Validate Prisma Schema
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+      
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          
+      - name: Habilitar Corepack (necesario para Yarn 4)
+        run: corepack enable
+
+      - name: Instalar dependencias del backend
+        working-directory: ./backend
+        run: yarn install --immutable
+
+      - name: Validar sintaxis del Schema
+        working-directory: ./backend
+        run: yarn prisma validate
+
+      - name: Comprobar formato del Schema
+        working-directory: ./backend
+        run: |
+          yarn prisma format
+          git diff --exit-code
+          
+      - name: Verificar que no faltan migraciones por generar
+        working-directory: ./backend
+        run: yarn prisma migrate diff --from-migrations prisma/migrations --to-schema-datamodel prisma/schema.prisma --exit-code
