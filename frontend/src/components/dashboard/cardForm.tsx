@@ -1,17 +1,33 @@
 import { useState } from "react";
 import type { TabuCard } from "./types/tabuCard.interface";
+import { createCard } from "../../api/createCard";
 
-
-
-export function CardForm({ initial, onSave, onCancel }: {
+export function CardForm({ initial, themeId, onSave, onCancel }: {
   initial?: Partial<TabuCard>;
+  themeId: number;
   onSave: (data: Omit<TabuCard, "id">) => void;
   onCancel: () => void;
 }) {
   const [word, setWord] = useState(initial?.word || "");
   const [tabuInput, setTabuInput] = useState((initial?.tabuWords || []).join(", "));
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
   const tabuWords = tabuInput.split(",").map((s) => s.trim()).filter(Boolean);
   const valid = word.trim().length > 0 && tabuWords.length >= 1;
+
+  const handleSave = async () => {
+    if (!valid) return;
+    setLoading(true);
+    try {
+     await createCard({ keyword: word.trim(), forbiddenWords: tabuWords, themeId });
+      onSave({ word: word.trim(), tabuWords });
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="d-flex flex-column gap-3">
@@ -43,14 +59,15 @@ export function CardForm({ initial, onSave, onCancel }: {
           {tabuWords.map((w, i) => <span key={i} className="td-chip-preview">{w}</span>)}
         </div>
       )}
+      {error && <p className="text-danger mb-0">{error}</p>}
       <div className="d-flex gap-2 justify-content-end mt-2">
         <button className="btn td-btn-sec px-3 py-2" onClick={onCancel}>Cancelar</button>
         <button
           className="btn td-btn-acento px-3 py-2"
-          onClick={() => valid && onSave({ word: word.trim(), tabuWords })}
-          disabled={!valid}
+          onClick={handleSave}
+          disabled={!valid || loading}
         >
-          Guardar tarjeta
+          {loading ? "Guardando..." : "Guardar tarjeta"}
         </button>
       </div>
     </div>

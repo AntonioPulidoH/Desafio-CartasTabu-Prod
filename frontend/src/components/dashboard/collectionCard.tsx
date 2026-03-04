@@ -9,7 +9,7 @@ export function CollectionCard({ collection, onOpen, onEdit, onDelete }: {
   return (
     <div className="td-card p-3 d-flex flex-column gap-3" onClick={onOpen}>
       <div className="d-flex justify-content-between align-items-start">
-        <span className="td-badge">{collection.category}</span>
+        <span className="td-badge">{collection.vocationalFamily?.name}</span>
         <div className="d-flex gap-1" onClick={(e) => e.stopPropagation()}>
           <button className="td-btn-icon" onClick={onEdit} title="Editar">✏️</button>
           <button className="td-btn-icon danger" onClick={onDelete} title="Eliminar">🗑</button>
@@ -23,7 +23,7 @@ export function CollectionCard({ collection, onOpen, onEdit, onDelete }: {
       </div>
       <div className="d-flex justify-content-between align-items-center pt-2 border-top td-card-divider mt-auto">
         <span className="td-suave td-desc">
-          <span className="fw-bold td-count">{collection.cards.length}</span> tarjetas
+          <span className="fw-bold td-count">{(collection.cards ?? []).length}</span> tarjetas
         </span>
         <span className="td-suave td-date">{collection.createdAt}</span>
       </div>
