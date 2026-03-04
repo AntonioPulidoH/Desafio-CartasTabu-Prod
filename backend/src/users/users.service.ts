@@ -23,7 +23,11 @@ export class UsersService {
           lastName: true,
           email: true,
           educationalCenter: true,
-          vocationalFamilyId: true,
+          vocationalFamily: {
+            select: {
+              name: true
+            }
+          },
           role: {
             select: {
               name:true
