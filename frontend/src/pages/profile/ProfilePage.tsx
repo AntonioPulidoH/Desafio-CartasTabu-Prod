@@ -20,6 +20,7 @@ type UserProfile = {
     lastName: string
     email: string
     educationalCenter: string | null
+    vocationalFamily: string | null
 
     role: Role
 
@@ -99,7 +100,7 @@ export default function ProfilePage() {
                         <p><strong>Apellido: </strong>{profile.lastName}</p>
                         <p><strong>Email: </strong>{profile.email}</p>
                         <p><strong>Centro educativo: </strong>{profile.educationalCenter}</p>
-                        <p><strong>Familia Profesional: </strong>{profile.}</p>
+                        <p><strong>Familia Profesional: </strong>{profile.vocationalFamily}</p>
                     </Card>
 
                     <Card title="Permisos">
