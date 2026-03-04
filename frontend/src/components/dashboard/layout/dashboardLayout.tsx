@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../styles/dashboard.css";
 import CollectionForm from "../collectionForm";
 import { CardItem } from "../cardItem";
@@ -6,46 +6,14 @@ import { CollectionCard } from "../collectionCard";
 import type { Collection } from "../types/colection.interface";
 import type { TabuCard } from "../types/tabuCard.interface";
 import { CardForm } from "../cardForm";
-
-
-
-//Info mockeada
-const INITIAL_COLLECTIONS: Collection[] = [
-  {
-    id: "1",
-    name: "Animales del mar",
-    description: "Fauna marina para niveles básicos",
-    category: "Naturaleza",
-    createdAt: "2025-01-10",
-    cards: [
-      { id: "c1", word: "Tiburón", tabuWords: ["pez", "dientes", "océano", "aleta", "Jaws"] },
-      { id: "c2", word: "Pulpo", tabuWords: ["tentáculos", "tinta", "ocho", "marino"] },
-    ],
-  },
-  {
-    id: "2",
-    name: "Tecnología",
-    description: "Conceptos del mundo digital",
-    category: "Educación",
-    createdAt: "2025-01-15",
-    cards: [
-      { id: "c3", word: "Inteligencia Artificial", tabuWords: ["robot", "machine learning", "datos", "ChatGPT", "algoritmo"] },
-    ],
-  },
-  {
-    id: "3",
-    name: "Cocina española",
-    description: "Gastronomía y platos típicos de España",
-    category: "Gastronomía",
-    createdAt: "2025-02-01",
-    cards: [],
-  },
-];
-
-const CATEGORIES = ["Naturaleza", "Educación", "Gastronomía", "Deportes", "Historia", "Arte", "Ciencia", "Otro"];
+import { getThemes } from "../../../api/getThemes";
+import { deleteThemes } from "../../../api/deleteTheme";
+import { updateThemes } from "../../../api/updateTheme";
+import { getCards } from "../../../api/getCards";
+import { updateCards } from "../../../api/updateCard";
+import { deleteCards } from "../../../api/deleteCard";
 
 const uid = () => Math.random().toString(36).slice(2, 9);
-
 
 function Modal({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
   return (
@@ -61,10 +29,6 @@ function Modal({ title, onClose, children }: { title: string; onClose: () => voi
   );
 }
 
-
-
-
-
 function CollectionDetail({ collection, onBack, onUpdate }: {
   collection: Collection;
   onBack: () => void;
@@ -73,19 +37,38 @@ function CollectionDetail({ collection, onBack, onUpdate }: {
   const [showCardForm, setShowCardForm] = useState(false);
   const [editingCard, setEditingCard] = useState<TabuCard | null>(null);
 
+    useEffect(() => {
+    const fetchCards = async () => {
+      try {
+        const cards = await getCards(Number(collection.id));
+        onUpdate({ ...collection, cards });
+      } catch (error) {
+        console.error("Error cargando tarjetas", error);
+      }
+    };
+
+    fetchCards();
+  }, [collection.id]);
+
   const addCard = (data: Omit<TabuCard, "id">) => {
-    onUpdate({ ...collection, cards: [...collection.cards, { ...data, id: uid() }] });
+    onUpdate({ ...collection, cards: [...(collection.cards ?? []), { ...data, id: uid() }] });
     setShowCardForm(false);
   };
 
-  const updateCard = (data: Omit<TabuCard, "id">) => {
-    if (!editingCard) return;
-    onUpdate({ ...collection, cards: collection.cards.map((c) => c.id === editingCard.id ? { ...data, id: c.id } : c) });
-    setEditingCard(null);
-  };
 
-  const deleteCard = (id: string) =>
-    onUpdate({ ...collection, cards: collection.cards.filter((c) => c.id !== id) });
+
+const deleteCard = async (id: string) => {
+  try {
+    await deleteCards(id);
+
+    // recargar tarjetas
+    const cards = await getCards(Number(collection.id));
+    onUpdate({ ...collection, cards });
+
+  } catch (error) {
+    console.error("Error eliminando tarjeta", error);
+  }
+};
 
   return (
     <div>
@@ -95,7 +78,7 @@ function CollectionDetail({ collection, onBack, onUpdate }: {
         <div>
           <div className="d-flex align-items-center gap-2 mb-1 flex-wrap">
             <h2 className="mb-0">{collection.name}</h2>
-            <span className="td-badge">{collection.category}</span>
+            <span className="td-badge">Familia {collection.vocationalFamily?.name}</span>
           </div>
           {collection.description && <p className="td-suave mb-0">{collection.description}</p>}
         </div>
@@ -107,7 +90,7 @@ function CollectionDetail({ collection, onBack, onUpdate }: {
       <div className="td-stat-row d-flex gap-4 p-3 mb-4">
         <div>
           <div className="td-stat-label">Tarjetas</div>
-          <div className="td-stat-value">{collection.cards.length}</div>
+          <div className="td-stat-value">{(collection.cards ?? []).length}</div>
         </div>
         <div className="td-stat-divider" />
         <div>
@@ -116,7 +99,7 @@ function CollectionDetail({ collection, onBack, onUpdate }: {
         </div>
       </div>
 
-      {collection.cards.length === 0 ? (
+      {(collection.cards ?? []).length === 0 ? (
         <div className="td-empty text-center py-5 px-3">
           <div className="td-empty-icon mb-2">🃏</div>
           <p className="mb-3">Esta colección no tiene tarjetas todavía.</p>
@@ -126,7 +109,7 @@ function CollectionDetail({ collection, onBack, onUpdate }: {
         </div>
       ) : (
         <div className="d-flex flex-column gap-2">
-          {collection.cards.map((card) => (
+          {(collection.cards ?? []).map((card) => (
             <CardItem key={card.id} card={card} onEdit={() => setEditingCard(card)} onDelete={() => deleteCard(card.id)} />
           ))}
         </div>
@@ -134,58 +117,67 @@ function CollectionDetail({ collection, onBack, onUpdate }: {
 
       {showCardForm && (
         <Modal title="Nueva tarjeta" onClose={() => setShowCardForm(false)}>
-          <CardForm onSave={addCard} onCancel={() => setShowCardForm(false)} />
-        </Modal>
-      )}
-      {editingCard && (
-        <Modal title="Editar tarjeta" onClose={() => setEditingCard(null)}>
-          <CardForm initial={editingCard} onSave={updateCard} onCancel={() => setEditingCard(null)} />
+          <CardForm themeId={Number(collection.id)} onSave={addCard} onCancel={() => setShowCardForm(false)} />
         </Modal>
       )}
     </div>
   );
 }
 
-
-
-
-
 export default function TabuDashboard() {
-  const [collections, setCollections] = useState<Collection[]>(INITIAL_COLLECTIONS);
+  const [collections, setCollections] = useState<Collection[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [showCreate, setShowCreate] = useState(false);
   const [editingCollection, setEditingCollection] = useState<Collection | null>(null);
   const [search, setSearch] = useState("");
-  const [filterCat, setFilterCat] = useState("Todas");
+  const [filterFamilyId, setFilterFamilyId] = useState<number | null>(null);
+  const [loadingCollections, setLoadingCollections] = useState(true);
 
   const selectedCollection = selectedId ? collections.find((c) => c.id === selectedId) ?? null : null;
+ 
+
+  const fetchCollections = async () => {
+    try {
+      const data = await getThemes();
+      setCollections(data);
+    } catch (err) {
+      console.error('Error al cargar colecciones', err);
+    } finally {
+      setLoadingCollections(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCollections();
+  }, []);
 
   const filtered = collections.filter((c) => {
-    const matchSearch = c.name.toLowerCase().includes(search.toLowerCase())
-      || c.description.toLowerCase().includes(search.toLowerCase());
-    return matchSearch && (filterCat === "Todas" || c.category === filterCat);
+    const matchSearch =
+      c.name.toLowerCase().includes(search.toLowerCase()) ||
+      c.description.toLowerCase().includes(search.toLowerCase());
+    const matchFamily = filterFamilyId === null || c.vocationalFamilyId === filterFamilyId;
+    return matchSearch && matchFamily;
   });
 
-  const createCollection = (data: Partial<Collection>) => {
-    const newCol: Collection = {
-      id: uid(), name: data.name!, description: data.description || "",
-      category: data.category!, cards: [], createdAt: new Date().toISOString().slice(0, 10),
-    };
-    setCollections([newCol, ...collections]);
+  const createCollection = async () => {
     setShowCreate(false);
+    await fetchCollections(); // recarga del backend tras crear
   };
 
-  const saveEdit = (data: Partial<Collection>) => {
-    if (!editingCollection) return;
-    setCollections(collections.map((c) => c.id === editingCollection.id ? { ...c, ...data } : c));
-    setEditingCollection(null);
-  };
+const saveEdit = async (data: Partial<Collection>) => {
+  if (!editingCollection) return;
+  await updateThemes(String(editingCollection.id), data);
+  await fetchCollections();
+  setEditingCollection(null);
+};
 
-  const deleteCollection = (id: string) =>
-    setCollections(collections.filter((c) => c.id !== id));
+const deleteCollection = async (id: string) => {
+  await deleteThemes(id);
+  setCollections(collections.filter((c) => c.id !== id));
+};
 
-  const updateFromDetail = (updated: Collection) =>
-    setCollections(collections.map((c) => c.id === updated.id ? updated : c));
+const updateFromDetail = (updated: Collection) =>
+  setCollections(collections.map((c) => c.id === updated.id ? updated : c));
 
   return (
     <div className="tabu-dashboard">
@@ -213,7 +205,7 @@ export default function TabuDashboard() {
           <div className="td-suave td-stats-label mb-1">Total colecciones</div>
           <div className="value">{collections.length}</div>
           <div className="td-suave td-stats-label mt-1">
-            {collections.reduce((a, c) => a + c.cards.length, 0)} tarjetas
+            {collections.reduce((a, c) => a + (c.cards ?? []).length, 0)} tarjetas
           </div>
         </div>
       </aside>
@@ -246,27 +238,39 @@ export default function TabuDashboard() {
                 onChange={(e) => setSearch(e.target.value)}
               />
               <div className="d-flex gap-2 flex-wrap">
-                {["Todas", ...CATEGORIES].map((cat) => (
-                  <button
-                    key={cat}
-                    className={`td-pill ${filterCat === cat ? "active" : ""}`}
-                    onClick={() => setFilterCat(cat)}
-                  >
-                    {cat}
-                  </button>
-                ))}
+                <button
+                  className={`td-pill ${filterFamilyId === null ? "active" : ""}`}
+                  onClick={() => setFilterFamilyId(null)}
+                >
+                  Todas
+                </button>
+                {collections
+                  .filter((c, index, self) => 
+                    self.findIndex(x => x.vocationalFamilyId === c.vocationalFamilyId) === index
+                  )
+                  .map((c) => (
+                    <button
+                      key={c.vocationalFamilyId}
+                      className={`td-pill ${filterFamilyId === c.vocationalFamilyId ? "active" : ""}`}
+                      onClick={() => setFilterFamilyId(c.vocationalFamilyId)}
+                    >
+                      {c.vocationalFamily?.name ?? `Familia ${c.vocationalFamilyId}`}
+                    </button>
+                  ))}
               </div>
-            </div>
+              </div>
 
-            {filtered.length === 0 ? (
+            {loadingCollections ? (
+              <div className="text-center py-5 td-suave">Cargando colecciones...</div>
+            ) : filtered.length === 0 ? (
               <div className="td-empty text-center py-5">
                 <div className="td-empty-icon mb-2">📦</div>
                 <p className="mb-3 td-suave">
-                  {search || filterCat !== "Todas"
+                  {search || filterFamilyId !== null
                     ? "No hay colecciones que coincidan."
                     : "Todavía no tienes colecciones."}
                 </p>
-                {!search && filterCat === "Todas" && (
+                {!search && filterFamilyId === null && (
                   <button className="btn td-btn-acento px-3 py-2" onClick={() => setShowCreate(true)}>
                     Crear colección
                   </button>
