@@ -1,0 +1,40 @@
+name: Build & Docker Check
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-docker-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      # -------- BACKEND --------
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Enable Corepack (Yarn 4)
+        run: corepack enable
+
+      - name: Install backend dependencies
+        working-directory: ./backend
+        run: yarn install --immutable
+
+      - name: Build backend
+        working-directory: ./backend
+        run: yarn build
+
+      # -------- FRONTEND --------
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: ./frontend
+        run: npm run build

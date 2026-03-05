@@ -14,14 +14,18 @@ export default function Register() {
         
         console.log(`rol: ${role}, token: ${token}`)
 
-        if (token && role === 'CREATOR') {
-            navigate('/dashboard', { replace: true })
-        } else if (token && role === 'USER') {
-            window.location.href = '/'
-        }else if(token && role === 'ADMIN'){
-            navigate('/dashboard', { replace: true })
+        if(token) {
+            navigate('/profile', {replace: true})
         }
     }, [navigate])
+
+    const handleRegisterSuccess = (role: string) => {
+        if(role === 'ADMIN') {
+            navigate('/admin', {replace: true})
+        } else {
+            navigate('/profile', {replace: true})
+        }
+    }
 
     return (
         <>
@@ -29,7 +33,7 @@ export default function Register() {
 
             <main>
                 <h1>Iniciar Sesión</h1>
-                <RegisterForm onSuccess={() => navigate('/dashboard', {replace: true})}></RegisterForm>
+                <RegisterForm onSuccess={handleRegisterSuccess}></RegisterForm>
             </main>
 
             <Footer></Footer>

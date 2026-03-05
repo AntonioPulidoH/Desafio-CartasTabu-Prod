@@ -11,13 +11,9 @@ export default function Login() {
     useEffect(() => {
         const token = sessionStorage.getItem('access_token')
 
-        const role = sessionStorage.getItem('user_role')
-
-    if (token && role === 'CREATOR') {
-        navigate('/dashboard', { replace: true })
-    } else if (token && role === 'USER') {
-        window.location.href = '/'
-    }
+        if(token) {
+            navigate('/profile', {replace: true})
+        }
     }, [navigate])
 
     return (

@@ -1,3 +1,4 @@
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import {
   Body,
   Controller,
@@ -9,19 +10,31 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UseGuards,
+  Request,
+  Put
 } from "@nestjs/common";
 import { CreateUserDto } from "./dto/user-create.dto";
 import { UsersService } from "./users.service";
-import { UpdateUserRoleDto } from "./dto/update-user-dto";
+import { UpdateUserRoleDto, UpdateUserDto } from "./dto/update-user-dto";
+import { AuthService } from 'src/auth/auth.service';
 
 @Controller("users")
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService, private readonly authService: AuthService) {}
 
   @Post("register")
   @HttpCode(HttpStatus.OK)
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto) {
+    const user = await this.usersService.create(createUserDto)
+    const userWithRole = await this.usersService.findEmail(user.email)
+    return this.authService.login(userWithRole);
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  getProfile(@Request() req) {
+    return this.usersService.findOne(req.user.userId)
   }
 
   @Get()
@@ -45,5 +58,11 @@ export class UsersController {
   @Delete(":id")
   remove(@Param("id", ParseIntPipe) id: number) {
     return this.usersService.remove(id);
+  }
+
+  @Put('me')
+  @UseGuards(JwtAuthGuard)
+  updateMe(@Request() req, @Body() data: UpdateUserDto) {
+    return this.usersService.updateMe(req.user.userId, data)
   }
 }

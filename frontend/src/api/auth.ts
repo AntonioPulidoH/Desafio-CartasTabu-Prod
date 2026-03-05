@@ -24,5 +24,9 @@ export async function login(payload: LoginRequest): Promise<LoginResponse> {
         throw new Error('Login fallido')
     }
 
-    return response.json() as Promise<LoginResponse>
+    const data = await response.json() as LoginResponse
+
+    sessionStorage.setItem('access_token', data.access_token)
+
+    return data
 }

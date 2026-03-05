@@ -8,7 +8,7 @@ import { PrismaService } from "src/prisma/prisma.service";
 import { CreateUserDto } from "./dto/user-create.dto";
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from "bcryptjs";
-import { UpdateUserRoleDto } from "./dto/update-user-dto";
+import { UpdateUserDto, UpdateUserRoleDto } from "./dto/update-user-dto";
 
 @Injectable()
 export class UsersService {
@@ -23,17 +23,16 @@ export class UsersService {
 
   async create(data: CreateUserDto) {
     const isValidEmail = (email: string): boolean => {
-      const emailVerified = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return emailVerified.test(email);
-    };
+      const emailVerified = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      return emailVerified.test(email)
+    }
 
     const isValidPassword = (password: string): boolean => {
-      const passwordVerified = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
-      return passwordVerified.test(password);
-    };
+      const passwordVerified = /^(?=.*[A-Z])(?=.*\d).{8,}$/
+      return passwordVerified.test(password)
+    }
 
-    //Validaciones
-    if (!data.email || !isValidEmail(data.email)) {
+    if(!data.email || !isValidEmail(data.email)) {
       throw new BadRequestException("EMAIL_INVALIDO");
     }
 
@@ -151,5 +150,40 @@ export class UsersService {
     });
 
     return { message: "Usuario eliminado correctamente" };
+  }
+
+  async updateMe(userId: number, data: UpdateUserDto) {
+    const updateData: any = {
+      email: data.email,
+      educationalCenter: data.educationalCenter,
+      vocationalFamilyId: data.vocationalFamilyId
+    }
+
+    if(data.password) {
+      const hassedPassword = await bcrypt.hash(data.password, 10)
+      updateData.password = hassedPassword
+    }
+
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: updateData,
+      select: {
+        id: true,
+        name: true,
+        lastName: true,
+        email: true,
+        educationalCenter: true,
+        vocationalFamily: {
+          select: {
+            name: true
+          }
+        },
+        role: {
+          select: {
+            name:true
+          }
+        }
+      }
+    })
   }
 }
