@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL_
+const API_BASE_URL = import.meta.env.VITE_API_URL
 
 export async function getProfile() {
     const token = sessionStorage.getItem('access_token')

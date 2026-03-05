@@ -59,24 +59,30 @@ export default function ProfilePage() {
 
     useEffect(() => {
         async function loadProfile() {
-            const data = await getProfile()
-            const formattedProfile: UserProfile = {
-                id: data.id,
-                name: data.name,
-                lastName: data.lastName,
-                email: data.email,
-                educationalCenter: data.educationalCenter,
-                vocationalFamily: data.vocationalFamily?.name ?? null,
-                role: data.role.name as Role,
+            try {
+                const data = await getProfile()
+                const formattedProfile: UserProfile = {
+                    id: data.id,
+                    name: data.name,
+                    lastName: data.lastName,
+                    email: data.email,
+                    educationalCenter: data.educationalCenter,
+                    vocationalFamily: data.vocationalFamily?.name ?? null,
+                    role: data.role.name as Role,
 
-                //mock temporal
-                stats: {
-                    generatedCards: 12,
-                    createdThemes: 3
+                    //mock temporal
+                    stats: {
+                        generatedCards: 12,
+                        createdThemes: 3
+                    }
                 }
-            }
 
-            setProfile(formattedProfile)
+                setProfile(formattedProfile)
+            } catch(error) {
+                console.error(error)
+                navigate('/auth')
+            }
+            
         }
         loadProfile()
     }, [])

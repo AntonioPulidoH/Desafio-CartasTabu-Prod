@@ -6,9 +6,13 @@ export type RegisterRequest = {
     educationalCenter?: string | null
 }
 
+export type RegisterResponse = {
+    access_token: string
+}
+
 const API_BASE_URL = import.meta.env.VITE_API_URL
 
-export async function register(payload: RegisterRequest) {
+export async function register(payload: RegisterRequest): Promise<RegisterResponse> {
     const response = await fetch(`${API_BASE_URL}/users/register`, {
         method: 'POST',
         headers: {
