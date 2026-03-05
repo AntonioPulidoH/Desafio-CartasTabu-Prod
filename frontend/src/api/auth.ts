@@ -4,7 +4,8 @@ export type LoginRequest = {
 }
 
 export type LoginResponse = {
-    access_token: string
+    access_token: string,
+    role:string
 }
 
 const API_BASE_URL = import.meta.env.VITE_API_URL

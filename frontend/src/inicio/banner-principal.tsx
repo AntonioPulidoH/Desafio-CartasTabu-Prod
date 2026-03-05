@@ -15,7 +15,7 @@ export function BannerPrincipal() {
 
         <p className="banner-descripcion mt-3 fs-5 mx-auto" style={{maxWidth: '600px', lineHeight: 1.7, color: 'var(--color-texto-suave)'}}>
           Crea, personaliza e imprime tarjetas del juego del Tabú adaptadas a
-          cualquier temática. Desde el aula hasta la oficina, haz que aprender
+          cualquier temática. Haz que aprender
           sea un juego.
         </p>
 

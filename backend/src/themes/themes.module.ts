@@ -3,6 +3,7 @@ import { ThemesService } from './themes.service';
 import { ThemesController } from './themes.controller';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { JwtModule } from '@nestjs/jwt';
+import { WebsocketsModule } from 'src/websockets/websocket.module';
 
 @Module({
   imports: [
@@ -10,6 +11,7 @@ import { JwtModule } from '@nestjs/jwt';
     JwtModule.register({
       secret: process.env.SECRET_KEY || 'secretKey',
     }),
+    WebsocketsModule
   ],
   controllers: [ThemesController],
   providers: [ThemesService],

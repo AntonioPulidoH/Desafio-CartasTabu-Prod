@@ -11,9 +11,13 @@ export default function Login() {
     useEffect(() => {
         const token = sessionStorage.getItem('access_token')
 
-        if(token) {
-            navigate('/', {replace: true}) //redireccion temporal
-        }
+        const role = sessionStorage.getItem('user_role')
+
+    if (token && role === 'CREATOR') {
+        navigate('/dashboard', { replace: true })
+    } else if (token && role === 'USER') {
+        window.location.href = '/'
+    }
     }, [navigate])
 
     return (
@@ -22,7 +26,7 @@ export default function Login() {
 
             <main>
                 <h1>Iniciar Sesión</h1>
-                <LoginForm onSuccess={() => navigate('/', {replace: true})}></LoginForm>
+                <LoginForm onSuccess={() => navigate('/dashboard', {replace: true})}></LoginForm>
             </main>
 
             <Footer></Footer>

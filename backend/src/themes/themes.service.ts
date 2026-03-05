@@ -2,20 +2,23 @@ import { Injectable } from '@nestjs/common';
 import { CreateThemeDto } from './dto/create-theme.dto';
 import { UpdateThemeDto } from './dto/update-theme.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { WebsocketsGateway } from 'src/websockets/websocket.gateaway';
 
 @Injectable()
 export class ThemesService {
-  constructor(private readonly prisma:PrismaService){}
+  constructor(private readonly prisma:PrismaService, private readonly wsGateway: WebsocketsGateway){}
   async create(data: CreateThemeDto, creatorId: number) {
-    return this.prisma.theme.create({
-      data:{
-        name:data.name,
-        description:data.description,
-        vocationalFamilyId:data.vocationalFamilyId,
-        creatorId:creatorId
-      }
+    const theme = await this.prisma.theme.create({
+      data: {
+        name: data.name,
+        description: data.description,
+        vocationalFamilyId: data.vocationalFamilyId,
+        creatorId: creatorId,
+      },
+    });
 
-    })
+    this.wsGateway.notifyThemeCreated(theme);
+    return theme;
   }
 
   async findAll() {

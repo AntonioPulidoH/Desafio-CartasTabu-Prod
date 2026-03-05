@@ -43,15 +43,22 @@ export default function RegisterForm({ onSuccess }: RegisterFormProps) {
         setLoading(true)
 
         try {
-        await register({
+        const data = await register({
             name,
             lastName,
             email,
             password,
             educationalCenter: educationalCenter || null,
         })
+        sessionStorage.setItem('access_token', data.access_token)
+        sessionStorage.setItem('user_role', data.role)
+        console.log(data)
+        if (data.role === 'CREATOR') {
+            if (onSuccess) onSuccess()
+        } else{
+            window.location.href = '/'
+        }
 
-        if (onSuccess) onSuccess()
         } catch (err: any) {
         switch (err.message) {
             case 'EMAIL_INVALIDO':

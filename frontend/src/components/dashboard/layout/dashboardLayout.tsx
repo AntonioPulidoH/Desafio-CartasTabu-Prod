@@ -7,6 +7,7 @@ import { getThemes } from "../actions/getThemes";
 import { deleteThemes } from "../actions/deleteTheme";
 import { updateThemes } from "../actions/updateTheme";
 import { CollectionDetail } from "../collectionDetail";
+import { useWebSocket } from "../../../hooks/useWebsocket";
 
 
 function Modal({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
@@ -38,6 +39,8 @@ export default function TabuDashboard() {
  
 
   const fetchCollections = async () => {
+    
+
     try {
       const data = await getThemes();
       setCollections(data);
@@ -47,7 +50,7 @@ export default function TabuDashboard() {
       setLoadingCollections(false);
     }
   };
-
+useWebSocket(fetchCollections);
   useEffect(() => {
     fetchCollections();
   }, []);

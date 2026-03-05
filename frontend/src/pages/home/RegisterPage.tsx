@@ -10,9 +10,16 @@ export default function Register() {
 
     useEffect(() => {
         const token = sessionStorage.getItem('access_token')
+        const role = sessionStorage.getItem('user_role')
+        
+        console.log(`rol: ${role}, token: ${token}`)
 
-        if(token) {
-            navigate('/', {replace: true}) //redireccion temporal
+        if (token && role === 'CREATOR') {
+            navigate('/dashboard', { replace: true })
+        } else if (token && role === 'USER') {
+            window.location.href = '/'
+        }else if(token && role === 'ADMIN'){
+            navigate('/dashboard', { replace: true })
         }
     }, [navigate])
 
@@ -22,7 +29,7 @@ export default function Register() {
 
             <main>
                 <h1>Iniciar Sesión</h1>
-                <RegisterForm onSuccess={() => navigate('/', {replace: true})}></RegisterForm>
+                <RegisterForm onSuccess={() => navigate('/dashboard', {replace: true})}></RegisterForm>
             </main>
 
             <Footer></Footer>

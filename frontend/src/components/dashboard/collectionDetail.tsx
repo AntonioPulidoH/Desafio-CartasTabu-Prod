@@ -4,6 +4,7 @@ import { getCards } from "./actions/getCards";
 import type { Collection } from "./types/colection.interface";
 import { CardForm } from "./cardForm";
 import { CardItem } from "./cardItem";
+import { useWebSocket } from "../../hooks/useWebsocket";
 
 
 function Modal({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
@@ -26,16 +27,18 @@ export function CollectionDetail({ collection, onBack, onUpdate }: {
   onUpdate: (col: Collection) => void;
 }) {
   const [showCardForm, setShowCardForm] = useState(false);
+     const fetchCards = async () => {
+  try {
+    const cards = await getCards(Number(collection.id));
+    onUpdate({ ...collection, cards });
+  } catch (error) {
+    console.error("Error cargando tarjetas", error);
+  }
+};
+
+useWebSocket(fetchCards); 
 
     useEffect(() => {
-    const fetchCards = async () => {
-      try {
-        const cards = await getCards(Number(collection.id));
-        onUpdate({ ...collection, cards });
-      } catch (error) {
-        console.error("Error cargando tarjetas", error);
-      }
-    };
 
     fetchCards();
   }, [collection.id]);

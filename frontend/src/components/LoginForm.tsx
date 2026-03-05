@@ -20,6 +20,7 @@ export default function LoginForm({onSuccess}: LoginFormProps) {
             const data = await login({email, password})
 
             sessionStorage.setItem('access_token', data.access_token)
+            sessionStorage.setItem('user_role', data.role)
             if(onSuccess) onSuccess()
         } catch (error) {
             setError('Email o contraseña incorrectos.')

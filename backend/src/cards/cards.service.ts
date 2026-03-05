@@ -35,7 +35,6 @@ export class CardsService {
         forbiddenWords: true,
       },
     });
-    
     return cards.map(card => ({
       id: String(card.id),
       word: card.keyword,

@@ -1,11 +1,12 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { CreateUserDto } from "./dto/user-create.dto";
+import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from "bcryptjs";
 
 @Injectable()
 export class UsersService {
-    constructor(private readonly prisma: PrismaService) {}
+    constructor(private readonly prisma: PrismaService, private jwtService: JwtService) {}
 
     async findEmail(email: string) {
         return this.prisma.user.findUnique({
@@ -48,16 +49,22 @@ export class UsersService {
   const hashedPassword = await bcrypt.hash(data.password, 10)
 
   
-  return this.prisma.user.create({
-    data: {
-      name: data.name,
-      lastName: data.lastName,
-      email: data.email,
-      password: hashedPassword,
-      educationalCenter: data.educationalCenter ?? null,
-      roleId: 1,
-      vocationalFamilyId: data.vocationalFamilyId ?? null,
-    },
+  const newUser = await this.prisma.user.create({
+      data: {
+          name: data.name,
+          lastName: data.lastName,
+          email: data.email,
+          password: hashedPassword,
+          educationalCenter: data.educationalCenter ?? null,
+          roleId: 1,
+      },
+      include: { role: true } 
   });
-}
+
+  const payload = { email: newUser.email, sub: newUser.id, role: newUser.role?.name };
+  return {
+      access_token: this.jwtService.sign(payload),
+      role: newUser.role?.name
+  };
+  }
 }
