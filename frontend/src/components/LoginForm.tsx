@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { login } from '../api/auth';
+import { useNavigate } from 'react-router-dom';
 
 type LoginFormProps = {
     onSuccess?: () => void
 }
 
 export default function LoginForm({onSuccess}: LoginFormProps) {
+    const navigate = useNavigate()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
@@ -21,6 +23,8 @@ export default function LoginForm({onSuccess}: LoginFormProps) {
 
             sessionStorage.setItem('access_token', data.access_token)
             if(onSuccess) onSuccess()
+
+            navigate('/profile')
         } catch (error) {
             setError('Email o contraseña incorrectos.')
         } finally {

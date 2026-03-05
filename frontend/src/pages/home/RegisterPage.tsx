@@ -12,9 +12,17 @@ export default function Register() {
         const token = sessionStorage.getItem('access_token')
 
         if(token) {
-            navigate('/', {replace: true}) //redireccion temporal
+            navigate('/profile', {replace: true})
         }
     }, [navigate])
+
+    const handleRegisterSuccess = (role: string) => {
+        if(role === 'ADMIN') {
+            navigate('/admin', {replace: true})
+        } else {
+            navigate('/profile', {replace: true})
+        }
+    }
 
     return (
         <>
@@ -22,7 +30,7 @@ export default function Register() {
 
             <main>
                 <h1>Iniciar Sesión</h1>
-                <RegisterForm onSuccess={() => navigate('/', {replace: true})}></RegisterForm>
+                <RegisterForm onSuccess={handleRegisterSuccess}></RegisterForm>
             </main>
 
             <Footer></Footer>

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { register } from '../api/register'
 
 type RegisterFormProps = {
-    onSuccess?: () => void
+    onSuccess?: (role: string) => void
 }
 
 export default function RegisterForm({ onSuccess }: RegisterFormProps) {
@@ -43,15 +43,23 @@ export default function RegisterForm({ onSuccess }: RegisterFormProps) {
         setLoading(true)
 
         try {
-        await register({
-            name,
-            lastName,
-            email,
-            password,
-            educationalCenter: educationalCenter || null,
-        })
+            const result = await register({
+                name,
+                lastName,
+                email,
+                password,
+                educationalCenter: educationalCenter || null,
+            })
 
-        if (onSuccess) onSuccess()
+            if(result?.access_token) {
+                sessionStorage.setItem('access_token', result.access_token)
+            } else {
+                throw new Error('Token no recibido del servidor')
+            }
+
+            if (onSuccess) {
+                onSuccess('USER')
+            }
         } catch (err: any) {
         switch (err.message) {
             case 'EMAIL_INVALIDO':

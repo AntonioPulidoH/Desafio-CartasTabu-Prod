@@ -12,7 +12,7 @@ export default function Login() {
         const token = sessionStorage.getItem('access_token')
 
         if(token) {
-            navigate('/', {replace: true}) //redireccion temporal
+            navigate('/profile', {replace: true})
         }
     }, [navigate])
 
