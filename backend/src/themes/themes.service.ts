@@ -1,16 +1,21 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { CreateThemeDto } from "./dto/create-theme.dto";
-import { UpdateThemeDto } from "./dto/update-theme.dto";
-import { PrismaService } from "src/prisma/prisma.service";
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { CreateThemeDto } from './dto/create-theme.dto';
+import { UpdateThemeDto } from './dto/update-theme.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { WebsocketsGateway } from 'src/websockets/websocket.gateaway';
+
+
 
 @Injectable()
 export class ThemesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService, private readonly wsGateway: WebsocketsGateway) {}
 
   async create(createThemeDto: CreateThemeDto) {
+    this.wsGateway.notifyThemeCreated(createThemeDto);
     return this.prisma.theme.create({
       data: createThemeDto,
     });
+
   }
 
   async findAll() {

@@ -8,6 +8,7 @@ import PrivateRoute from './PrivateRoute'
 import { AdminLayout } from "../components/AdminLayout/AdminLayout";
 import { UserTable } from "../components/UserTable/UserTable";
 import { ThemeTable } from "../components/ThemeTable/ThemeTable";
+import DashboardPage from '../pages/Dashboard'
 
 export const appRouter = createBrowserRouter([
   {
@@ -42,4 +43,17 @@ export const appRouter = createBrowserRouter([
           { path: "tematicas", element: <ThemeTable /> },
         ],
   },
-])
+  {
+    path: "/admin",
+    element: <AdminLayout />,
+    children: [
+      { index: true, element: <Navigate to="usuarios" replace /> },
+      { path: "usuarios", element: <UserTable /> },
+      { path: "tematicas", element: <ThemeTable /> },
+    ],
+  },
+    {
+        path:"/dashboard",
+        element: <DashboardPage/>
+    }
+]);

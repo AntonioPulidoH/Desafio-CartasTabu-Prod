@@ -2,6 +2,7 @@ import { GraduationCap } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 export function BarraNavegacion() {
   const navigate = useNavigate()
+  const token = sessionStorage.getItem("access_token")
   return (
     <nav className="navbar navbar-expand-lg navbar-dark barra-nav fixed-top border-bottom" style={{ borderColor: 'var(--color-borde)' }}>
       <div className="container">
@@ -36,7 +37,12 @@ export function BarraNavegacion() {
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link small px-3 py-2" href="#empezar">
+              <a className="nav-link small px-3 py-2" 
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  token ? navigate('/dashboard') : navigate('/auth');
+                }}>
                 Crear
               </a>
             </li>

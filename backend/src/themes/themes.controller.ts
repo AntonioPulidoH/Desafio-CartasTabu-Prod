@@ -8,17 +8,20 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  Request,
+  UseGuards
 } from "@nestjs/common";
 import { ThemesService } from "./themes.service";
 import { CreateThemeDto } from "./dto/create-theme.dto";
 import { UpdateThemeDto } from "./dto/update-theme.dto";
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller("themes")
 export class ThemesController {
   constructor(private readonly themesService: ThemesService) {}
 
   @Post()
-  create(@Body() createThemeDto: CreateThemeDto) {
+  create(@Body() createThemeDto: CreateThemeDto, @Request() req) {
     return this.themesService.create(createThemeDto);
   }
 

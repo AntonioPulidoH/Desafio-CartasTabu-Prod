@@ -6,12 +6,13 @@ import {
 } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { CreateUserDto } from "./dto/user-create.dto";
+import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from "bcryptjs";
 import { UpdateUserDto, UpdateUserRoleDto } from "./dto/update-user-dto";
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService) {}
+    constructor(private readonly prisma: PrismaService, private jwtService: JwtService) {}
 
   async findEmail(email: string) {
     return this.prisma.user.findUnique({

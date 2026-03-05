@@ -20,8 +20,9 @@ export default function LoginForm({onSuccess}: LoginFormProps) {
 
         try {
             const data = await login({email, password})
-
+            console.log(data)
             sessionStorage.setItem('access_token', data.access_token)
+            sessionStorage.setItem('user_role', data.role)//Esto hay que cambiarlo, sale undefined 
             if(onSuccess) onSuccess()
 
             navigate('/profile')

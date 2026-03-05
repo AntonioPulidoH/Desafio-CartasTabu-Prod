@@ -22,7 +22,7 @@ export default function Login() {
 
             <main>
                 <h1>Iniciar Sesión</h1>
-                <LoginForm onSuccess={() => navigate('/', {replace: true})}></LoginForm>
+                <LoginForm onSuccess={() => navigate('/dashboard', {replace: true})}></LoginForm>
             </main>
 
             <Footer></Footer>

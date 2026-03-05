@@ -55,6 +55,19 @@ export const AdminSidebar = () => {
               Gestión de Temáticas
             </NavLink>
           </li>
+
+          <li className="nav-item">
+              <NavLink
+              to="/dashboard"
+              onClick={closeMenu}
+              className={({ isActive }) =>
+                `tabu-menu-item d-flex align-items-center w-100 text-start text-decoration-none ${isActive ? "is-active" : ""}`
+              }
+            >        
+            ▦ &nbsp;Colecciones</NavLink>
+
+     
+          </li>
         </ul>
       </div>
     </aside>

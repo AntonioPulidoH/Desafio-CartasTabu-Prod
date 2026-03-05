@@ -10,6 +10,9 @@ export default function Register() {
 
     useEffect(() => {
         const token = sessionStorage.getItem('access_token')
+        const role = sessionStorage.getItem('user_role')
+        
+        console.log(`rol: ${role}, token: ${token}`)
 
         if(token) {
             navigate('/profile', {replace: true})

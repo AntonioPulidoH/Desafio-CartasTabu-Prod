@@ -286,6 +286,12 @@ a:hover {
 }
 
 /* Footer */
+
+.tabu-dashboard ~ .footer-pagina,
+.tabu-dashboard + .footer-pagina {
+  margin-left: 220px;
+}
+
 .footer-pagina {
   background-color: rgba(116, 107, 170, 0.05);
 }

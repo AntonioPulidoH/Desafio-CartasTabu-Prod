@@ -4,6 +4,7 @@ import { Toaster } from "react-hot-toast";
 import { Outlet } from "react-router-dom";
 import { useUsers } from "../UserTable/hooks/useUsers";
 import { useThemes } from "../ThemeTable/hooks/useThemes";
+import { BarraNavegacion } from "../barra-navegacion";
 
 export const AdminLayout = () => {
   const { users, loading: loadingUsers } = useUsers();
@@ -16,10 +17,13 @@ export const AdminLayout = () => {
   );
 
   return (
+    
     <div
       className="d-flex flex-column flex-md-row"
       style={{ minHeight: "100vh", width: "100vw" }}
     >
+    <BarraNavegacion></BarraNavegacion>
+      
       {/* Toaster */}
       <Toaster position="top-right" reverseOrder={false} />
 
