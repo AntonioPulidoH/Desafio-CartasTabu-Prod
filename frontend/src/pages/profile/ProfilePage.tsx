@@ -6,12 +6,12 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getProfile } from "../../api/user";
 
-type Role = 'ADMIN' | 'CREADOR' | 'USUARIO'
+type Role = 'ADMIN' | 'CREATOR' | 'USER'
 
 const roleBadge: Record<Role, string> = {
     ADMIN: 'bg-danger',
-    CREADOR: 'bg-primary',
-    USUARIO: 'bg-secondary'
+    CREATOR: 'bg-primary',
+    USER: 'bg-secondary'
 }
 
 type UserProfile = {
@@ -38,12 +38,12 @@ const rolePermissions = {
         canCreateThemes: true,
         canManageUser: true
     },
-    CREADOR: {
+    CREATOR: {
         canGenerateCard: true,
         canCreateThemes: true,
         canManageUser: false
     },
-    USUARIO: {
+    USER: {
         canGenerateCard: true,
         canCreateThemes: false,
         canManageUser: false
@@ -64,7 +64,7 @@ export default function ProfilePage() {
                 lastName: data.lastName,
                 email: data.email,
                 educationalCenter: data.educationalCenter,
-                vocationalFamily: data.vocationalFamily.name,
+                vocationalFamily: data.vocationalFamily?.name ?? null,
                 role: data.role.name as Role,
 
                 //mock temporal
@@ -87,7 +87,6 @@ export default function ProfilePage() {
 
             <div className="profile-container">
                 <p>
-                    Rol: 
                     <span className={`badge ${roleBadge[profile.role] ?? 'bg-dark'}`}>
                         {profile.role}
                     </span>
@@ -117,7 +116,7 @@ export default function ProfilePage() {
                     >
                         <p>Tarjetas generadas: {profile.stats.generatedCards}</p>
 
-                        {(profile.role === 'CREADOR' || profile.role === 'ADMIN') && (
+                        {(profile.role === 'CREATOR' || profile.role === 'ADMIN') && (
                             <p>Temas creados: {profile.stats.createdThemes}</p>
                         )}
                     </Card>
