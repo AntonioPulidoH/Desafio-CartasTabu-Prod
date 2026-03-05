@@ -8,6 +8,7 @@ import { deleteThemes } from "../actions/deleteTheme";
 import { updateThemes } from "../actions/updateTheme";
 import { CollectionDetail } from "../collectionDetail";
 import { useWebSocket } from "../../../hooks/useWebsocket";
+import { AdminSidebar } from "../../AdminSidebar/AdminSidebar";
 
 
 function Modal({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
@@ -86,23 +87,10 @@ const updateFromDetail = (updated: Collection) =>
   return (
     <div className="tabu-dashboard">
 
-      <aside className="td-sidebar d-flex flex-column p-4 gap-4">
-        <div className="d-flex align-items-center gap-2">
-          <div className="td-logo-icon d-flex align-items-center justify-content-center fw-bold fs-5">T</div>
-          <div>
-            <div className="td-logo-nombre">TABÚ</div>
-            <div className="td-logo-sub">DASHBOARD</div>
-          </div>
-        </div>
+      <aside className="td-sidebar d-flex flex-column ">
+       
 
-        <nav className="d-flex flex-column gap-1">
-          <button
-            className={`td-nav-link px-3 py-2 ${!selectedCollection ? "active" : ""}`}
-            onClick={() => setSelectedId(null)}
-          >
-            ▦ &nbsp;Colecciones
-          </button>
-        </nav>
+      <AdminSidebar></AdminSidebar>
 
         <div className="td-stats-box p-3 mt-auto">
           <div className="td-suave td-stats-label mb-1">Total colecciones</div>

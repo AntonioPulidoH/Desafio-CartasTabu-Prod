@@ -2,6 +2,7 @@ export type CreateThemeRequest = {
     name: string
     description?: string
     vocationalFamilyId: number
+    creatorId?: number
 
 }
 
@@ -16,7 +17,10 @@ export async function createTheme(payload: CreateThemeRequest) {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
     },
-    body: JSON.stringify(payload)
+    body: JSON.stringify({
+      ...payload,
+      creatorId: Number(1)//Esto lo dejo para el sprint pero no está bien
+    })
   });
 
   if (!response.ok) {
