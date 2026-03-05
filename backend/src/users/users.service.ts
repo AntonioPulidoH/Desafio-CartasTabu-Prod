@@ -7,7 +7,7 @@ import {
 import { PrismaService } from "src/prisma/prisma.service";
 import { CreateUserDto } from "./dto/user-create.dto";
 import * as bcrypt from "bcryptjs";
-import { UpdateUserRoleDto } from "./dto/update-user-dto";
+import { UpdateUserDto, UpdateUserRoleDto } from "./dto/update-user-dto";
 
 @Injectable()
 export class UsersService {
@@ -172,5 +172,40 @@ export class UsersService {
     });
 
     return { message: "Usuario eliminado correctamente" };
+  }
+
+  async updateMe(userId: number, data: UpdateUserDto) {
+    const updateData: any = {
+      email: data.email,
+      educationalCenter: data.educationalCenter,
+      vocationalFamilyId: data.vocationalFamilyId
+    }
+
+    if(data.password) {
+      const hassedPassword = await bcrypt.hash(data.password, 10)
+      updateData.password = hassedPassword
+    }
+
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: updateData,
+      select: {
+        id: true,
+        name: true,
+        lastName: true,
+        email: true,
+        educationalCenter: true,
+        vocationalFamily: {
+          select: {
+            name: true
+          }
+        },
+        role: {
+          select: {
+            name:true
+          }
+        }
+      }
+    })
   }
 }

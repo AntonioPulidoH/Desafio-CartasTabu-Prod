@@ -11,11 +11,12 @@ import {
   Patch,
   Post,
   UseGuards,
-  Request
+  Request,
+  Put
 } from "@nestjs/common";
 import { CreateUserDto } from "./dto/user-create.dto";
 import { UsersService } from "./users.service";
-import { UpdateUserRoleDto } from "./dto/update-user-dto";
+import { UpdateUserRoleDto, UpdateUserDto } from "./dto/update-user-dto";
 
 @Controller("users")
 export class UsersController {
@@ -54,5 +55,11 @@ export class UsersController {
   @Delete(":id")
   remove(@Param("id", ParseIntPipe) id: number) {
     return this.usersService.remove(id);
+  }
+
+  @Put('me')
+  @UseGuards(JwtAuthGuard)
+  updateMe(@Request() req, @Body() data: UpdateUserDto) {
+    return this.usersService.updateMe(req.user.userId, data)
   }
 }
