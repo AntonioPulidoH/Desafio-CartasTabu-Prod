@@ -5,6 +5,7 @@ import Card from "../../components/ui/Card";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getProfile } from "../../api/user";
+import { EditProfileModal } from '../../components/Profile/EditProfileModal';
 
 type Role = 'ADMIN' | 'CREATOR' | 'USER'
 
@@ -54,6 +55,7 @@ const rolePermissions = {
 export default function ProfilePage() {
     const navigate = useNavigate()
     const [profile, setProfile] = useState<UserProfile | null>(null)
+    const [editOpen, setEditOpen] = useState(false)
 
     useEffect(() => {
         async function loadProfile() {
@@ -100,6 +102,8 @@ export default function ProfilePage() {
                         <p><strong>Email: </strong>{profile.email}</p>
                         <p><strong>Centro educativo: </strong>{profile.educationalCenter}</p>
                         <p><strong>Familia Profesional: </strong>{profile.vocationalFamily}</p>
+
+                        <button className='btn boton-acento' onClick={() => setEditOpen(true)}>Editar perfil</button>
                     </Card>
 
                     <Card title="Permisos">
@@ -122,6 +126,26 @@ export default function ProfilePage() {
                     </Card>
                 </div>
             </div>
+
+            <EditProfileModal
+                isOpen={editOpen}
+                onClose={() => setEditOpen(false)}
+                profile={profile}
+                onUpdated={async () => {
+                    const data = await getProfile()
+
+                    setProfile({
+                        id: data.id,
+                        name: data.name,
+                        lastName: data.lastName,
+                        email: data.email,
+                        educationalCenter: data.educationalCenter,
+                        vocationalFamily: data.vocationalFamily?.name ?? null,
+                        role: data.role.name as Role,
+                        stats: profile.stats
+                    })
+                }}    
+            ></EditProfileModal>
 
             <Footer></Footer>
         </>
