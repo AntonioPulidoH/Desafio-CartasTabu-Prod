@@ -25,7 +25,7 @@ export function CollectionCard({ collection, onOpen, onEdit, onDelete }: {
         <span className="td-suave td-desc">
           <span className="fw-bold td-count">{(collection.cards ?? []).length}</span> tarjetas
         </span>
-        <span className="td-suave td-date">{collection.createdAt}</span>
+        <span className="td-suave td-date">{collection.createdAt.slice(0, 10)}</span>
       </div>
     </div>
   );

@@ -19,6 +19,11 @@ export class CardsController {
     return this.cardsService.findAll();
   }
 
+  @Get('themes/:themeId')
+    findByTheme(@Param('themeId') themeId: string) {
+      return this.cardsService.findByTheme(Number(themeId));
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.cardsService.findOne(+id);
@@ -34,8 +39,5 @@ export class CardsController {
     return this.cardsService.remove(+id);
   }
 
-  @Get('themes/:themeId')
-  findByTheme(@Param('themeId') themeId: string) {
-    return this.cardsService.findByTheme(Number(themeId));
-  }
+
 }

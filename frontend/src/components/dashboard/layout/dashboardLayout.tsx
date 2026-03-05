@@ -1,19 +1,13 @@
 import { useState, useEffect } from "react";
 import "../styles/dashboard.css";
 import CollectionForm from "../collectionForm";
-import { CardItem } from "../cardItem";
 import { CollectionCard } from "../collectionCard";
 import type { Collection } from "../types/colection.interface";
-import type { TabuCard } from "../types/tabuCard.interface";
-import { CardForm } from "../cardForm";
-import { getThemes } from "../../../api/getThemes";
-import { deleteThemes } from "../../../api/deleteTheme";
-import { updateThemes } from "../../../api/updateTheme";
-import { getCards } from "../../../api/getCards";
-import { updateCards } from "../../../api/updateCard";
-import { deleteCards } from "../../../api/deleteCard";
+import { getThemes } from "../actions/getThemes";
+import { deleteThemes } from "../actions/deleteTheme";
+import { updateThemes } from "../actions/updateTheme";
+import { CollectionDetail } from "../collectionDetail";
 
-const uid = () => Math.random().toString(36).slice(2, 9);
 
 function Modal({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
   return (
@@ -29,100 +23,7 @@ function Modal({ title, onClose, children }: { title: string; onClose: () => voi
   );
 }
 
-function CollectionDetail({ collection, onBack, onUpdate }: {
-  collection: Collection;
-  onBack: () => void;
-  onUpdate: (col: Collection) => void;
-}) {
-  const [showCardForm, setShowCardForm] = useState(false);
-  const [editingCard, setEditingCard] = useState<TabuCard | null>(null);
 
-    useEffect(() => {
-    const fetchCards = async () => {
-      try {
-        const cards = await getCards(Number(collection.id));
-        onUpdate({ ...collection, cards });
-      } catch (error) {
-        console.error("Error cargando tarjetas", error);
-      }
-    };
-
-    fetchCards();
-  }, [collection.id]);
-
-  const addCard = (data: Omit<TabuCard, "id">) => {
-    onUpdate({ ...collection, cards: [...(collection.cards ?? []), { ...data, id: uid() }] });
-    setShowCardForm(false);
-  };
-
-
-
-const deleteCard = async (id: string) => {
-  try {
-    await deleteCards(id);
-
-    // recargar tarjetas
-    const cards = await getCards(Number(collection.id));
-    onUpdate({ ...collection, cards });
-
-  } catch (error) {
-    console.error("Error eliminando tarjeta", error);
-  }
-};
-
-  return (
-    <div>
-      <button className="btn td-btn-sec px-3 py-2 mb-4" onClick={onBack}>← Volver</button>
-
-      <div className="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
-        <div>
-          <div className="d-flex align-items-center gap-2 mb-1 flex-wrap">
-            <h2 className="mb-0">{collection.name}</h2>
-            <span className="td-badge">Familia {collection.vocationalFamily?.name}</span>
-          </div>
-          {collection.description && <p className="td-suave mb-0">{collection.description}</p>}
-        </div>
-        <button className="btn td-btn-acento px-3 py-2" onClick={() => setShowCardForm(true)}>
-          + Nueva tarjeta
-        </button>
-      </div>
-
-      <div className="td-stat-row d-flex gap-4 p-3 mb-4">
-        <div>
-          <div className="td-stat-label">Tarjetas</div>
-          <div className="td-stat-value">{(collection.cards ?? []).length}</div>
-        </div>
-        <div className="td-stat-divider" />
-        <div>
-          <div className="td-stat-label">Creada</div>
-          <div className="td-stat-value">{collection.createdAt}</div>
-        </div>
-      </div>
-
-      {(collection.cards ?? []).length === 0 ? (
-        <div className="td-empty text-center py-5 px-3">
-          <div className="td-empty-icon mb-2">🃏</div>
-          <p className="mb-3">Esta colección no tiene tarjetas todavía.</p>
-          <button className="btn td-btn-acento px-3 py-2" onClick={() => setShowCardForm(true)}>
-            Crear primera tarjeta
-          </button>
-        </div>
-      ) : (
-        <div className="d-flex flex-column gap-2">
-          {(collection.cards ?? []).map((card) => (
-            <CardItem key={card.id} card={card} onEdit={() => setEditingCard(card)} onDelete={() => deleteCard(card.id)} />
-          ))}
-        </div>
-      )}
-
-      {showCardForm && (
-        <Modal title="Nueva tarjeta" onClose={() => setShowCardForm(false)}>
-          <CardForm themeId={Number(collection.id)} onSave={addCard} onCancel={() => setShowCardForm(false)} />
-        </Modal>
-      )}
-    </div>
-  );
-}
 
 export default function TabuDashboard() {
   const [collections, setCollections] = useState<Collection[]>([]);
@@ -161,7 +62,7 @@ export default function TabuDashboard() {
 
   const createCollection = async () => {
     setShowCreate(false);
-    await fetchCollections(); // recarga del backend tras crear
+    await fetchCollections(); 
   };
 
 const saveEdit = async (data: Partial<Collection>) => {
@@ -182,7 +83,6 @@ const updateFromDetail = (updated: Collection) =>
   return (
     <div className="tabu-dashboard">
 
-      {/* Sidebar */}
       <aside className="td-sidebar d-flex flex-column p-4 gap-4">
         <div className="d-flex align-items-center gap-2">
           <div className="td-logo-icon d-flex align-items-center justify-content-center fw-bold fs-5">T</div>
@@ -210,7 +110,6 @@ const updateFromDetail = (updated: Collection) =>
         </div>
       </aside>
 
-      {/* Main */}
       <main className="td-main">
         {selectedCollection ? (
           <CollectionDetail

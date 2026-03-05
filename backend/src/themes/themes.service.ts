@@ -18,11 +18,16 @@ export class ThemesService {
     })
   }
 
-  findAll() {
+  async findAll() {
     return this.prisma.theme.findMany({
       include: {
-        vocationalFamily: true, 
-      },
+        vocationalFamily: true,
+        cards: {
+          include: {
+            forbiddenWords: true,
+          }
+        }
+      }
     });
   }
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { TabuCard } from "./types/tabuCard.interface";
-import { createCard } from "../../api/createCard";
+import { createCard } from "./actions/createCard";
 
 export function CardForm({ initial, themeId, onSave, onCancel }: {
   initial?: Partial<TabuCard>;
@@ -9,19 +9,19 @@ export function CardForm({ initial, themeId, onSave, onCancel }: {
   onCancel: () => void;
 }) {
   const [word, setWord] = useState(initial?.word || "");
-  const [tabuInput, setTabuInput] = useState((initial?.tabuWords || []).join(", "));
+  const [tabuInput, setTabuInput] = useState((initial?.forbiddenWords || []).join(", "));
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const tabuWords = tabuInput.split(",").map((s) => s.trim()).filter(Boolean);
-  const valid = word.trim().length > 0 && tabuWords.length >= 1;
+  const forbiddenWords = tabuInput.split(",").map((s) => s.trim()).filter(Boolean);
+  const valid = word.trim().length > 0 && forbiddenWords.length >= 1;
 
   const handleSave = async () => {
     if (!valid) return;
     setLoading(true);
     try {
-     await createCard({ keyword: word.trim(), forbiddenWords: tabuWords, themeId });
-      onSave({ word: word.trim(), tabuWords });
+     await createCard({ keyword: word.trim(), forbiddenWords: forbiddenWords, themeId });
+      onSave({ word: word.trim(), forbiddenWords});
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -54,9 +54,9 @@ export function CardForm({ initial, themeId, onSave, onCancel }: {
           placeholder="pez, dientes, océano, aleta..."
         />
       </div>
-      {tabuWords.length > 0 && (
+      {forbiddenWords.length > 0 && (
         <div className="d-flex flex-wrap gap-1">
-          {tabuWords.map((w, i) => <span key={i} className="td-chip-preview">{w}</span>)}
+          {forbiddenWords.map((w, i) => <span key={i} className="td-chip-preview">{w}</span>)}
         </div>
       )}
       {error && <p className="text-danger mb-0">{error}</p>}

@@ -1,13 +1,10 @@
 import { useState, useEffect } from "react";
 import type { Collection } from "./types/colection.interface";
-import { createTheme } from "../../api/createTheme";
-import { updateThemes } from "../../api/updateTheme";
-import { getVocationalFamilies } from "../../api/getFamilies";
+import { createTheme } from "./actions/createTheme";
+import { updateThemes } from "./actions/updateTheme";
+import { getVocationalFamilies } from "./actions/getFamilies";
+import type { VocationalFamily } from "./types/vocationalFamily";
 
-type VocationalFamily = {
-  id: number;
-  name: string;
-}
 
 export default function CollectionForm({ initial, onSave, onCancel }: {
   initial?: Partial<Collection>;
@@ -78,7 +75,7 @@ export default function CollectionForm({ initial, onSave, onCancel }: {
           value={vocationalFamilyId}
           onChange={(e) => setFamily(Number(e.target.value))}
         >
-          <option value={0} disabled>Selecciona una familia...</option>
+        <option value="" selected>Selecciona la familia profesional</option>
           {families.map((f) => (
             <option key={f.id} value={f.id}>{f.name}</option>
           ))}
