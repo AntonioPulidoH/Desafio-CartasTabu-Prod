@@ -1,57 +1,70 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateThemeDto } from './dto/create-theme.dto';
 import { UpdateThemeDto } from './dto/update-theme.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { WebsocketsGateway } from 'src/websockets/websocket.gateaway';
 
+
+
 @Injectable()
 export class ThemesService {
-  constructor(private readonly prisma:PrismaService, private readonly wsGateway: WebsocketsGateway){}
-  async create(data: CreateThemeDto, creatorId: number) {
-    const theme = await this.prisma.theme.create({
-      data: {
-        name: data.name,
-        description: data.description,
-        vocationalFamilyId: data.vocationalFamilyId,
-        creatorId: creatorId,
-      },
+  constructor(private readonly prisma: PrismaService, private readonly wsGateway: WebsocketsGateway) {}
+
+  async create(createThemeDto: CreateThemeDto) {
+    this.wsGateway.notifyThemeCreated(createThemeDto);
+    return this.prisma.theme.create({
+      data: createThemeDto,
     });
 
-    this.wsGateway.notifyThemeCreated(theme);
-    return theme;
   }
 
   async findAll() {
     return this.prisma.theme.findMany({
       include: {
-        vocationalFamily: true,
-        cards: {
-          include: {
-            forbiddenWords: true,
-          }
-        }
-      }
+        vocationalFamily: {
+          select: { id: true, name: true },
+        },
+        creator: {
+          select: { id: true, name: true, lastName: true },
+        },
+        _count: {
+          select: { cards: true },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
   }
 
-  findOne(id: number) {
-      return this.prisma.theme.findUnique({
-        where: { id },
-      });
+  async findOne(id: number) {
+    const theme = await this.prisma.theme.findUnique({
+      where: { id },
+      include: {
+        vocationalFamily: true,
+        creator: true,
+        cards: true,
+      },
+    });
+
+    if (!theme) {
+      throw new NotFoundException(`La temática con ID ${id} no existe`);
+    }
+    return theme;
   }
 
-update(id: number, updateThemeDto: UpdateThemeDto) {
-  return this.prisma.theme.update({
-    where: { id },
-    data: {
-      name: updateThemeDto.name,
-      description: updateThemeDto.description,
-      vocationalFamilyId: updateThemeDto.vocationalFamilyId,
-    }
-  });
-}
+  async update(id: number, updateThemeDto: UpdateThemeDto) {
+    await this.findOne(id);
 
-  remove(id: number) {
+    return this.prisma.theme.update({
+      where: { id },
+      data: updateThemeDto,
+    });
+  }
+
+  async remove(id: number) {
+    await this.findOne(id);
+
     return this.prisma.theme.delete({
       where: { id },
     });

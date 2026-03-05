@@ -20,7 +20,12 @@ body {
   color: var(--color-claro);
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-varela-round), 'Varela Round', sans-serif;
   color: var(--color-claro);
 }
@@ -311,4 +316,13 @@ a:hover {
 
 .footer-enlaces a:hover {
   color: var(--color-acento);
+}
+
+.titulo-tabu {
+  color: var(--color-acento);
+  font-size: 2.2rem;
+  font-weight: 600;
+  text-shadow: 0 4px 16px rgba(255, 89, 77, 0.4);
+  letter-spacing: 2px;
+  margin-bottom: 2rem;
 }

@@ -1,15 +1,4 @@
-import { IsNumber, IsOptional, IsString } from "class-validator";
+import { PartialType } from '@nestjs/mapped-types';
+import { CreateThemeDto } from './create-theme.dto';
 
-export class UpdateThemeDto {
-    @IsOptional()
-    @IsString()
-    name?: string;
-
-    @IsOptional()
-    @IsString()
-    description?: string;
-
-    @IsOptional()
-    @IsNumber()
-    vocationalFamilyId?: number;
-}
+export class UpdateThemeDto extends PartialType(CreateThemeDto) {}
