@@ -572,6 +572,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-oauth/google@npm:^0.13.4":
+  version: 0.13.4
+  resolution: "@react-oauth/google@npm:0.13.4"
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 10c0/0df487a22a4bd896c6ba3f7495618799c7dadf160776339b749a494bf88898c901b9e3db72bf6902039c927c465a23fe45ef12e948666a5ae62e79687d121eab
+  languageName: node
+  linkType: hard
+
 "@rolldown/pluginutils@npm:1.0.0-rc.2":
   version: 1.0.0-rc.2
   resolution: "@rolldown/pluginutils@npm:1.0.0-rc.2"
@@ -1671,6 +1681,7 @@ __metadata:
   resolution: "frontend@workspace:."
   dependencies:
     "@eslint/js": "npm:^9.39.1"
+    "@react-oauth/google": "npm:^0.13.4"
     "@types/node": "npm:^24.10.1"
     "@types/react": "npm:^19.2.5"
     "@types/react-dom": "npm:^19.2.3"
