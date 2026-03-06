@@ -51,6 +51,11 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
 
             if (response.ok && data.access_token) {
                 sessionStorage.setItem('access_token', data.access_token);
+
+                if (data.role) {
+                    sessionStorage.setItem('user_role', data.role)
+                }
+
                 if (onSuccess) onSuccess();
                 navigate('/profile');
             } else {
