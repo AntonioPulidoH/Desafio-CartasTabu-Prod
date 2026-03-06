@@ -7,12 +7,15 @@ import {
 import { PrismaService } from "src/prisma/prisma.service";
 import { CreateUserDto } from "./dto/user-create.dto";
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from "bcryptjs";
+import * as bcrypt from "bcrypt";
 import { UpdateUserDto, UpdateUserRoleDto } from "./dto/update-user-dto";
 
 @Injectable()
 export class UsersService {
-    constructor(private readonly prisma: PrismaService, private jwtService: JwtService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private jwtService: JwtService
+  ) { }
 
   async findEmail(email: string) {
     return this.prisma.user.findUnique({
@@ -23,16 +26,16 @@ export class UsersService {
 
   async create(data: CreateUserDto) {
     const isValidEmail = (email: string): boolean => {
-      const emailVerified = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-      return emailVerified.test(email)
-    }
+      const emailVerified = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailVerified.test(email);
+    };
 
     const isValidPassword = (password: string): boolean => {
-      const passwordVerified = /^(?=.*[A-Z])(?=.*\d).{8,}$/
-      return passwordVerified.test(password)
-    }
+      const passwordVerified = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+      return passwordVerified.test(password);
+    };
 
-    if(!data.email || !isValidEmail(data.email)) {
+    if (!data.email || !isValidEmail(data.email)) {
       throw new BadRequestException("EMAIL_INVALIDO");
     }
 
@@ -156,12 +159,12 @@ export class UsersService {
     const updateData: any = {
       email: data.email,
       educationalCenter: data.educationalCenter,
-      vocationalFamilyId: data.vocationalFamilyId
-    }
+      vocationalFamilyId: data.vocationalFamilyId,
+    };
 
-    if(data.password) {
-      const hassedPassword = await bcrypt.hash(data.password, 10)
-      updateData.password = hassedPassword
+    if (data.password) {
+      const hashedPassword = await bcrypt.hash(data.password, 10);
+      updateData.password = hashedPassword;
     }
 
     return this.prisma.user.update({
@@ -175,15 +178,15 @@ export class UsersService {
         educationalCenter: true,
         vocationalFamily: {
           select: {
-            name: true
-          }
+            name: true,
+          },
         },
         role: {
           select: {
-            name:true
-          }
-        }
-      }
-    })
+            name: true,
+          },
+        },
+      },
+    });
   }
 }
