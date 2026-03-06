@@ -21,7 +21,7 @@ import { AuthService } from 'src/auth/auth.service';
 
 @Controller("users")
 export class UsersController {
-  constructor(private readonly usersService: UsersService, private readonly authService: AuthService) { }
+  constructor(private readonly usersService: UsersService, private readonly authService: AuthService) {}
 
   @Post("register")
   @HttpCode(HttpStatus.OK)

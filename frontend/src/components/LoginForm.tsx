@@ -1,14 +1,12 @@
 import { useState } from 'react';
 import { login } from '../api/auth';
 import { useNavigate } from 'react-router-dom';
-import { GoogleLogin } from '@react-oauth/google';
-import type { CredentialResponse } from '@react-oauth/google';
 
 type LoginFormProps = {
     onSuccess?: () => void
 }
 
-export default function LoginForm({ onSuccess }: LoginFormProps) {
+export default function LoginForm({onSuccess}: LoginFormProps) {
     const navigate = useNavigate()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -21,48 +19,15 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
         setLoading(true)
 
         try {
-            const data = await login({ email, password })
+            const data = await login({email, password})
+            console.log(data)
             sessionStorage.setItem('access_token', data.access_token)
+            sessionStorage.setItem('user_role', data.role)//Esto hay que cambiarlo, sale undefined 
+            if(onSuccess) onSuccess()
 
-            if (data.role) {
-                sessionStorage.setItem('user_role', data.role)
-            }
-
-            if (onSuccess) onSuccess()
             navigate('/profile')
-        } catch {
+        } catch (error) {
             setError('Email o contraseña incorrectos.')
-        } finally {
-            setLoading(false)
-        }
-    }
-
-    const handleGoogleSuccess = async (credentialResponse: CredentialResponse) => {
-        setError('')
-        setLoading(true)
-        try {
-            const response = await fetch('/api/auth/google', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id_token: credentialResponse.credential }),
-            })
-
-            const data = await response.json()
-
-            if (response.ok && data.access_token) {
-                sessionStorage.setItem('access_token', data.access_token);
-
-                if (data.role) {
-                    sessionStorage.setItem('user_role', data.role)
-                }
-
-                if (onSuccess) onSuccess();
-                navigate('/profile');
-            } else {
-                setError('No se pudo validar la cuenta de Google.')
-            }
-        } catch {
-            setError('Error de conexión con el servidor.')
         } finally {
             setLoading(false)
         }
@@ -75,53 +40,40 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
                     <div className='col-md-6 col-lg-5'>
                         <div className='card auth-card border-0 shadow-sm '>
                             <div className='card-body p-5'>
-                                <h2 className='card-title mb-4 text-center fw-bold text-white'>Iniciar Sesión</h2>
+                                <h2 className='card-title mb-4 text-center fw-bold'>Iniciar Sesión</h2>
                                 <form className='auth-form' onSubmit={handleSubmit}>
                                     <div className='mb-3'>
                                         <input
+                                            id='email'
                                             className='form-control'
                                             type='email'
                                             placeholder='Introduce tu email'
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
-                                            required />
+                                            required>
+                                        </input>
                                     </div>
 
                                     <div className='mb-4'>
                                         <input
+                                            id='password'
                                             className='form-control'
                                             type='password'
                                             placeholder='Introduce tu contraseña'
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
-                                            required />
+                                            required>
+                                        </input>
                                     </div>
 
-                                    {error && <p className='text-danger text-center fw-bold'>{error}</p>}
+                                    {error && <p className='text-danger'>{error}</p>}
 
                                     <button className='btn btn-auth-submit w-100 py-2' type='submit' disabled={loading}>
                                         {loading ? 'Entrando...' : 'Entrar'}
                                     </button>
-
-                                    <div className='d-flex align-items-center my-4'>
-                                        <hr className='flex-grow-1 border-light' style={{ opacity: 1 }} />
-                                        <span className='mx-3 fw-bold text-white'>o</span>
-                                        <hr className='flex-grow-1 border-light' style={{ opacity: 1 }} />
-                                    </div>
-
-                                    <div className='d-flex justify-content-center mb-3'>
-                                        <GoogleLogin
-                                            onSuccess={handleGoogleSuccess}
-                                            onError={() => setError('Fallo en la autenticación')}
-                                            theme='filled_blue'
-                                            shape='pill'
-                                            width="100%"
-                                        />
-                                    </div>
-
-                                    <p className='text-center mt-3 mb-0 text-white'>
+                                    <p className='text-center mt-3 mb-0 '>
                                         ¿Aún no tienes cuenta?{' '}
-                                        <a href='/register' className='fw-bold'>Regístrate</a>
+                                        <a href='/register'>Regístrate</a>
                                     </p>
                                 </form>
                             </div>
@@ -130,5 +82,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
                 </div>
             </div>
         </div>
+        
+        
     )
 }
