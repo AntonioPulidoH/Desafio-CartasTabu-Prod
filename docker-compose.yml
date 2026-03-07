@@ -57,7 +57,7 @@ services:
     depends_on:
       - backend
     command: >
-      sh -c "yarn install &&
+      sh -c "yarn install && 
              yarn dev --host 0.0.0.0 --port 5173"
 
   ### NGINX
