@@ -9,6 +9,7 @@ import { AdminLayout } from "../components/AdminLayout/AdminLayout";
 import { UserTable } from "../components/UserTable/UserTable";
 import { ThemeTable } from "../components/ThemeTable/ThemeTable";
 import DashboardPage from '../pages/Dashboard'
+import { SharedCollection } from "../components/dashboard/sharedCollection";
 
 export const appRouter = createBrowserRouter([
   {
@@ -55,5 +56,9 @@ export const appRouter = createBrowserRouter([
     {
         path:"/dashboard",
         element: <DashboardPage/>
+    },
+    {
+        path:"/collection/:id",
+        element:<SharedCollection/>
     }
 ]);

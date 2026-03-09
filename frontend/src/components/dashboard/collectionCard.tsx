@@ -1,16 +1,18 @@
 import type { Collection } from "./types/colection.interface";
 
-export function CollectionCard({ collection, onOpen, onEdit, onDelete }: {
+export function CollectionCard({ collection, onOpen, onEdit, onDelete, onShare }: {
   collection: Collection;
   onOpen: () => void;
   onEdit: () => void;
   onDelete: () => void;
+  onShare: () => void;
 }) {
   return (
     <div className="td-card p-3 d-flex flex-column gap-3" onClick={onOpen}>
       <div className="d-flex justify-content-between align-items-start">
         <span className="td-badge">{collection.vocationalFamily?.name}</span>
         <div className="d-flex gap-1" onClick={(e) => e.stopPropagation()}>
+          <button className="td-btn-icon" onClick={onShare} title="Compartir">🔗</button>
           <button className="td-btn-icon" onClick={onEdit} title="Editar">✏️</button>
           <button className="td-btn-icon danger" onClick={onDelete} title="Eliminar">🗑</button>
         </div>

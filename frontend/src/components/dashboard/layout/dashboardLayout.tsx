@@ -9,6 +9,7 @@ import { updateThemes } from "../actions/updateTheme";
 import { CollectionDetail } from "../collectionDetail";
 import { useWebSocket } from "../../../hooks/useWebsocket";
 import { AdminSidebar } from "../../AdminSidebar/AdminSidebar";
+import toast, { Toaster } from "react-hot-toast";
 
 
 function Modal({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
@@ -86,7 +87,7 @@ const updateFromDetail = (updated: Collection) =>
 
   return (
     <div className="tabu-dashboard">
-
+    <Toaster position="top-right" reverseOrder={false} />
       <aside className="td-sidebar d-flex flex-column ">
        
 
@@ -175,6 +176,11 @@ const updateFromDetail = (updated: Collection) =>
                       onOpen={() => setSelectedId(col.id)}
                       onEdit={() => setEditingCollection(col)}
                       onDelete={() => deleteCollection(col.id)}
+                      onShare={() => {
+                        const url = `${window.location.origin}/collection/${col.id}`;
+                        navigator.clipboard.writeText(url);
+                        toast.success('Se ha copiado el enlace')
+                      }}
                     />
                   </div>
                 ))}

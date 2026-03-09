@@ -7,7 +7,7 @@ export function CardItem({ card,  onDelete }: { card: TabuCard; onDelete: () => 
       <div className="flex-grow-1">
         <div className="td-card-word mb-2">{card.word}</div>
         <div className="d-flex flex-wrap gap-1">
-          {card.forbiddenWords.map((w, i) => <span key={i} className="td-chip">{w}</span>)}
+         {(card.forbiddenWords ?? []).map((w, i) => <span key={i} className="td-chip">{w}</span>)}
         </div>
       </div>
       <div className="d-flex gap-1 flex-shrink-0">
