@@ -2,8 +2,6 @@ export type CreateThemeRequest = {
     name: string
     description?: string
     vocationalFamilyId: number
-    creatorId?: number
-
 }
 
 const API_BASE_URL = import.meta.env.VITE_API_URL
@@ -19,7 +17,6 @@ export async function createTheme(payload: CreateThemeRequest) {
     },
     body: JSON.stringify({
       ...payload,
-      creatorId: Number(1)//Esto lo dejo para el sprint pero no está bien
     })
   });
 

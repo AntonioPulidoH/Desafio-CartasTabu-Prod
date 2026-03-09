@@ -10,12 +10,16 @@ import { WebsocketsGateway } from 'src/websockets/websocket.gateaway';
 export class ThemesService {
   constructor(private readonly prisma: PrismaService, private readonly wsGateway: WebsocketsGateway) {}
 
-  async create(createThemeDto: CreateThemeDto) {
-    this.wsGateway.notifyThemeCreated(createThemeDto);
+async create(data: CreateThemeDto, creatorId: number) {
     return this.prisma.theme.create({
-      data: createThemeDto,
-    });
+      data:{
+        name:data.name,
+        description:data.description,
+        vocationalFamilyId:data.vocationalFamilyId,
+        creatorId:creatorId
+      }
 
+    })
   }
 
   async findAll() {

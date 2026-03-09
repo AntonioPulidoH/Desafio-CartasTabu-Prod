@@ -21,8 +21,15 @@ export class ThemesController {
   constructor(private readonly themesService: ThemesService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   create(@Body() createThemeDto: CreateThemeDto, @Request() req) {
-    return this.themesService.create(createThemeDto);
+     console.log('req.user:', req.user);
+    return this.themesService.create(createThemeDto, req.user.userId);
+  }
+
+  @Get(':id/public')
+  findPublic(@Param('id') id: string) {
+    return this.themesService.findOne(+id);  
   }
 
   @Get()
