@@ -1,4 +1,4 @@
-import { Users, Globe, Menu, X } from "lucide-react";
+import { Users, Globe, Menu, X, LayoutGrid } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { useAdminSidebar } from "./hooks/useAdminSidebar";
 import "./AdminSidebar.css";
@@ -10,7 +10,6 @@ export const AdminSidebar = () => {
     <aside className="admin-sidebar d-flex flex-column flex-shrink-0 border-end">
       {/* Cabecera */}
       <div className="d-flex justify-content-between align-items-center p-3 d-md-none w-100">
-        <div className="fw-bold text-white">Logo</div>
         <button
           className="btn btn-sm text-white"
           onClick={toggleMenu}
@@ -24,7 +23,6 @@ export const AdminSidebar = () => {
       <div
         className={`p-3 flex-column w-100 ${isMenuOpen ? "d-flex" : "d-none d-md-flex"}`}
       >
-
         <ul className="nav flex-column mb-auto gap-2">
           <li className="nav-item">
             <NavLink
@@ -53,16 +51,16 @@ export const AdminSidebar = () => {
           </li>
 
           <li className="nav-item">
-              <NavLink
+            <NavLink
               to="/dashboard"
               onClick={closeMenu}
               className={({ isActive }) =>
                 `tabu-menu-item d-flex align-items-center w-100 text-start text-decoration-none ${isActive ? "is-active" : ""}`
               }
-            >        
-            ▦ &nbsp;Colecciones</NavLink>
-
-     
+            >
+              <LayoutGrid className="me-3" size={20} />
+              Colecciones
+            </NavLink>
           </li>
         </ul>
       </div>
