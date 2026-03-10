@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getCollection } from "./actions/getCollectionLink";
 import { CardItem } from "./cardItem";
 import type { Collection } from "./types/colection.interface";
+import { themeService } from "./services/themeService";
 
 export function SharedCollection() {
   const { id } = useParams();
   const [collection, setCollection] = useState<Collection | null>(null);
   const [error, setError] = useState("");
 
+
 useEffect(() => {
-  getCollection(Number(id))
+  themeService.getPublic(Number(id))
     .then(data => setCollection({
       ...data,
       cards: (data.cards ?? []).map((c: any) => ({

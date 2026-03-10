@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { TabuCard } from "./types/tabuCard.interface";
-import { createCard } from "./actions/createCard";
+import { cardService } from "./services/cardService";
 
 const TABU_WORDS = 4;
 
@@ -28,7 +28,11 @@ export function CardForm({ initial, themeId, onSave, onCancel }: {
     if (!valid) return;
     setLoading(true);
     try {
-      await createCard({ keyword: word.trim(), forbiddenWords, themeId });
+    await cardService.create({      
+      keyword: word.trim(),
+      themeId: themeId,             
+      forbiddenWords: forbiddenWords,
+    });
       onSave({ word: word.trim(), forbiddenWords });
     } catch (err: any) {
       setError(err.message);

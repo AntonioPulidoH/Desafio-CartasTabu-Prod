@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { deleteCards } from "./actions/deleteCard";
-import { getCards } from "./actions/getCards";
 import type { Collection } from "./types/colection.interface";
 import { CardForm } from "./cardForm";
 import { CardItem } from "./cardItem";
 import { useWebSocket } from "../../hooks/useWebsocket";
+import { cardService } from "./services/cardService";
+import toast from "react-hot-toast";
 
 
 function Modal({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
@@ -27,16 +27,20 @@ export function CollectionDetail({ collection, onBack, onUpdate }: {
   onUpdate: (col: Collection) => void;
 }) {
   const [showCardForm, setShowCardForm] = useState(false);
-     const fetchCards = async () => {
-  try {
-    const cards = await getCards(Number(collection.id));
-    onUpdate({ ...collection, cards });
-  } catch (error) {
-    console.error("Error cargando tarjetas", error);
-  }
-};
+    const fetchCards = async () => {
+    try {
+        const cards = await cardService.getByTheme(Number(collection.id));
+        onUpdate({ ...collection, cards });
+    } catch (error) {
+        console.error("Error cargando tarjetas", error);
+    }
+    };
 
-useWebSocket(fetchCards); 
+    useWebSocket({
+    onCardCreated: () => { fetchCards(); toast.success("Nueva tarjeta creada"); },
+    onCardUpdated: () => { fetchCards(); toast("Tarjeta actualizada"); },
+    onCardDeleted: () => { fetchCards(); toast.error("Tarjeta eliminada"); },
+    });
 
     useEffect(() => {
 
@@ -44,23 +48,21 @@ useWebSocket(fetchCards);
   }, [collection.id]);
 
     const addCard = async () => {
-    const cards = await getCards(Number(collection.id));
+    const cards = await cardService.getByTheme(Number(collection.id));
     onUpdate({ ...collection, cards });
     setShowCardForm(false);
     };
 
 
-const deleteCard = async (id: string) => {
-  try {
-    await deleteCards(id);
-
-    const cards = await getCards(Number(collection.id));
-    onUpdate({ ...collection, cards });
-
-  } catch (error) {
-    console.error("Error eliminando tarjeta", error);
-  }
-};
+    const deleteCard = async (id: string) => {
+    try {
+        await cardService.delete(id);
+        const cards = await cardService.getByTheme(Number(collection.id));
+        onUpdate({ ...collection, cards });
+    } catch (error) {
+        console.error("Error eliminando tarjeta", error);
+    }
+    };
 
   return (
     <div>

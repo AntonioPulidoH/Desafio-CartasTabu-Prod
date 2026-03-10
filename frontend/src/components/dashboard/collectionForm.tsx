@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import type { Collection } from "./types/colection.interface";
-import { createTheme } from "./actions/createTheme";
-import { updateThemes } from "./actions/updateTheme";
-import { getVocationalFamilies } from "./actions/getFamilies";
 import type { VocationalFamily } from "./types/vocationalFamily";
+import { familyService } from "./services/familyService";
+import { themeService } from "./services/themeService";
 
 
 export default function CollectionForm({ initial, onSave, onCancel }: {
@@ -22,7 +21,7 @@ export default function CollectionForm({ initial, onSave, onCancel }: {
   const valid = name.trim().length > 0 && vocationalFamilyId !== 0;
 
   useEffect(() => {
-    getVocationalFamilies()
+    familyService.getAll()
       .then(setFamilies)
       .catch(() => setError('Error al cargar las familias profesionales'));
   }, []);
@@ -33,9 +32,9 @@ export default function CollectionForm({ initial, onSave, onCancel }: {
     setLoading(true);
     try {
       if (isEditing) {
-        await updateThemes(String(initial!.id!), { name, description, vocationalFamilyId });
+        await themeService.update(String(initial!.id!), { name, description, vocationalFamilyId });
       } else {
-        await createTheme({ name, description, vocationalFamilyId });
+        await themeService.create({ name, description, vocationalFamilyId });
       }
       onSave({});
     } catch (err: any) {

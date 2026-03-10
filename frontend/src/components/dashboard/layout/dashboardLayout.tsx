@@ -3,13 +3,11 @@ import "../styles/dashboard.css";
 import CollectionForm from "../collectionForm";
 import { CollectionCard } from "../collectionCard";
 import type { Collection } from "../types/colection.interface";
-import { getThemes } from "../actions/getThemes";
-import { deleteThemes } from "../actions/deleteTheme";
-import { updateThemes } from "../actions/updateTheme";
 import { CollectionDetail } from "../collectionDetail";
 import { useWebSocket } from "../../../hooks/useWebsocket";
 import { AdminSidebar } from "../../AdminSidebar/AdminSidebar";
 import toast, { Toaster } from "react-hot-toast";
+import { themeService } from "../services/themeService";
 
 
 function Modal({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
@@ -41,10 +39,8 @@ export default function TabuDashboard() {
  
 
   const fetchCollections = async () => {
-    
-
     try {
-      const data = await getThemes();
+      const data = await themeService.getAll();
       setCollections(data);
     } catch (err) {
       console.error('Error al cargar colecciones', err);
@@ -52,10 +48,6 @@ export default function TabuDashboard() {
       setLoadingCollections(false);
     }
   };
-useWebSocket(fetchCollections);
-  useEffect(() => {
-    fetchCollections();
-  }, []);
 
   const filtered = collections.filter((c) => {
     const matchSearch =
@@ -65,22 +57,35 @@ useWebSocket(fetchCollections);
     return matchSearch && matchFamily;
   });
 
+    useWebSocket({
+    onThemeCreated: () => { fetchCollections(); toast.success("Nueva colección creada"); },
+    onThemeUpdated: () => { fetchCollections(); toast("Colección actualizada"); },
+    onThemeDeleted: () => { fetchCollections(); toast.error("Colección eliminada"); },
+    onCardCreated:  () => { fetchCollections(); toast.success("Nueva tarjeta creada"); },
+    onCardUpdated:  () => { fetchCollections(); toast("Tarjeta actualizada"); },
+    onCardDeleted:  () => { fetchCollections(); toast.error("Tarjeta eliminada"); },
+  });
+
+  useEffect(() => {
+    fetchCollections();             
+  }, []);
+
   const createCollection = async () => {
     setShowCreate(false);
     await fetchCollections(); 
   };
 
-const saveEdit = async (data: Partial<Collection>) => {
-  if (!editingCollection) return;
-  await updateThemes(String(editingCollection.id), data);
-  await fetchCollections();
-  setEditingCollection(null);
-};
+  const saveEdit = async (data: Partial<Collection>) => {
+    if (!editingCollection) return;
+    await themeService.update(String(editingCollection.id), data);
+    await fetchCollections();
+    setEditingCollection(null);
+  };
 
-const deleteCollection = async (id: string) => {
-  await deleteThemes(id);
-  setCollections(collections.filter((c) => c.id !== id));
-};
+  const deleteCollection = async (id: string) => {
+    await themeService.delete(id);
+    setCollections(collections.filter((c) => c.id !== id));
+  };
 
 const updateFromDetail = (updated: Collection) =>
   setCollections(collections.map((c) => c.id === updated.id ? updated : c));
