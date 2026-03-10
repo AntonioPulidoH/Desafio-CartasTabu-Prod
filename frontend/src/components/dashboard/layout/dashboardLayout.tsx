@@ -43,7 +43,7 @@ export default function TabuDashboard() {
       const data = await themeService.getAll();
       setCollections(data);
     } catch (err) {
-      console.error('Error al cargar colecciones', err);
+      console.error('Error al cargar las temáticas', err);
     } finally {
       setLoadingCollections(false);
     }
@@ -99,7 +99,7 @@ const updateFromDetail = (updated: Collection) =>
       <AdminSidebar></AdminSidebar>
 
         <div className="td-stats-box p-3 mt-auto">
-          <div className="td-suave td-stats-label mb-1">Total colecciones</div>
+          <div className="td-suave td-stats-label mb-1">Total temáticas</div>
           <div className="value">{collections.length}</div>
           <div className="td-suave td-stats-label mt-1">
             {collections.reduce((a, c) => a + (c.cards ?? []).length, 0)} tarjetas
@@ -118,7 +118,7 @@ const updateFromDetail = (updated: Collection) =>
           <>
             <div className="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
               <div>
-                <h1 className="mb-1">Colecciones</h1>
+                <h1 className="mb-1">Temáticas</h1>
                 <p className="td-suave mb-0">Gestiona tus temas y tarjetas del juego Tabú</p>
               </div>
               <button className="btn td-btn-acento px-3 py-2" onClick={() => setShowCreate(true)}>
@@ -129,7 +129,7 @@ const updateFromDetail = (updated: Collection) =>
             <div className="d-flex gap-2 flex-wrap mb-4">
               <input
                 className="form-control td-input td-search"
-                placeholder="Buscar colecciones..."
+                placeholder="Buscar temáticas..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
@@ -157,14 +157,14 @@ const updateFromDetail = (updated: Collection) =>
               </div>
 
             {loadingCollections ? (
-              <div className="text-center py-5 td-suave">Cargando colecciones...</div>
+              <div className="text-center py-5 td-suave">Cargando temáticas...</div>
             ) : filtered.length === 0 ? (
               <div className="td-empty text-center py-5">
                 <div className="td-empty-icon mb-2">📦</div>
                 <p className="mb-3 td-suave">
                   {search || filterFamilyId !== null
-                    ? "No hay colecciones que coincidan."
-                    : "Todavía no tienes colecciones."}
+                    ? "No hay temáticas que coincidan."
+                    : "Todavía no tienes temáticas."}
                 </p>
                 {!search && filterFamilyId === null && (
                   <button className="btn td-btn-acento px-3 py-2" onClick={() => setShowCreate(true)}>

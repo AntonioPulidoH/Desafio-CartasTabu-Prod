@@ -1,3 +1,4 @@
+import { Pencil, Share2, Trash2 } from "lucide-react";
 import type { Collection } from "./types/colection.interface";
 
 export function CollectionCard({ collection, onOpen, onEdit, onDelete, onShare }: {
@@ -8,26 +9,32 @@ export function CollectionCard({ collection, onOpen, onEdit, onDelete, onShare }
   onShare: () => void;
 }) {
   return (
-    <div className="td-card p-3 d-flex flex-column gap-3" onClick={onOpen}>
+    <div className="td-card p-3 d-flex flex-column gap-3 bg-light" onClick={onOpen}>
       <div className="d-flex justify-content-between align-items-start">
         <span className="td-badge">{collection.vocationalFamily?.name}</span>
         <div className="d-flex gap-1" onClick={(e) => e.stopPropagation()}>
-          <button className="td-btn-icon" onClick={onShare} title="Compartir">🔗</button>
-          <button className="td-btn-icon" onClick={onEdit} title="Editar">✏️</button>
-          <button className="td-btn-icon danger" onClick={onDelete} title="Eliminar">🗑</button>
+          <button className="td-btn-icon text-dark" onClick={onShare} title="Compartir">
+            <Share2 size={16} strokeWidth={2} />
+          </button>
+          <button className="td-btn-icon text-dark" onClick={onEdit} title="Editar">
+            <Pencil size={16} strokeWidth={2} />
+          </button>
+          <button className="td-btn-icon danger text-danger" onClick={onDelete} title="Eliminar">
+            <Trash2 size={16} strokeWidth={2} />
+          </button>
         </div>
       </div>
       <div>
-        <h5 className="mb-1">{collection.name}</h5>
+        <h5 className="mb-1 text-dark">{collection.name}</h5>
         {collection.description && (
           <p className="td-suave td-desc mb-0">{collection.description}</p>
         )}
       </div>
       <div className="d-flex justify-content-between align-items-center pt-2 border-top td-card-divider mt-auto">
-        <span className="td-suave td-desc">
-          <span className="fw-bold td-count">{(collection.cards ?? []).length}</span> tarjetas
+        <span className="td-suave td-desc text-dark">
+          <span className="fw-bold td-count text-dark">{(collection.cards ?? []).length}</span> tarjetas
         </span>
-        <span className="td-suave td-date">{collection.createdAt.slice(0, 10)}</span>
+        <span className="td-suave td-date text-dark">{collection.createdAt.slice(0, 10)}</span>
       </div>
     </div>
   );
