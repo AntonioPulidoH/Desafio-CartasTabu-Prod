@@ -60,7 +60,7 @@ export const ThemeTable = () => {
   };
 
   if (loading)
-    return <div className="p-4 text-center mt-4">Cargando temáticas...</div>;
+    return <div className="p-4 text-center mt-4">Cargando categorías...</div>;
   if (error)
     return <div className="p-4 text-center text-danger mt-4">{error}</div>;
 
@@ -68,13 +68,13 @@ export const ThemeTable = () => {
     <div className="tabu-table-container bg-white p-4 shadow-sm mt-4">
       {/* Cabecera */}
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h4 className="mb-0 fw-bold tabu-text-primary">Temas Globales</h4>
+        <h4 className="mb-0 fw-bold tabu-text-primary">Categorías</h4>
         <button
           className="btn tabu-btn-primary d-flex align-items-center gap-2"
           onClick={openAddModal}
         >
           <PlusCircle size={18} />
-          <span>Nueva Temática</span>
+          <span>Nueva Categoría</span>
         </button>
       </div>
 
@@ -83,7 +83,7 @@ export const ThemeTable = () => {
         <table className="table tabu-table align-middle mb-0">
           <thead>
             <tr>
-              <th>Nombre del Tema</th>
+              <th>Nombre Categoría</th>
               <th>Familia Profesional</th>
               <th>Nº Cartas</th>
               <th className="text-center">Acciones</th>
@@ -93,7 +93,7 @@ export const ThemeTable = () => {
             {themes.length === 0 ? (
               <tr>
                 <td colSpan={5} className="text-center text-muted py-4">
-                  No hay temáticas registradas todavía.
+                  No hay categorías registradas todavía.
                 </td>
               </tr>
             ) : (
@@ -133,7 +133,7 @@ export const ThemeTable = () => {
           <span className="text-muted small">
             Mostrando del {indexOfFirstItem + 1} al{" "}
             {Math.min(indexOfLastItem, themes.length)} de {themes.length}{" "}
-            temáticas
+            Categorías
           </span>
           <nav>
             <ul className="pagination pagination-sm mb-0">
@@ -167,11 +167,11 @@ export const ThemeTable = () => {
         </div>
       )}
 
-      {/* Modal Crear/Editar Temática */}
+      {/* Modal Crear/Editar Categoría */}
       <Modal
         isOpen={isOpen}
         title={
-          modalMode === "create" ? "Añadir Nueva Temática" : "Editar Temática"
+          modalMode === "create" ? "Añadir Nueva Categoría" : "Editar Categoría"
         }
         onClose={closeModal}
         footer={
@@ -189,7 +189,7 @@ export const ThemeTable = () => {
               onClick={handleSubmit}
               disabled={!formData.name}
             >
-              {modalMode === "create" ? "Crear Temática" : "Guardar Cambios"}
+              {modalMode === "create" ? "Crear Categoría" : "Guardar Cambios"}
             </button>
           </>
         }
@@ -197,7 +197,7 @@ export const ThemeTable = () => {
         <div className="row g-3">
           <div className="col-12">
             <label className="form-label fw-medium">
-              Nombre de la Temática *
+              Nombre de la Categoría *
             </label>
             <input
               type="text"
@@ -248,10 +248,10 @@ export const ThemeTable = () => {
         </div>
       </Modal>
 
-      {/* Modal Borrar Temática */}
+      {/* Modal Borrar Categoría */}
       <Modal
         isOpen={isDeleteOpen}
-        title="Eliminar Temática"
+        title="Eliminar Categoría"
         onClose={closeDeleteModal}
         footer={
           <>
@@ -274,7 +274,7 @@ export const ThemeTable = () => {
       >
         {themeToDelete && (
           <p className="mb-1 text-muted">
-            ¿Estás seguro de que deseas eliminar la temática{" "}
+            ¿Estás seguro de que deseas eliminar la categoría{" "}
             <strong>{themeToDelete.name}</strong>? Las cartas asociadas también
             se borrarán en cascada.
           </p>

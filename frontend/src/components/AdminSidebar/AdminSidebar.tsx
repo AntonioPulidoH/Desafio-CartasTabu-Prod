@@ -46,7 +46,7 @@ export const AdminSidebar = () => {
               }
             >
               <Globe className="me-3" size={20} />
-              Gestión de Temáticas
+              Gestión de Categorías
             </NavLink>
           </li>
 
