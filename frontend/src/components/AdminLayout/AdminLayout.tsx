@@ -17,13 +17,12 @@ export const AdminLayout = () => {
   );
 
   return (
-    
     <div
       className="d-flex flex-column flex-md-row"
-      style={{ minHeight: "100vh", width: "100vw" }}
+      style={{ minHeight: "100vh", width: "100vw", paddingTop: "80px" }}
     >
-    <BarraNavegacion></BarraNavegacion>
-      
+      <BarraNavegacion />
+
       {/* Toaster */}
       <Toaster position="top-right" reverseOrder={false} />
 
