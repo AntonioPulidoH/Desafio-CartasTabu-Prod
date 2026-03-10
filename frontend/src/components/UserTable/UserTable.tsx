@@ -77,9 +77,9 @@ export const UserTable = () => {
   if (error) return <div className="p-4 text-center text-danger">{error}</div>;
 
   return (
-    <div className="tabu-table-container bg-white p-4 shadow-sm mt-4">
+    <div className="tabu-table-container bg-white p-3 shadow-sm mt-2">
       {/* Cabecera Tabla */}
-      <div className="d-flex justify-content-between align-items-center mb-4">
+      <div className="d-flex justify-content-between align-items-center mb-3">
         <h4 className="mb-0 fw-bold tabu-text-primary">Usuarios Registrados</h4>
         <button
           className="btn tabu-btn-primary d-flex align-items-center gap-2"
@@ -141,7 +141,7 @@ export const UserTable = () => {
 
       {/* Controles Paginación */}
       {totalPages > 1 && (
-        <div className="d-flex justify-content-between align-items-center mt-4">
+        <div className="d-flex justify-content-between align-items-center mt-3">
           <span className="text-muted small">
             Mostrando del {indexOfFirstItem + 1} al{" "}
             {Math.min(indexOfLastItem, users.length)} de {users.length} usuarios

@@ -5,6 +5,7 @@ import { Outlet } from "react-router-dom";
 import { useUsers } from "../UserTable/hooks/useUsers";
 import { useThemes } from "../ThemeTable/hooks/useThemes";
 import { BarraNavegacion } from "../barra-navegacion";
+import "./AdminLayout.css";
 
 export const AdminLayout = () => {
   const { users, loading: loadingUsers } = useUsers();
@@ -17,10 +18,7 @@ export const AdminLayout = () => {
   );
 
   return (
-    <div
-      className="d-flex flex-column flex-md-row"
-      style={{ minHeight: "100vh", width: "100vw", paddingTop: "80px" }}
-    >
+    <div className="d-flex flex-column flex-md-row admin-layout-wrapper">
       <BarraNavegacion />
 
       {/* Toaster */}
@@ -30,13 +28,10 @@ export const AdminLayout = () => {
       <AdminSidebar />
 
       {/* Columna derecha */}
-      <main
-        className="flex-grow-1 p-4 p-md-5"
-        style={{ overflowY: "auto", overflowX: "hidden" }}
-      >
+      <main className="flex-grow-1 p-3 p-md-4 admin-layout-main">
         <div className="mx-auto" style={{ maxWidth: "1100px" }}>
           {/* StatCards */}
-          <div className="row g-4 mb-5">
+          <div className="row g-3 mb-4">
             <div className="col-12 col-md-4">
               <StatCard
                 title="Usuarios Totales:"
@@ -56,6 +51,7 @@ export const AdminLayout = () => {
               />
             </div>
           </div>
+
           {/* Tablas Dinámicas */}
           <div>
             <Outlet />
