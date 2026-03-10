@@ -2,12 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { CreateCardDto } from './dto/create-card.dto';
 import { UpdateCardDto } from './dto/update-card.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { WebsocketsGateway } from 'src/websockets/websocket.gateaway';
 
 @Injectable()
 export class CardsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService, private readonly wsGateway: WebsocketsGateway) {}
 
   async create(data: CreateCardDto, creatorId: number) {
+    this.wsGateway.notifyCardCreated(data);
   return this.prisma.card.create({
     data: {
       keyword:data.keyword,
@@ -43,6 +45,7 @@ export class CardsService {
   }
 
   update(id: number, updateCardDto: UpdateCardDto) {
+    this.wsGateway.notifyCardUpdated(updateCardDto);
       return this.prisma.card.update({
     where: { id },
     data: {
@@ -56,6 +59,7 @@ export class CardsService {
   }
 
   remove(id: number) {
+    this.wsGateway.notifyCardDeleted();
     return this.prisma.card.delete({
       where: {id}
     })

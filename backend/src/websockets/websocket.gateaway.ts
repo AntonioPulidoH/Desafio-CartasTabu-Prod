@@ -25,8 +25,23 @@ export class WebsocketsGateway {
     this.server.emit('theme-created', theme);
   }
 
+  notifyThemeUpdated(theme:any){
+    this.server.emit('theme-updated', theme)
+  }
+
+    notifyThemeDeleted() {
+    this.server.emit('theme-deleted');
+    }
 
   notifyCardCreated(card: any) {
     this.server.emit('card-created', card);
+  }
+
+  notifyCardUpdated(card:any){
+    this.server.emit('card-updated',card)
+  }
+
+  notifyCardDeleted(){
+    this.server.emit('card-deleted')
   }
 }

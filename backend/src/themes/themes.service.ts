@@ -11,6 +11,7 @@ export class ThemesService {
   constructor(private readonly prisma: PrismaService, private readonly wsGateway: WebsocketsGateway) {}
 
 async create(data: CreateThemeDto, creatorId: number) {
+  this.wsGateway.notifyThemeCreated(data);
     return this.prisma.theme.create({
       data:{
         name:data.name,
@@ -59,7 +60,7 @@ async create(data: CreateThemeDto, creatorId: number) {
 
   async update(id: number, updateThemeDto: UpdateThemeDto) {
     await this.findOne(id);
-
+    this.wsGateway.notifyThemeUpdated(updateThemeDto);
     return this.prisma.theme.update({
       where: { id },
       data: updateThemeDto,
@@ -68,7 +69,7 @@ async create(data: CreateThemeDto, creatorId: number) {
 
   async remove(id: number) {
     await this.findOne(id);
-
+    this.wsGateway.notifyThemeDeleted();
     return this.prisma.theme.delete({
       where: { id },
     });
