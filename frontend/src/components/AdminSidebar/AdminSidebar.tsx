@@ -24,10 +24,6 @@ export const AdminSidebar = () => {
       <div
         className={`p-3 flex-column w-100 ${isMenuOpen ? "d-flex" : "d-none d-md-flex"}`}
       >
-        {/* Logo */}
-        <div className="mb-4 px-2 d-none d-md-block text-white fw-bold">
-          Logo
-        </div>
 
         <ul className="nav flex-column mb-auto gap-2">
           <li className="nav-item">

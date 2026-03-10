@@ -31,12 +31,10 @@ export const AdminLayout = () => {
 
       {/* Columna derecha */}
       <main
-        className="flex-grow-1 p-3 p-md-4 w-100"
-        style={{ overflowX: "hidden" }}
+        className="flex-grow-1 p-4 p-md-5"
+        style={{ overflowY: "auto", overflowX: "hidden" }}
       >
-        <div className="container-fluid max-w-7xl mx-auto px-0">
-          <h2 className="mb-4 fw-bold">Dashboard General</h2>
-
+        <div className="mx-auto" style={{ maxWidth: "1100px" }}>
           {/* StatCards */}
           <div className="row g-4 mb-5">
             <div className="col-12 col-md-4">
@@ -58,7 +56,6 @@ export const AdminLayout = () => {
               />
             </div>
           </div>
-
           {/* Tablas Dinámicas */}
           <div>
             <Outlet />
