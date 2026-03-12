@@ -3,12 +3,11 @@ import "../styles/dashboard.css";
 import CollectionForm from "../collectionForm";
 import { CollectionCard } from "../collectionCard";
 import type { Collection } from "../types/colection.interface";
-import { getThemes } from "../actions/getThemes";
-import { deleteThemes } from "../actions/deleteTheme";
-import { updateThemes } from "../actions/updateTheme";
 import { CollectionDetail } from "../collectionDetail";
 import { useWebSocket } from "../../../hooks/useWebsocket";
 import { AdminSidebar } from "../../AdminSidebar/AdminSidebar";
+import toast, { Toaster } from "react-hot-toast";
+import { themeService } from "../services/themeService";
 
 
 function Modal({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
@@ -40,21 +39,15 @@ export default function TabuDashboard() {
  
 
   const fetchCollections = async () => {
-    
-
     try {
-      const data = await getThemes();
+      const data = await themeService.getAll();
       setCollections(data);
     } catch (err) {
-      console.error('Error al cargar colecciones', err);
+      console.error('Error al cargar las temáticas', err);
     } finally {
       setLoadingCollections(false);
     }
   };
-useWebSocket(fetchCollections);
-  useEffect(() => {
-    fetchCollections();
-  }, []);
 
   const filtered = collections.filter((c) => {
     const matchSearch =
@@ -64,36 +57,49 @@ useWebSocket(fetchCollections);
     return matchSearch && matchFamily;
   });
 
+    useWebSocket({
+    onThemeCreated: () => { fetchCollections(); toast.success("Nueva colección creada"); },
+    onThemeUpdated: () => { fetchCollections(); toast("Colección actualizada"); },
+    onThemeDeleted: () => { fetchCollections(); toast.error("Colección eliminada"); },
+    onCardCreated:  () => { fetchCollections(); toast.success("Nueva tarjeta creada"); },
+    onCardUpdated:  () => { fetchCollections(); toast("Tarjeta actualizada"); },
+    onCardDeleted:  () => { fetchCollections(); toast.error("Tarjeta eliminada"); },
+  });
+
+  useEffect(() => {
+    fetchCollections();             
+  }, []);
+
   const createCollection = async () => {
     setShowCreate(false);
     await fetchCollections(); 
   };
 
-const saveEdit = async (data: Partial<Collection>) => {
-  if (!editingCollection) return;
-  await updateThemes(String(editingCollection.id), data);
-  await fetchCollections();
-  setEditingCollection(null);
-};
+  const saveEdit = async (data: Partial<Collection>) => {
+    if (!editingCollection) return;
+    await themeService.update(String(editingCollection.id), data);
+    await fetchCollections();
+    setEditingCollection(null);
+  };
 
-const deleteCollection = async (id: string) => {
-  await deleteThemes(id);
-  setCollections(collections.filter((c) => c.id !== id));
-};
+  const deleteCollection = async (id: string) => {
+    await themeService.delete(id);
+    setCollections(collections.filter((c) => c.id !== id));
+  };
 
 const updateFromDetail = (updated: Collection) =>
   setCollections(collections.map((c) => c.id === updated.id ? updated : c));
 
   return (
     <div className="tabu-dashboard">
-
+    <Toaster position="top-right" reverseOrder={false} />
       <aside className="td-sidebar d-flex flex-column ">
        
 
       <AdminSidebar></AdminSidebar>
 
         <div className="td-stats-box p-3 mt-auto">
-          <div className="td-suave td-stats-label mb-1">Total colecciones</div>
+          <div className="td-suave td-stats-label mb-1">Total temáticas</div>
           <div className="value">{collections.length}</div>
           <div className="td-suave td-stats-label mt-1">
             {collections.reduce((a, c) => a + (c.cards ?? []).length, 0)} tarjetas
@@ -112,7 +118,7 @@ const updateFromDetail = (updated: Collection) =>
           <>
             <div className="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
               <div>
-                <h1 className="mb-1">Colecciones</h1>
+                <h1 className="mb-1">Temáticas</h1>
                 <p className="td-suave mb-0">Gestiona tus temas y tarjetas del juego Tabú</p>
               </div>
               <button className="btn td-btn-acento px-3 py-2" onClick={() => setShowCreate(true)}>
@@ -123,7 +129,7 @@ const updateFromDetail = (updated: Collection) =>
             <div className="d-flex gap-2 flex-wrap mb-4">
               <input
                 className="form-control td-input td-search"
-                placeholder="Buscar colecciones..."
+                placeholder="Buscar temáticas..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
@@ -151,14 +157,14 @@ const updateFromDetail = (updated: Collection) =>
               </div>
 
             {loadingCollections ? (
-              <div className="text-center py-5 td-suave">Cargando colecciones...</div>
+              <div className="text-center py-5 td-suave">Cargando temáticas...</div>
             ) : filtered.length === 0 ? (
               <div className="td-empty text-center py-5">
                 <div className="td-empty-icon mb-2">📦</div>
                 <p className="mb-3 td-suave">
                   {search || filterFamilyId !== null
-                    ? "No hay colecciones que coincidan."
-                    : "Todavía no tienes colecciones."}
+                    ? "No hay temáticas que coincidan."
+                    : "Todavía no tienes temáticas."}
                 </p>
                 {!search && filterFamilyId === null && (
                   <button className="btn td-btn-acento px-3 py-2" onClick={() => setShowCreate(true)}>
@@ -175,6 +181,11 @@ const updateFromDetail = (updated: Collection) =>
                       onOpen={() => setSelectedId(col.id)}
                       onEdit={() => setEditingCollection(col)}
                       onDelete={() => deleteCollection(col.id)}
+                      onShare={() => {
+                        const url = `${window.location.origin}/collection/${col.id}`;
+                        navigator.clipboard.writeText(url);
+                        toast.success('Se ha copiado el enlace')
+                      }}
                     />
                   </div>
                 ))}

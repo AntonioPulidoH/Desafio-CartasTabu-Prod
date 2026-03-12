@@ -64,7 +64,7 @@ export const AdminSidebar = () => {
                 `tabu-menu-item d-flex align-items-center w-100 text-start text-decoration-none ${isActive ? "is-active" : ""}`
               }
             >        
-            ▦ &nbsp;Colecciones</NavLink>
+            ▦ &nbsp;Temáticas</NavLink>
 
      
           </li>
