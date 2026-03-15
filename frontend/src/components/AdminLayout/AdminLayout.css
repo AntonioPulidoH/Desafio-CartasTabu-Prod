@@ -1,0 +1,21 @@
+.admin-layout-wrapper {
+  width: 100%;
+  padding-top: 80px;
+  min-height: 100vh;
+}
+
+.admin-layout-main {
+  overflow-x: hidden;
+}
+
+@media (min-width: 992px) and (min-height: 650px) {
+  .admin-layout-wrapper {
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .admin-layout-main {
+    height: 100%;
+    overflow: hidden;
+  }
+}
