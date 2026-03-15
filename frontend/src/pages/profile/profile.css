@@ -1,7 +1,7 @@
 .profile-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 120px 24px 60px 24px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 .profile-header {
@@ -28,9 +28,15 @@
   background-color: rgba(40, 25, 82, 0.5);
 }
 
-.badge-USER { color: var(--color-secundario); }
-.badge-CREATOR { color: var(--color-acento); }
-.badge-ADMIN { color: #ffcc00; }
+.badge-USER {
+  color: var(--color-secundario);
+}
+.badge-CREATOR {
+  color: var(--color-acento);
+}
+.badge-ADMIN {
+  color: #ffcc00;
+}
 
 .profile-grid {
   display: grid;
@@ -44,7 +50,9 @@
   border-radius: var(--radio-borde);
   padding: 24px;
   backdrop-filter: blur(8px);
-  transition: border-color 0.2s ease, background-color 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
 }
 
 .profile-card:hover {
@@ -73,6 +81,21 @@
 
 .profile-card button {
   margin-top: 10px;
+}
+
+.profile-layout-wrapper {
+  height: 100vh;
+  width: 100%;
+  padding-top: 80px;
+  overflow: hidden;
+  background-color: var(--color-fondo);
+  color: var(--color-claro);
+}
+
+.profile-layout-main {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 @media (max-width: 768px) {

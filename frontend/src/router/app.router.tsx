@@ -2,13 +2,13 @@ import AuthPage from "../pages/home/AuthPage";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import HomePage from "../pages/home/HomePage";
 import Register from "../pages/home/RegisterPage";
-import Rules from '../pages/home/RulesPage'
-import ProfilePage from '../pages/profile/ProfilePage'
-import PrivateRoute from './PrivateRoute'
+import Rules from "../pages/home/RulesPage";
+import ProfilePage from "../pages/profile/ProfilePage";
+import PrivateRoute from "./PrivateRoute";
 import { AdminLayout } from "../components/AdminLayout/AdminLayout";
 import { UserTable } from "../components/UserTable/UserTable";
 import { ThemeTable } from "../components/ThemeTable/ThemeTable";
-import DashboardPage from '../pages/Dashboard'
+import DashboardPage from "../pages/Dashboard";
 import { SharedCollection } from "../components/dashboard/sharedCollection";
 
 export const appRouter = createBrowserRouter([
@@ -25,24 +25,16 @@ export const appRouter = createBrowserRouter([
     element: <Register></Register>,
   },
   {
-        path: 'rules',
-        element: <Rules></Rules>
-    },
-    {
-        path:'/profile',
-        element: 
-        <PrivateRoute>
-            <ProfilePage></ProfilePage>
-        </PrivateRoute>
-    },
-    {
-        path: "/admin",
-        element: <AdminLayout />,
-        children: [
-          { index: true, element: <Navigate to="usuarios" replace /> },
-          { path: "usuarios", element: <UserTable /> },
-          { path: "tematicas", element: <ThemeTable /> },
-        ],
+    path: "rules",
+    element: <Rules></Rules>,
+  },
+  {
+    path: "/profile",
+    element: (
+      <PrivateRoute>
+        <ProfilePage></ProfilePage>
+      </PrivateRoute>
+    ),
   },
   {
     path: "/admin",
@@ -53,12 +45,12 @@ export const appRouter = createBrowserRouter([
       { path: "tematicas", element: <ThemeTable /> },
     ],
   },
-    {
-        path:"/dashboard",
-        element: <DashboardPage/>
-    },
-    {
-        path:"/collection/:id",
-        element:<SharedCollection/>
-    }
+  {
+    path: "/dashboard",
+    element: <DashboardPage />,
+  },
+  {
+    path: "/collection/:id",
+    element: <SharedCollection />,
+  },
 ]);

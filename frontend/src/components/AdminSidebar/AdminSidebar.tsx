@@ -1,4 +1,4 @@
-import { Users, Globe, Menu, X, LayoutGrid } from "lucide-react";
+import { Users, Globe, Menu, X, LayoutGrid, User } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { useAdminSidebar } from "./hooks/useAdminSidebar";
 import "./AdminSidebar.css";
@@ -60,6 +60,19 @@ export const AdminSidebar = () => {
             >
               <LayoutGrid className="me-3" size={20} />
               Colecciones
+            </NavLink>
+          </li>
+
+          <li className="nav-item">
+            <NavLink
+              to="/profile"
+              onClick={closeMenu}
+              className={({ isActive }) =>
+                `tabu-menu-item d-flex align-items-center w-100 text-start text-decoration-none ${isActive ? "is-active" : ""}`
+              }
+            >
+              <User className="me-3" size={20} />
+              Mi Perfil
             </NavLink>
           </li>
         </ul>
