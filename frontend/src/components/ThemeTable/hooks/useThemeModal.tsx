@@ -9,8 +9,7 @@ export const useThemeModal = () => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    vocationalFamilyId: 1,
-    creatorId: 12, // Cuando el Login esté listo, cambiar el 12 por currentUser.id
+    vocationalFamilyId: 0
   });
 
   const openAddModal = () => {
@@ -18,8 +17,7 @@ export const useThemeModal = () => {
     setFormData({
       name: "",
       description: "",
-      vocationalFamilyId: 1,
-      creatorId: 12, // Cuando el Login esté listo, cambiar el 12 por currentUser.id
+      vocationalFamilyId: 0,
     });
     setIsOpen(true);
   };
@@ -31,7 +29,6 @@ export const useThemeModal = () => {
       name: theme.name,
       description: theme.description || "",
       vocationalFamilyId: theme.vocationalFamilyId,
-      creatorId: theme.creatorId,
     });
     setIsOpen(true);
   };

@@ -60,7 +60,7 @@
   font-size: 28px;
 }
 
-/* Nav */
+
 .td-nav-link {
   color: var(--color-texto-suave);
   font-weight: 600;
@@ -151,9 +151,9 @@
 
 .td-card-divider { border-color: var(--color-borde) !important; }
 
-/* Tabu card item (dentro del detalle) */
+
 .td-card-item {
-  background: rgba(40, 25, 82, 0.5);
+  background: rgba(145, 127, 196, 0.5);
   border: 1px solid var(--color-borde);
   border-radius: var(--radio-borde);
   transition: border-color 0.2s;
@@ -167,14 +167,14 @@
   color: var(--color-claro);
 }
 
-/* Badge categoría */
+
 .td-badge {
   font-size: 11px; font-weight: 700;
   letter-spacing: 0.05em; text-transform: uppercase;
   border-radius: 4px; padding: 2px 8px;
-  background: rgba(116, 107, 170, 0.2);
-  border: 1px solid var(--color-borde);
-  color: var(--color-secundario);
+  background: rgba(240, 107, 125, 0.344);
+  border: 1px solid var(--color-acento);
+  color: var(--color-acento);
   display: inline-block;
 }
 
