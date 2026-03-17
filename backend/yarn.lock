@@ -3167,6 +3167,7 @@ __metadata:
     globals: "npm:^16.0.0"
     jest: "npm:^30.0.0"
     jsonwebtoken: "npm:^9.0.3"
+    openai: "npm:^6.32.0"
     passport: "npm:^0.7.0"
     passport-jwt: "npm:^4.0.1"
     pg: "npm:^8.18.0"
@@ -6632,6 +6633,23 @@ __metadata:
   dependencies:
     mimic-fn: "npm:^2.1.0"
   checksum: 10c0/ffcef6fbb2692c3c40749f31ea2e22677a876daea92959b8a80b521d95cca7a668c884d8b2045d1d8ee7d56796aa405c405462af112a1477594cc63531baeb8f
+  languageName: node
+  linkType: hard
+
+"openai@npm:^6.32.0":
+  version: 6.32.0
+  resolution: "openai@npm:6.32.0"
+  peerDependencies:
+    ws: ^8.18.0
+    zod: ^3.25 || ^4.0
+  peerDependenciesMeta:
+    ws:
+      optional: true
+    zod:
+      optional: true
+  bin:
+    openai: bin/cli
+  checksum: 10c0/783f2f5fb4ec26d0629f4b4b3854dcd4c6c686ea50f81bd352ccdd6b70aa933aee10bab631dfa3b886ff34dbeaa9ec0fa700ba195161dff32058a5f565003c8e
   languageName: node
   linkType: hard
 
