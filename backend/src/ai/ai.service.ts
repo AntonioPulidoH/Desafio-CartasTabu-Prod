@@ -1,16 +1,23 @@
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import OpenAI from "openai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { GenerateCardsDto } from "./dto/generate-cards.dto";
 
 @Injectable()
 export class AiService {
-  private openai: OpenAI;
+  private genAI: GoogleGenerativeAI;
 
   constructor(private configService: ConfigService) {
-    this.openai = new OpenAI({
-      apiKey: this.configService.get<string>("OPENAI_API_KEY"),
-    });
+    const apiKey = this.configService.get<string>("GEMINI_API_KEY");
+
+    if (!apiKey) {
+      throw new Error(
+        "Falta la variable de entorno GEMINI_API_KEY. Revisa tu archivo .env",
+      );
+    }
+
+    // Inicializa el SDK de Google con la clave
+    this.genAI = new GoogleGenerativeAI(apiKey);
   }
 
   async generateCards(dto: GenerateCardsDto) {
@@ -18,14 +25,11 @@ export class AiService {
 
     const systemPrompt = `
       Eres un experto creador de contenido educativo para el juego 'Tabú' enfocado en estudiantes de Formación Profesional en España.
-      Tu tarea es generar cartas para la Familia Profesional de: "${vocationalFamily}".
+      Tu tarea es generar exactamente ${amount} cartas para la Familia Profesional de: "${vocationalFamily}".
       
-      Instrucciones obligatorias:
-      1. Genera exactamente ${amount} cartas.
-      2. El contexto adicional del profesor es: "${context || "Ninguno en particular. Usa un nivel intermedio."}". Adapta el tono y la dificultad a este contexto.
-      3. Cada carta debe tener un "keyword" (la palabra a adivinar).
-      4. Cada carta debe tener entre 3 y 5 "forbiddenWords" (palabras tabú que no se pueden decir para describir el keyword).
-      5. Responde ÚNICAMENTE con un JSON válido que siga esta estructura exacta:
+      El contexto adicional del profesor es: "${context || "Ninguno en particular. Usa un nivel intermedio."}".
+      
+      Devuelve ÚNICAMENTE un objeto JSON válido con la siguiente estructura, sin texto markdown adicional:
       {
         "cards": [
           {
@@ -37,27 +41,26 @@ export class AiService {
     `;
 
     try {
-      const response = await this.openai.chat.completions.create({
-        model: "gpt-4o-mini",
-        response_format: { type: "json_object" }, // Fuerza que devuelva JSON
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: "Genera las cartas ahora." },
-        ],
-        temperature: 0.7, // 0.7 da cierta creatividad
+      const model = this.genAI.getGenerativeModel({
+        model: "gemini-1.5-flash",
+        generationConfig: {
+          responseMimeType: "application/json",
+          temperature: 0.7,
+        },
       });
 
-      const jsonContent = response.choices[0].message.content;
+      const result = await model.generateContent(systemPrompt);
+      const responseText = result.response.text();
 
-      if (!jsonContent) {
+      if (!responseText) {
         throw new InternalServerErrorException(
-          "El asistente IA no ha devuelto ningún contenido.",
+          "La IA no ha devuelto ningún contenido.",
         );
       }
 
-      return JSON.parse(jsonContent);
+      return JSON.parse(responseText);
     } catch (error) {
-      console.error("Error en OpenAI:", error);
+      console.error("Error en Google Gemini:", error);
       throw new InternalServerErrorException(
         "Fallo al generar las cartas con IA",
       );
