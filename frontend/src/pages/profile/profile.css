@@ -4,6 +4,18 @@
   padding: 0;
 }
 
+.profile-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.profile-title {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
 .profile-header {
   margin-bottom: 40px;
 }
@@ -50,18 +62,25 @@
   border-radius: var(--radio-borde);
   padding: 24px;
   backdrop-filter: blur(8px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
   transition:
+    transform 0.15s ease,
     border-color 0.2s ease,
-    background-color 0.2s ease;
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .profile-card:hover {
+  transform: translateY(-4px);
   border-color: rgba(255, 89, 77, 0.4);
   background-color: rgba(116, 107, 170, 0.25);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
 }
 
 .profile-card h3 {
+  font-size: 1.3rem;
   margin-bottom: 20px;
+  color: var(--color-acento);
 }
 
 .profile-card p {
@@ -96,6 +115,70 @@
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+.profile-card .list-group {
+  background-color: transparent;
+  border-radius: var(--radio-borde);
+  overflow: hidden;
+}
+
+.profile-card .list-group-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  background-color: var(--color-tarjeta) !important;
+  color: var(--color-claro);
+  border-color: var(--color-borde);
+}
+
+.profile-card .list-group-item span {
+  color: var(--color-texto-suave);
+  flex: 0 0 160px;
+}
+
+.profile-card .list-group-item strong {
+  color: var(--color-claro);
+  flex: 1;
+  text-align: right;
+}
+
+.profile-stats {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.stat-box {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-borde);
+  padding: 14px;
+  text-align: center;
+  transition: 
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.2s ease;
+}
+
+.stat-box:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-acento);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+}
+
+.stat-value {
+  display: block;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--color-acento);
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--color-texto-suave);
 }
 
 @media (max-width: 768px) {

@@ -99,11 +99,8 @@ export default function ProfilePage() {
       {/* Contenedor principal */}
       <main className="flex-grow-1 p-4 p-md-5 profile-layout-main">
         <div className="mx-auto" style={{ maxWidth: "1100px" }}>
-          <div className="d-flex align-items-center gap-3 mb-4">
-            <h2
-              className="mb-0 fw-bold"
-              style={{ color: "var(--tabu-primary)" }}
-            >
+          <div className="profile-title-row">
+            <h2 className="profile-title">
               Mi Perfil
             </h2>
             <span
@@ -115,26 +112,32 @@ export default function ProfilePage() {
 
           <div className="profile-grid">
             <Card title="Información de perfil">
-              <p>
-                <strong>Nombre: </strong>
-                {profile.name}
-              </p>
-              <p>
-                <strong>Apellido: </strong>
-                {profile.lastName}
-              </p>
-              <p>
-                <strong>Email: </strong>
-                {profile.email}
-              </p>
-              <p>
-                <strong>Centro educativo: </strong>
-                {profile.educationalCenter}
-              </p>
-              <p>
-                <strong>Familia Profesional: </strong>
-                {profile.vocationalFamily}
-              </p>
+              <ul className="list-group list-group-flush">
+                <li className="list-group-item d-flex justify-content-between">
+                  <span>Nombre</span>
+                  <strong>{profile.name}</strong>
+                </li>
+
+                <li className="list-group-item d-flex justify-content-between">
+                  <span>Apellido</span>
+                  <strong>{profile.lastName}</strong>
+                </li>
+
+                <li className="list-group-item d-flex justify-content-between">
+                  <span>Email</span>
+                  <strong>{profile.email}</strong>
+                </li>
+
+                <li className="list-group-item d-flex justify-content-between">
+                  <span>Centro educativo</span>
+                  <strong>{profile.educationalCenter}</strong>
+                </li>
+
+                <li className="list-group-item d-flex justify-content-between">
+                  <span>Familia profesional</span>
+                  <strong>{profile.vocationalFamily}</strong>
+                </li>
+              </ul>
 
               <button
                 className="btn btn-primary mt-3"
@@ -170,11 +173,29 @@ export default function ProfilePage() {
                 </button>
               }
             >
-              <p>Tarjetas generadas: {profile.stats.generatedCards}</p>
+              <div className="profile-stats">
+                <div className="stat-box">
+                  <span className="stat-value">
+                    {profile.stats.generatedCards}
+                  </span>
 
-              {(profile.role === "CREATOR" || profile.role === "ADMIN") && (
-                <p>Temas creados: {profile.stats.createdThemes}</p>
-              )}
+                  <span className="stat-label">
+                    Tarjetas generadas
+                  </span>
+                </div>
+
+                {(profile.role === "CREATOR" || profile.role === "ADMIN") && (
+                  <div className="stat-box">
+                    <span className="stat-value">
+                      {profile.stats.createdThemes}
+                    </span>
+
+                    <span className="stat-label">
+                      Temas creados
+                    </span>
+                  </div>
+                )}
+              </div>
             </Card>
           </div>
         </div>
