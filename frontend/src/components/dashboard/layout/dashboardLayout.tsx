@@ -118,7 +118,7 @@ const updateFromDetail = (updated: Collection) =>
           <>
             <div className="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
               <div>
-                <h1 className="mb-1">Temáticas</h1>
+                <h1 className="mb-1">Colecciones</h1>
                 <p className="td-suave mb-0">Gestiona tus temas y tarjetas del juego Tabú</p>
               </div>
               <button className="btn td-btn-acento px-3 py-2" onClick={() => setShowCreate(true)}>
