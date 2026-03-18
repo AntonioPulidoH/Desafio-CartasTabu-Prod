@@ -3,6 +3,7 @@ import { Modal } from "../ui/Modal/Modal";
 import { updateProfile } from "../../api/user";
 import { getVocationalFamilies } from "../../api/vocationalFamilies";
 import toast from "react-hot-toast";
+import './EditProfileModal.css'
 
 type VocationalFamily = {
     id: number
@@ -68,58 +69,70 @@ export const EditProfileModal = ({isOpen, onClose, profile, onUpdated}: Props) =
                 </>
             }
         >
-            <div className="d-flex flex-column gap-3">
+            <div className="d-flex flex-column gap-4 edit-profile-form">
                 <div>
-                    <input 
+                    <h6 className="fw-bold mb-3">
+                        Datos personales (opcional)
+                    </h6>
+                    <div className="mb-3">
+                        <label className="form-label">Email</label>
+                        <input 
                         className="form-control" 
                         type="email" 
                         value={email} 
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="Nuevo email"
-                    ></input>
-                </div>
+                        placeholder="Nuevo email"></input>
+                    </div>
 
-                <div>
-                    <input 
+                    <div className="mb-3">
+                        <label className="form-label">Centro educativo</label>
+                        <input 
                         className="form-control" 
                         value={educationalCenter ?? ''} 
                         onChange={(e) => setEducationalCenter(e.target.value)}
-                        placeholder="Nuevo centro educativo"
-                    ></input>
+                        placeholder="Nuevo centro educativo"></input>
+                    </div>
+
+                    <div className="mb-3">
+                        <label className="form-label">Familia profesional</label>
+                        <select 
+                            className="form-select"
+                            value={vocationalFamilyId ?? ''}
+                            onChange={(e) => setVocationalFamilyId(Number(e.target.value))}
+                        >
+                            <option value=''>No cambiar</option>
+
+                            {families.map(f => (
+                                <option key={f.id} value={f.id}>{f.name}</option>
+                            ))}
+                        </select>
+                    </div>
                 </div>
 
                 <div>
-                    <select 
-                        className="form-select"
-                        value={vocationalFamilyId ?? ''}
-                        onChange={(e) => setVocationalFamilyId(Number(e.target.value))}
-                    >
-                        <option value=''>Nueva familia profesional</option>
+                    <h6 className="fw-bold mb-3 ">
+                        Cambiar contraseña (opcional)
+                    </h6>
 
-                        {families.map(f => (
-                            <option key={f.id} value={f.id}>{f.name}</option>
-                        ))}
-                    </select>
-                </div>
-
-                <div>
-                    <input 
+                    <div className="mb-3">
+                        <label className="form-label">Nueva contraseña</label>
+                        <input 
                         className="form-control" 
                         type="password" 
                         value={password} 
                         onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Nueva contraseña"
-                    ></input>
-                </div>
+                        placeholder="Dejar vacío para no cambiar"></input>
+                    </div>
 
-                <div>
-                    <input 
+                    <div className="mb-1">
+                        <label className="form-label">Confirmar contraseña</label>
+                        <input 
                         className="form-control" 
                         type="password" 
                         value={confirmPassword} 
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        placeholder="Confirmar contraseña"
-                    ></input>
+                        placeholder="Repetir contraseña"></input>
+                    </div>
                 </div>
             </div>
         </Modal>
