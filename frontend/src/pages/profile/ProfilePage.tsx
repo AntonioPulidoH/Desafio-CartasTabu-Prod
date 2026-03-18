@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { getProfile } from "../../api/user";
 import { EditProfileModal } from "../../components/Profile/EditProfileModal";
 import { AdminSidebar } from "../../components/AdminSidebar/AdminSidebar";
+import { getMyCardsCount } from "../../api/cards";
+import { getMyThemesCount } from "../../api/themes";
 
 type Role = "ADMIN" | "CREATOR" | "USER";
 
@@ -25,14 +27,12 @@ type UserProfile = {
 
   role: Role;
 
-  //mock temporal
   stats: {
     generatedCards: number;
     createdThemes: number;
   };
 };
 
-//mock temporal
 const rolePermissions = {
   ADMIN: {
     canGenerateCard: true,
@@ -60,6 +60,10 @@ export default function ProfilePage() {
     async function loadProfile() {
       try {
         const data = await getProfile();
+
+        const cardsCount = await getMyCardsCount()
+        const themesCount = await getMyThemesCount()
+
         const formattedProfile: UserProfile = {
           id: data.id,
           name: data.name,
@@ -69,10 +73,9 @@ export default function ProfilePage() {
           vocationalFamily: data.vocationalFamily?.name ?? null,
           role: data.role.name as Role,
 
-          //mock temporal
           stats: {
-            generatedCards: 12,
-            createdThemes: 3,
+            generatedCards: cardsCount.total,
+            createdThemes: themesCount.total,
           },
         };
 
