@@ -18,6 +18,19 @@ export interface GeneratedCollectionResponse {
   }[];
 }
 
+export interface GenerateCardsPayload {
+  vocationalFamily: string;
+  amount: number;
+  context?: string;
+}
+
+export interface GeneratedCardsResponse {
+  cards: {
+    keyword: string;
+    forbiddenWords: string[];
+  }[];
+}
+
 export const aiService = {
   generateCollection: async (
     payload: GenerateCollectionPayload,
@@ -28,6 +41,25 @@ export const aiService = {
 
     const response = await axios.post<GeneratedCollectionResponse>(
       `${API_URL}/generate-collection`,
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    return response.data;
+  },
+
+  generateCards: async (
+    payload: GenerateCardsPayload,
+  ): Promise<GeneratedCardsResponse> => {
+    const token = sessionStorage.getItem("access_token");
+    if (!token) throw new Error("No estás autenticado");
+
+    const response = await axios.post<GeneratedCardsResponse>(
+      `${API_URL}/generate-cards`,
       payload,
       {
         headers: {
