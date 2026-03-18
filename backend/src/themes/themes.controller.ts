@@ -23,7 +23,7 @@ export class ThemesController {
   @Post()
   @UseGuards(JwtAuthGuard)
   create(@Body() createThemeDto: CreateThemeDto, @Request() req) {
-     console.log('req.user:', req.user);
+    console.log('req.user:', req.user);
     return this.themesService.create(createThemeDto, req.user.userId);
   }
 
@@ -53,5 +53,11 @@ export class ThemesController {
   @Delete(":id")
   remove(@Param("id", ParseIntPipe) id: number) {
     return this.themesService.remove(id);
+  }
+
+  @Get('my/count')
+  @UseGuards(JwtAuthGuard)
+  countMyThemes(@Request() req){
+    return this.themesService.countByUser(req.user.userId)
   }
 }

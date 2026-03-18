@@ -8,6 +8,12 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 export class CardsController {
   constructor(private readonly cardsService: CardsService) {}
 
+  @Get('my/count')
+  @UseGuards(JwtAuthGuard)
+  countMyCards(@Request() req){
+    return this.cardsService.countByUser(req.user.userId)
+  }
+
   @Post()
     @UseGuards(JwtAuthGuard)
     create(@Body() createCardDto: CreateCardDto, @Req() req) {
