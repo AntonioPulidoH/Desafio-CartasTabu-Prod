@@ -155,7 +155,7 @@ export function AiCardsModal({
                 Descartar y probar otra vez
               </button>
               <button className="btn td-btn-acento" onClick={handleSave}>
-                Añadir al mazo
+                Añadir a Colección
               </button>
             </div>
           </div>

@@ -71,6 +71,22 @@ export default function TabuDashboard() {
     return matchSearch && matchFamily;
   });
 
+  // Extrae el texto del rol 
+  const getUserRole = () => {
+    const token = sessionStorage.getItem('access_token');
+    if (!token) return 'USER'; 
+    
+    try {
+      const payload = JSON.parse(window.atob(token.split('.')[1].replace(/-/g, '+').replace(/_/, '/')));
+      return payload.role || 'USER';
+    } catch (e) {
+      return 'USER';
+    }
+  };
+
+  const userRole = getUserRole();
+  const canCreateCollections = userRole === 'ADMIN' || userRole === 'CREATOR' || userRole === 'USER_CREATOR';
+
   useWebSocket({
     onThemeCreated: () => {
       fetchCollections();
@@ -196,25 +212,27 @@ export default function TabuDashboard() {
                   Gestiona tus temas y tarjetas del juego Tabú
                 </p>
               </div>
-              {/* Botones */}
-              <div className="d-flex gap-2">
-                <button
-                  className="btn btn-dark border border-secondary px-3 py-2"
-                  onClick={() => setShowAiModal(true)}
-                  style={{
-                    background: "var(--color-tarjeta)",
-                    color: "var(--color-claro)",
-                  }}
-                >
-                  ✨ Asistente IA
-                </button>
-                <button
-                  className="btn td-btn-acento px-3 py-2"
-                  onClick={() => setShowCreate(true)}
-                >
-                  + Nueva colección
-                </button>
-              </div>
+
+              {canCreateCollections && (
+                <div className="d-flex gap-2">
+                  <button
+                    className="btn btn-dark border border-secondary px-3 py-2"
+                    onClick={() => setShowAiModal(true)}
+                    style={{
+                      background: "var(--color-tarjeta)",
+                      color: "var(--color-claro)",
+                    }}
+                  >
+                    ✨ Asistente IA
+                  </button>
+                  <button
+                    className="btn td-btn-acento px-3 py-2"
+                    onClick={() => setShowCreate(true)}
+                  >
+                    + Nueva colección
+                  </button>
+                </div>
+              )}
             </div>
 
             <div className="d-flex gap-2 flex-wrap mb-4">
