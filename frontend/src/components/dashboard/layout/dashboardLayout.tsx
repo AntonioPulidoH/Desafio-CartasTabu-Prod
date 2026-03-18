@@ -129,7 +129,6 @@ export default function TabuDashboard() {
         name: generatedData.name,
         description: generatedData.description,
         vocationalFamilyId: generatedData.vocationalFamilyId,
-        creatorId: 1, // ⚠️ ¡OJO! Recuerda cambiar esto por el ID real de tu usuario (o sacarlo del contexto/estado)
       };
 
       const newTheme = await themeService.create(themePayload);
@@ -143,7 +142,6 @@ export default function TabuDashboard() {
         const cardPayload = {
           keyword: card.keyword,
           themeId: newTheme.id,
-          creatorId: 1,
           forbiddenWords: card.forbiddenWords,
         };
 
