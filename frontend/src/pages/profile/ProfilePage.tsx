@@ -93,7 +93,7 @@ export default function ProfilePage() {
     loadProfile();
   }, [navigate]);
 
-  if (loading) {
+  if (loading || !profile) {
     return (
       <div className="d-flex flex-column flex-md-row profile-layout-wrapper">
         <BarraNavegacion></BarraNavegacion>
