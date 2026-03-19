@@ -9,6 +9,8 @@ import { AdminSidebar } from "../../AdminSidebar/AdminSidebar";
 import toast, { Toaster } from "react-hot-toast";
 import { themeService } from "../services/themeService";
 import { Modal } from "../modal";
+import { AiCollectionModal } from "../AiCollectionModal";
+import axios from "axios";
 
 export default function TabuDashboard() {
   const [collections, setCollections] = useState<Collection[]>([]);
@@ -18,13 +20,27 @@ export default function TabuDashboard() {
   const [search, setSearch] = useState("");
   const [filterFamilyId, setFilterFamilyId] = useState<number | null>(null);
   const [loadingCollections, setLoadingCollections] = useState(true);
+  const [showAiModal, setShowAiModal] = useState(false);
 
 
-  const role = sessionStorage.getItem("user_role") ?? "{}";
-  const canCreate = role === "ADMIN" || role === "CREATOR";
+  const getUserRole = () => {
+    const token = sessionStorage.getItem("access_token");
+    if (!token) return "USER";
+    try {
+      const payload = JSON.parse(
+        window.atob(token.split(".")[1].replace(/-/g, "+").replace(/_/, "/"))
+      );
+      return payload.role || "USER";
+    } catch (e) {
+      return "USER";
+    }
+  };
+
+  const userRole = getUserRole();
+  const canCreate = userRole === "ADMIN" || userRole === "CREATOR";
 
   const selectedCollection = selectedId
-    ? collections.find((c) => c.id === selectedId) ?? null
+    ? (collections.find((c) => c.id === selectedId) ?? null)
     : null;
 
   const fetchCollections = async () => {
@@ -80,6 +96,43 @@ export default function TabuDashboard() {
   const updateFromDetail = (updated: Collection) =>
     setCollections(collections.map((c) => (c.id === updated.id ? updated : c)));
 
+  const handleSaveAiCollection = async (generatedData: any) => {
+    try {
+      const themePayload = {
+        name: generatedData.name,
+        description: generatedData.description,
+        vocationalFamilyId: generatedData.vocationalFamilyId,
+      };
+
+      const newTheme = await themeService.create(themePayload);
+
+      const token = sessionStorage.getItem("access_token");
+      const API_URL =
+        import.meta.env.VITE_LOCAL_API_URL || import.meta.env.VITE_API_URL;
+
+      const cardPromises = generatedData.cards.map((card: any) =>
+        axios.post(
+          `${API_URL}/cards`,
+          {
+            keyword: card.keyword,
+            themeId: newTheme.id,
+            forbiddenWords: card.forbiddenWords,
+          },
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
+      );
+
+      await Promise.all(cardPromises);
+
+      setShowAiModal(false);
+      await fetchCollections();
+      toast.success("Colección guardada con éxito");
+    } catch (error) {
+      console.error("Error al guardar en BD:", error);
+      toast.error("Error al guardar la colección.");
+    }
+  };
+
   return (
     <div className="tabu-dashboard">
       <Toaster position="top-right" reverseOrder={false} />
@@ -90,7 +143,7 @@ export default function TabuDashboard() {
           <div className="td-suave td-stats-label mb-1">Total temáticas</div>
           <div className="value">{collections.length}</div>
           <div className="td-suave td-stats-label mt-1">
-            {collections.reduce((a, c) => a + (c.cards ?? []).length, 0)} tarjetas
+            {collections.reduce((a, c) => a + (c._count?.cards ?? (c.cards ?? []).length), 0)} tarjetas
           </div>
         </div>
       </aside>
@@ -106,13 +159,30 @@ export default function TabuDashboard() {
           <>
             <div className="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
               <div>
-                <h1 className="mb-1">Temáticas</h1>
-                <p className="td-suave mb-0">Gestiona tus temas y tarjetas del juego Tabú</p>
+                <h1 className="mb-1">Colecciones</h1>
+                <p className="td-suave mb-0">
+                  Gestiona tus temas y tarjetas del juego Tabú
+                </p>
               </div>
               {canCreate && (
-                <button className="btn td-btn-acento px-3 py-2" onClick={() => setShowCreate(true)}>
-                  + Nueva colección
-                </button>
+                <div className="d-flex gap-2">
+                  <button
+                    className="btn btn-dark border border-secondary px-3 py-2"
+                    onClick={() => setShowAiModal(true)}
+                    style={{
+                      background: "var(--color-tarjeta)",
+                      color: "var(--color-claro)",
+                    }}
+                  >
+                    ✨ Asistente IA
+                  </button>
+                  <button
+                    className="btn td-btn-acento px-3 py-2"
+                    onClick={() => setShowCreate(true)}
+                  >
+                    + Nueva colección
+                  </button>
+                </div>
               )}
             </div>
 
@@ -157,7 +227,10 @@ export default function TabuDashboard() {
                     : "Todavía no tienes temáticas."}
                 </p>
                 {!search && filterFamilyId === null && canCreate && (
-                  <button className="btn td-btn-acento px-3 py-2" onClick={() => setShowCreate(true)}>
+                  <button
+                    className="btn td-btn-acento px-3 py-2"
+                    onClick={() => setShowCreate(true)}
+                  >
                     Crear colección
                   </button>
                 )}
@@ -187,9 +260,20 @@ export default function TabuDashboard() {
 
       {showCreate && (
         <Modal title="Nueva colección" onClose={() => setShowCreate(false)}>
-          <CollectionForm onSave={createCollection} onCancel={() => setShowCreate(false)} />
+          <CollectionForm
+            onSave={createCollection}
+            onCancel={() => setShowCreate(false)}
+          />
         </Modal>
       )}
+
+      {showAiModal && (
+        <AiCollectionModal
+          onClose={() => setShowAiModal(false)}
+          onSaveGenerated={handleSaveAiCollection}
+        />
+      )}
+
       {editingCollection && (
         <Modal title="Editar colección" onClose={() => setEditingCollection(null)}>
           <CollectionForm
