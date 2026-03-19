@@ -8,6 +8,9 @@ export interface Collection {
   vocationalFamilyId:number;
   vocationalFamily?: { id: number; name: string };
   cards?:TabuCard[]
-  createdAt:string
+  createdAt:string;
+  _count?: {        
+    cards: number;
+  };
 
 }

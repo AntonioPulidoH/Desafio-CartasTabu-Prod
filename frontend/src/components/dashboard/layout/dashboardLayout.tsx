@@ -8,23 +8,9 @@ import { useWebSocket } from "../../../hooks/useWebsocket";
 import { AdminSidebar } from "../../AdminSidebar/AdminSidebar";
 import toast, { Toaster } from "react-hot-toast";
 import { themeService } from "../services/themeService";
-
-
-function Modal({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
-  return (
-    <div className="td-overlay" onClick={onClose}>
-      <div className="td-modal p-4" onClick={(e) => e.stopPropagation()}>
-        <div className="d-flex justify-content-between align-items-center mb-4">
-          <h5 className="mb-0">{title}</h5>
-          <button className="td-btn-icon" onClick={onClose}>✕</button>
-        </div>
-        {children}
-      </div>
-    </div>
-  );
-}
-
-
+import { Modal } from "../modal";
+import { AiCollectionModal } from "../AiCollectionModal";
+import axios from "axios";
 
 export default function TabuDashboard() {
   const [collections, setCollections] = useState<Collection[]>([]);
@@ -34,16 +20,35 @@ export default function TabuDashboard() {
   const [search, setSearch] = useState("");
   const [filterFamilyId, setFilterFamilyId] = useState<number | null>(null);
   const [loadingCollections, setLoadingCollections] = useState(true);
+  const [showAiModal, setShowAiModal] = useState(false);
 
-  const selectedCollection = selectedId ? collections.find((c) => c.id === selectedId) ?? null : null;
- 
+
+  const getUserRole = () => {
+    const token = sessionStorage.getItem("access_token");
+    if (!token) return "USER";
+    try {
+      const payload = JSON.parse(
+        window.atob(token.split(".")[1].replace(/-/g, "+").replace(/_/, "/"))
+      );
+      return payload.role || "USER";
+    } catch (e) {
+      return "USER";
+    }
+  };
+
+  const userRole = getUserRole();
+  const canCreate = userRole === "ADMIN" || userRole === "CREATOR";
+
+  const selectedCollection = selectedId
+    ? (collections.find((c) => c.id === selectedId) ?? null)
+    : null;
 
   const fetchCollections = async () => {
     try {
       const data = await themeService.getAll();
       setCollections(data);
     } catch (err) {
-      console.error('Error al cargar las temáticas', err);
+      console.error("Error al cargar las temáticas", err);
     } finally {
       setLoadingCollections(false);
     }
@@ -53,11 +58,12 @@ export default function TabuDashboard() {
     const matchSearch =
       c.name.toLowerCase().includes(search.toLowerCase()) ||
       c.description.toLowerCase().includes(search.toLowerCase());
-    const matchFamily = filterFamilyId === null || c.vocationalFamilyId === filterFamilyId;
+    const matchFamily =
+      filterFamilyId === null || c.vocationalFamilyId === filterFamilyId;
     return matchSearch && matchFamily;
   });
 
-    useWebSocket({
+  useWebSocket({
     onThemeCreated: () => { fetchCollections(); toast.success("Nueva colección creada"); },
     onThemeUpdated: () => { fetchCollections(); toast("Colección actualizada"); },
     onThemeDeleted: () => { fetchCollections(); toast.error("Colección eliminada"); },
@@ -67,12 +73,12 @@ export default function TabuDashboard() {
   });
 
   useEffect(() => {
-    fetchCollections();             
+    fetchCollections();
   }, []);
 
   const createCollection = async () => {
     setShowCreate(false);
-    await fetchCollections(); 
+    await fetchCollections();
   };
 
   const saveEdit = async (data: Partial<Collection>) => {
@@ -87,22 +93,57 @@ export default function TabuDashboard() {
     setCollections(collections.filter((c) => c.id !== id));
   };
 
-const updateFromDetail = (updated: Collection) =>
-  setCollections(collections.map((c) => c.id === updated.id ? updated : c));
+  const updateFromDetail = (updated: Collection) =>
+    setCollections(collections.map((c) => (c.id === updated.id ? updated : c)));
+
+  const handleSaveAiCollection = async (generatedData: any) => {
+    try {
+      const themePayload = {
+        name: generatedData.name,
+        description: generatedData.description,
+        vocationalFamilyId: generatedData.vocationalFamilyId,
+      };
+
+      const newTheme = await themeService.create(themePayload);
+
+      const token = sessionStorage.getItem("access_token");
+      const API_URL =
+        import.meta.env.VITE_LOCAL_API_URL || import.meta.env.VITE_API_URL;
+
+      const cardPromises = generatedData.cards.map((card: any) =>
+        axios.post(
+          `${API_URL}/cards`,
+          {
+            keyword: card.keyword,
+            themeId: newTheme.id,
+            forbiddenWords: card.forbiddenWords,
+          },
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
+      );
+
+      await Promise.all(cardPromises);
+
+      setShowAiModal(false);
+      await fetchCollections();
+      toast.success("Colección guardada con éxito");
+    } catch (error) {
+      console.error("Error al guardar en BD:", error);
+      toast.error("Error al guardar la colección.");
+    }
+  };
 
   return (
     <div className="tabu-dashboard">
-    <Toaster position="top-right" reverseOrder={false} />
-      <aside className="td-sidebar d-flex flex-column ">
-       
+      <Toaster position="top-right" reverseOrder={false} />
 
-      <AdminSidebar></AdminSidebar>
-
+      <aside className="td-sidebar d-flex flex-column">
+        <AdminSidebar />
         <div className="td-stats-box p-3 mt-auto">
           <div className="td-suave td-stats-label mb-1">Total temáticas</div>
           <div className="value">{collections.length}</div>
           <div className="td-suave td-stats-label mt-1">
-            {collections.reduce((a, c) => a + (c.cards ?? []).length, 0)} tarjetas
+            {collections.reduce((a, c) => a + (c._count?.cards ?? (c.cards ?? []).length), 0)} tarjetas
           </div>
         </div>
       </aside>
@@ -118,12 +159,31 @@ const updateFromDetail = (updated: Collection) =>
           <>
             <div className="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
               <div>
-                <h1 className="mb-1">Temáticas</h1>
-                <p className="td-suave mb-0">Gestiona tus temas y tarjetas del juego Tabú</p>
+                <h1 className="mb-1">Colecciones</h1>
+                <p className="td-suave mb-0">
+                  Gestiona tus temas y tarjetas del juego Tabú
+                </p>
               </div>
-              <button className="btn td-btn-acento px-3 py-2" onClick={() => setShowCreate(true)}>
-                + Nueva colección
-              </button>
+              {canCreate && (
+                <div className="d-flex gap-2">
+                  <button
+                    className="btn btn-dark border border-secondary px-3 py-2"
+                    onClick={() => setShowAiModal(true)}
+                    style={{
+                      background: "var(--color-tarjeta)",
+                      color: "var(--color-claro)",
+                    }}
+                  >
+                    ✨ Asistente IA
+                  </button>
+                  <button
+                    className="btn td-btn-acento px-3 py-2"
+                    onClick={() => setShowCreate(true)}
+                  >
+                    + Nueva colección
+                  </button>
+                </div>
+              )}
             </div>
 
             <div className="d-flex gap-2 flex-wrap mb-4">
@@ -141,8 +201,8 @@ const updateFromDetail = (updated: Collection) =>
                   Todas
                 </button>
                 {collections
-                  .filter((c, index, self) => 
-                    self.findIndex(x => x.vocationalFamilyId === c.vocationalFamilyId) === index
+                  .filter((c, index, self) =>
+                    self.findIndex((x) => x.vocationalFamilyId === c.vocationalFamilyId) === index
                   )
                   .map((c) => (
                     <button
@@ -154,7 +214,7 @@ const updateFromDetail = (updated: Collection) =>
                     </button>
                   ))}
               </div>
-              </div>
+            </div>
 
             {loadingCollections ? (
               <div className="text-center py-5 td-suave">Cargando temáticas...</div>
@@ -166,8 +226,11 @@ const updateFromDetail = (updated: Collection) =>
                     ? "No hay temáticas que coincidan."
                     : "Todavía no tienes temáticas."}
                 </p>
-                {!search && filterFamilyId === null && (
-                  <button className="btn td-btn-acento px-3 py-2" onClick={() => setShowCreate(true)}>
+                {!search && filterFamilyId === null && canCreate && (
+                  <button
+                    className="btn td-btn-acento px-3 py-2"
+                    onClick={() => setShowCreate(true)}
+                  >
                     Crear colección
                   </button>
                 )}
@@ -179,12 +242,12 @@ const updateFromDetail = (updated: Collection) =>
                     <CollectionCard
                       collection={col}
                       onOpen={() => setSelectedId(col.id)}
-                      onEdit={() => setEditingCollection(col)}
-                      onDelete={() => deleteCollection(col.id)}
+                      onEdit={canCreate ? () => setEditingCollection(col) : undefined}
+                      onDelete={canCreate ? () => deleteCollection(col.id) : undefined}
                       onShare={() => {
                         const url = `${window.location.origin}/collection/${col.id}`;
                         navigator.clipboard.writeText(url);
-                        toast.success('Se ha copiado el enlace')
+                        toast.success("Se ha copiado el enlace");
                       }}
                     />
                   </div>
@@ -197,12 +260,27 @@ const updateFromDetail = (updated: Collection) =>
 
       {showCreate && (
         <Modal title="Nueva colección" onClose={() => setShowCreate(false)}>
-          <CollectionForm onSave={createCollection} onCancel={() => setShowCreate(false)} />
+          <CollectionForm
+            onSave={createCollection}
+            onCancel={() => setShowCreate(false)}
+          />
         </Modal>
       )}
+
+      {showAiModal && (
+        <AiCollectionModal
+          onClose={() => setShowAiModal(false)}
+          onSaveGenerated={handleSaveAiCollection}
+        />
+      )}
+
       {editingCollection && (
         <Modal title="Editar colección" onClose={() => setEditingCollection(null)}>
-          <CollectionForm initial={editingCollection} onSave={saveEdit} onCancel={() => setEditingCollection(null)} />
+          <CollectionForm
+            initial={editingCollection}
+            onSave={saveEdit}
+            onCancel={() => setEditingCollection(null)}
+          />
         </Modal>
       )}
     </div>
