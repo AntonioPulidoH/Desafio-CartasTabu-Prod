@@ -75,11 +75,11 @@ export function BarraNavegacion() {
                 <li className="nav-item ms-lg-3 mt-2 mt-lg-0 d-flex align-items-center">
                   <span
                     className="nav-link text-light d-flex align-items-center gap-2 px-3 fw-medium"
-                    onClick={() => navigate("/dashboard")}
+                    onClick={() => navigate("/profile")}
                     style={{ cursor: "pointer", transition: "opacity 0.2s" }}
                     onMouseOver={(e) => (e.currentTarget.style.opacity = "0.8")}
                     onMouseOut={(e) => (e.currentTarget.style.opacity = "1")}
-                    title="Ir a mi Dashboard"
+                    title="Ir a mi Perfil"
                   >
                     <User size={18} />
                     {userEmail}
