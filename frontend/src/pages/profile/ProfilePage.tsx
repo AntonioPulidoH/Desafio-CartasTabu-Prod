@@ -54,6 +54,7 @@ const rolePermissions = {
 export default function ProfilePage() {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState(true)
   const [editOpen, setEditOpen] = useState(false);
 
   useEffect(() => {
@@ -84,11 +85,29 @@ export default function ProfilePage() {
         console.error(error);
         navigate("/auth");
       }
+
+      setTimeout(() => {
+        setLoading(false)
+      }, 400)
     }
     loadProfile();
   }, [navigate]);
 
-  if (!profile) return <p>Cargando perfil...</p>;
+  if (loading) {
+    return (
+      <div className="d-flex flex-column flex-md-row profile-layout-wrapper">
+        <BarraNavegacion></BarraNavegacion>
+        <AdminSidebar></AdminSidebar>
+
+        <main className="flex-grow-1 p-4 p-md-5 profile-layout-main d-flex justify-content-center align-items-center">
+          <div className="profile-loading">
+            <div className="spinner-border text-light"></div>
+            <p className="mt-3">Cargando perfil...</p>
+          </div>
+        </main>
+      </div>
+    )
+  }
 
   return (
     <div className="d-flex flex-column flex-md-row profile-layout-wrapper">
