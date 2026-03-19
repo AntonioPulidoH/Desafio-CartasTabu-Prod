@@ -6,6 +6,10 @@ import { useWebSocket } from "../../hooks/useWebsocket";
 import { cardService } from "./services/cardService";
 import { AiCardsModal } from "./AiCardsModal";
 import toast from "react-hot-toast";
+import { generateCollectionPDF } from "./services/pdfService";
+
+  const role = sessionStorage.getItem("user_role") ?? "{}";
+  const canCreate = role === "ADMIN" || role === "CREATOR";
 import axios from "axios";
 
 function Modal({
@@ -124,6 +128,7 @@ export function CollectionDetail({
         ← Volver
       </button>
 
+
       <div className="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
         <div>
           <div className="d-flex align-items-center gap-2 mb-1 flex-wrap">
@@ -155,6 +160,17 @@ export function CollectionDetail({
             + Nueva tarjeta
           </button>
         </div>
+      <button
+            className="btn td-btn-sec px-3 py-2"
+            onClick={() => generateCollectionPDF(collection)}>
+            ⬇ Descargar PDF
+        </button>
+        {canCreate && (
+        <button className="btn td-btn-acento px-3 py-2" onClick={() => setShowCardForm(true)}>
+            + Nueva tarjeta
+        </button>
+        )}
+        
       </div>
 
       <div className="td-stat-row d-flex gap-4 p-3 mb-4">
@@ -175,6 +191,11 @@ export function CollectionDetail({
         <div className="td-empty text-center py-5 px-3">
           <div className="td-empty-icon mb-2">🃏</div>
           <p className="mb-3">Esta colección no tiene tarjetas todavía.</p>
+            {canCreate && (
+            <button className="btn td-btn-acento px-3 py-2" onClick={() => setShowCardForm(true)}>
+                Crear primera tarjeta
+            </button>
+            )}
           <button
             className="btn td-btn-acento px-3 py-2"
             onClick={() => setShowCardForm(true)}

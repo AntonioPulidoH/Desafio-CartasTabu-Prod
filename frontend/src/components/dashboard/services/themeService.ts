@@ -7,17 +7,18 @@ export type CreateThemeRequest = {
 };
 
 export const themeService = {
-  getAll: async () => {
+    getAll: async () => {
     const response = await apiClient.get("/themes");
     return response.data.map((theme: any) => ({
-      ...theme,
-      cards: (theme.cards ?? []).map((card: any) => ({
+        ...theme,
+        cards: (theme.cards ?? []).map((card: any) => ({
         id: String(card.id),
         word: card.keyword,
         forbiddenWords: (card.forbiddenWords ?? []).map((fw: any) => fw.word),
-      })),
+        })),
+        _cardCount: theme._count?.cards ?? 0,
     }));
-  },
+    },
 
   getPublic: async (id: number) => {
     const response = await apiClient.get(`/themes/${id}/public`);
