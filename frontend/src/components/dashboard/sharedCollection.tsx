@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { CardItem } from "./cardItem";
 import type { Collection } from "./types/colection.interface";
 import { themeService } from "./services/themeService";
+import { generateCollectionPDF } from "./services/pdfService";
+import { Download } from "lucide-react";
 
 export function SharedCollection() {
   const { id } = useParams();
@@ -49,8 +51,13 @@ useEffect(() => {
           <p className="td-suave mb-0">{collection.description}</p>
         )}
       </div>
-
       <div className="td-stat-row d-flex gap-4 p-3 mb-4">
+            <button
+            className="td-btn-icon text-white"
+            onClick={(e) => { e.stopPropagation(); generateCollectionPDF(collection); }}
+            title="Descargar PDF">
+            <Download size={16} strokeWidth={2} />
+            </button>
         <div>
           <div className="td-stat-label">Tarjetas</div>
           <div className="td-stat-value">{(collection.cards ?? []).length}</div>
