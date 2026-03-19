@@ -1,5 +1,6 @@
-import { Pencil, Share2, Trash2 } from "lucide-react";
+import { Download, Pencil, Share2, Trash2 } from "lucide-react";
 import type { Collection } from "./types/colection.interface";
+import { generateCollectionPDF } from "./services/pdfService";
 
 export function CollectionCard({ collection, onOpen, onEdit, onDelete, onShare }: {
   collection: Collection;
@@ -16,6 +17,13 @@ export function CollectionCard({ collection, onOpen, onEdit, onDelete, onShare }
       <div className="d-flex justify-content-between align-items-start">
         <span className="td-badge">{collection.vocationalFamily?.name}</span>
         <div className="d-flex gap-1" onClick={(e) => e.stopPropagation()}>
+          <button
+            className="td-btn-icon text-dark"
+            onClick={(e) => { e.stopPropagation(); generateCollectionPDF(collection); }}
+            title="Descargar PDF"
+          >
+            <Download size={16} strokeWidth={2} />
+          </button>
           <button className="td-btn-icon text-dark" onClick={onShare} title="Compartir">
             <Share2 size={16} strokeWidth={2} />
           </button>
@@ -39,7 +47,9 @@ export function CollectionCard({ collection, onOpen, onEdit, onDelete, onShare }
       </div>
       <div className="d-flex justify-content-between align-items-center pt-2 border-top td-card-divider mt-auto">
         <span className="td-suave td-desc text-dark">
-          <span className="fw-bold td-count text-dark">{(collection.cards ?? []).length}</span> tarjetas
+          <span className="fw-bold td-count text-dark">
+            {collection._count?.cards ?? (collection.cards ?? []).length}
+          </span> tarjetas
         </span>
         <span className="td-suave td-date text-dark">{collection.createdAt.slice(0, 10)}</span>
       </div>
