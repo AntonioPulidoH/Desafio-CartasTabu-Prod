@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = `${import.meta.env.VITE_LOCAL_API_URL}/themes`;
+const API_BASE_URL = import.meta.env.VITE_LOCAL_API_URL || import.meta.env.VITE_API_URL;
+const API_URL = `${API_BASE_URL}/themes`;
 axios.interceptors.request.use((config) => {
   const token = sessionStorage.getItem('access_token');
   if (token) {

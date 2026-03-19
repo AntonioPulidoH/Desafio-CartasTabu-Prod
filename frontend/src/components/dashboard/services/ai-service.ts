@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = `${import.meta.env.VITE_LOCAL_API_URL}/ai`;
+const API_BASE_URL = import.meta.env.VITE_LOCAL_API_URL || import.meta.env.VITE_API_URL;
+const API_URL = `${API_BASE_URL}/ai`;
 
 export interface GenerateCollectionPayload {
   vocationalFamily: string;
@@ -37,7 +38,7 @@ export const aiService = {
   ): Promise<GeneratedCollectionResponse> => {
     const token = sessionStorage.getItem("access_token");
 
-    if (!token) throw new Error("No estás autenticado");
+    if (!token) throw new Error("No estas autenticado");
 
     const response = await axios.post<GeneratedCollectionResponse>(
       `${API_URL}/generate-collection`,
@@ -56,7 +57,7 @@ export const aiService = {
     payload: GenerateCardsPayload,
   ): Promise<GeneratedCardsResponse> => {
     const token = sessionStorage.getItem("access_token");
-    if (!token) throw new Error("No estás autenticado");
+    if (!token) throw new Error("No estas autenticado");
 
     const response = await axios.post<GeneratedCardsResponse>(
       `${API_URL}/generate-cards`,
