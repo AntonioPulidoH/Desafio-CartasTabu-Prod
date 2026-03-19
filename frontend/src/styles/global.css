@@ -84,6 +84,7 @@ a:hover {
   cursor: pointer;
   transition: opacity 0.2s ease, box-shadow 0.2s ease, gap 0.3s ease;
   box-shadow: 0 8px 24px rgba(255, 89, 77, 0.25);
+  padding: 8px 16px;
 }
 
 .boton-acento:hover {
@@ -100,6 +101,7 @@ a:hover {
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  padding: 8px 16px;
 }
 
 .boton-secundario:hover {

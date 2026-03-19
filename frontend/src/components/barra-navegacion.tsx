@@ -45,28 +45,27 @@ export function BarraNavegacion() {
 
         <div className="collapse navbar-collapse" id="navbarMenu">
           <ul className="navbar-nav ms-auto align-items-lg-center">
+            <li className="nav-item ms-lg-2 mt-2 mt-lg-0">
+              <button 
+              type="button" 
+              className="boton-acento"
+              onClick={(e) => {
+                  e.preventDefault();
+                  token ? navigate("/dashboard") : navigate("/auth");
+                }}>
+                  Crear colección
+              </button>
+            </li>
+
             <li className="nav-item">
               <a className="nav-link small px-3 py-2" href="#caracteristicas">
                 <button
                   type="button"
-                  className="boton-acento w-100 d-inline-flex align-items-center justify-content-center gap-2 px-4 py-3"
+                  className="boton-secundario"
                   onClick={() => navigate("/rules")}
                 >
                   Reglas del juego
                 </button>
-              </a>
-            </li>
-
-            <li className="nav-item">
-              <a
-                className="nav-link small px-3 py-2"
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  token ? navigate("/dashboard") : navigate("/auth");
-                }}
-              >
-                Crear
               </a>
             </li>
 
