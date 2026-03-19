@@ -8,23 +8,7 @@ import { useWebSocket } from "../../../hooks/useWebsocket";
 import { AdminSidebar } from "../../AdminSidebar/AdminSidebar";
 import toast, { Toaster } from "react-hot-toast";
 import { themeService } from "../services/themeService";
-
-
-function Modal({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
-  return (
-    <div className="td-overlay" onClick={onClose}>
-      <div className="td-modal p-4" onClick={(e) => e.stopPropagation()}>
-        <div className="d-flex justify-content-between align-items-center mb-4">
-          <h5 className="mb-0">{title}</h5>
-          <button className="td-btn-icon" onClick={onClose}>✕</button>
-        </div>
-        {children}
-      </div>
-    </div>
-  );
-}
-
-
+import { Modal } from "../modal";
 
 export default function TabuDashboard() {
   const [collections, setCollections] = useState<Collection[]>([]);
@@ -35,15 +19,20 @@ export default function TabuDashboard() {
   const [filterFamilyId, setFilterFamilyId] = useState<number | null>(null);
   const [loadingCollections, setLoadingCollections] = useState(true);
 
-  const selectedCollection = selectedId ? collections.find((c) => c.id === selectedId) ?? null : null;
- 
+
+  const role = sessionStorage.getItem("user_role") ?? "{}";
+  const canCreate = role === "ADMIN" || role === "CREATOR";
+
+  const selectedCollection = selectedId
+    ? collections.find((c) => c.id === selectedId) ?? null
+    : null;
 
   const fetchCollections = async () => {
     try {
       const data = await themeService.getAll();
       setCollections(data);
     } catch (err) {
-      console.error('Error al cargar las temáticas', err);
+      console.error("Error al cargar las temáticas", err);
     } finally {
       setLoadingCollections(false);
     }
@@ -53,11 +42,12 @@ export default function TabuDashboard() {
     const matchSearch =
       c.name.toLowerCase().includes(search.toLowerCase()) ||
       c.description.toLowerCase().includes(search.toLowerCase());
-    const matchFamily = filterFamilyId === null || c.vocationalFamilyId === filterFamilyId;
+    const matchFamily =
+      filterFamilyId === null || c.vocationalFamilyId === filterFamilyId;
     return matchSearch && matchFamily;
   });
 
-    useWebSocket({
+  useWebSocket({
     onThemeCreated: () => { fetchCollections(); toast.success("Nueva colección creada"); },
     onThemeUpdated: () => { fetchCollections(); toast("Colección actualizada"); },
     onThemeDeleted: () => { fetchCollections(); toast.error("Colección eliminada"); },
@@ -67,12 +57,12 @@ export default function TabuDashboard() {
   });
 
   useEffect(() => {
-    fetchCollections();             
+    fetchCollections();
   }, []);
 
   const createCollection = async () => {
     setShowCreate(false);
-    await fetchCollections(); 
+    await fetchCollections();
   };
 
   const saveEdit = async (data: Partial<Collection>) => {
@@ -87,17 +77,15 @@ export default function TabuDashboard() {
     setCollections(collections.filter((c) => c.id !== id));
   };
 
-const updateFromDetail = (updated: Collection) =>
-  setCollections(collections.map((c) => c.id === updated.id ? updated : c));
+  const updateFromDetail = (updated: Collection) =>
+    setCollections(collections.map((c) => (c.id === updated.id ? updated : c)));
 
   return (
     <div className="tabu-dashboard">
-    <Toaster position="top-right" reverseOrder={false} />
-      <aside className="td-sidebar d-flex flex-column ">
-       
+      <Toaster position="top-right" reverseOrder={false} />
 
-      <AdminSidebar></AdminSidebar>
-
+      <aside className="td-sidebar d-flex flex-column">
+        <AdminSidebar />
         <div className="td-stats-box p-3 mt-auto">
           <div className="td-suave td-stats-label mb-1">Total temáticas</div>
           <div className="value">{collections.length}</div>
@@ -121,9 +109,11 @@ const updateFromDetail = (updated: Collection) =>
                 <h1 className="mb-1">Temáticas</h1>
                 <p className="td-suave mb-0">Gestiona tus temas y tarjetas del juego Tabú</p>
               </div>
-              <button className="btn td-btn-acento px-3 py-2" onClick={() => setShowCreate(true)}>
-                + Nueva colección
-              </button>
+              {canCreate && (
+                <button className="btn td-btn-acento px-3 py-2" onClick={() => setShowCreate(true)}>
+                  + Nueva colección
+                </button>
+              )}
             </div>
 
             <div className="d-flex gap-2 flex-wrap mb-4">
@@ -141,8 +131,8 @@ const updateFromDetail = (updated: Collection) =>
                   Todas
                 </button>
                 {collections
-                  .filter((c, index, self) => 
-                    self.findIndex(x => x.vocationalFamilyId === c.vocationalFamilyId) === index
+                  .filter((c, index, self) =>
+                    self.findIndex((x) => x.vocationalFamilyId === c.vocationalFamilyId) === index
                   )
                   .map((c) => (
                     <button
@@ -154,7 +144,7 @@ const updateFromDetail = (updated: Collection) =>
                     </button>
                   ))}
               </div>
-              </div>
+            </div>
 
             {loadingCollections ? (
               <div className="text-center py-5 td-suave">Cargando temáticas...</div>
@@ -166,7 +156,7 @@ const updateFromDetail = (updated: Collection) =>
                     ? "No hay temáticas que coincidan."
                     : "Todavía no tienes temáticas."}
                 </p>
-                {!search && filterFamilyId === null && (
+                {!search && filterFamilyId === null && canCreate && (
                   <button className="btn td-btn-acento px-3 py-2" onClick={() => setShowCreate(true)}>
                     Crear colección
                   </button>
@@ -179,12 +169,12 @@ const updateFromDetail = (updated: Collection) =>
                     <CollectionCard
                       collection={col}
                       onOpen={() => setSelectedId(col.id)}
-                      onEdit={() => setEditingCollection(col)}
-                      onDelete={() => deleteCollection(col.id)}
+                      onEdit={canCreate ? () => setEditingCollection(col) : undefined}
+                      onDelete={canCreate ? () => deleteCollection(col.id) : undefined}
                       onShare={() => {
                         const url = `${window.location.origin}/collection/${col.id}`;
                         navigator.clipboard.writeText(url);
-                        toast.success('Se ha copiado el enlace')
+                        toast.success("Se ha copiado el enlace");
                       }}
                     />
                   </div>
@@ -202,7 +192,11 @@ const updateFromDetail = (updated: Collection) =>
       )}
       {editingCollection && (
         <Modal title="Editar colección" onClose={() => setEditingCollection(null)}>
-          <CollectionForm initial={editingCollection} onSave={saveEdit} onCancel={() => setEditingCollection(null)} />
+          <CollectionForm
+            initial={editingCollection}
+            onSave={saveEdit}
+            onCancel={() => setEditingCollection(null)}
+          />
         </Modal>
       )}
     </div>

@@ -4,10 +4,13 @@ import type { Collection } from "./types/colection.interface";
 export function CollectionCard({ collection, onOpen, onEdit, onDelete, onShare }: {
   collection: Collection;
   onOpen: () => void;
-  onEdit: () => void;
-  onDelete: () => void;
-  onShare: () => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
+  onShare?: () => void;
 }) {
+  const role = sessionStorage.getItem("user_role") ?? "";
+  const canCreate = role === "ADMIN" || role === "CREATOR";
+
   return (
     <div className="td-card p-3 d-flex flex-column gap-3 bg-light" onClick={onOpen}>
       <div className="d-flex justify-content-between align-items-start">
@@ -16,12 +19,16 @@ export function CollectionCard({ collection, onOpen, onEdit, onDelete, onShare }
           <button className="td-btn-icon text-dark" onClick={onShare} title="Compartir">
             <Share2 size={16} strokeWidth={2} />
           </button>
-          <button className="td-btn-icon text-dark" onClick={onEdit} title="Editar">
-            <Pencil size={16} strokeWidth={2} />
-          </button>
-          <button className="td-btn-icon danger text-danger" onClick={onDelete} title="Eliminar">
-            <Trash2 size={16} strokeWidth={2} />
-          </button>
+          {canCreate && (
+            <button className="td-btn-icon text-dark" onClick={onEdit} title="Editar">
+              <Pencil size={16} strokeWidth={2} />
+            </button>
+          )}
+          {canCreate && (
+            <button className="td-btn-icon danger text-danger" onClick={onDelete} title="Eliminar">
+              <Trash2 size={16} strokeWidth={2} />
+            </button>
+          )}
         </div>
       </div>
       <div>

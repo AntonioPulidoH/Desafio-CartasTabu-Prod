@@ -6,6 +6,9 @@ import { useWebSocket } from "../../hooks/useWebsocket";
 import { cardService } from "./services/cardService";
 import toast from "react-hot-toast";
 
+  const role = sessionStorage.getItem("user_role") ?? "{}";
+  const canCreate = role === "ADMIN" || role === "CREATOR";
+
 
 function Modal({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
   return (
@@ -76,9 +79,11 @@ export function CollectionDetail({ collection, onBack, onUpdate }: {
           </div>
           {collection.description && <p className="td-suave mb-0">{collection.description}</p>}
         </div>
+        {canCreate && (
         <button className="btn td-btn-acento px-3 py-2" onClick={() => setShowCardForm(true)}>
-          + Nueva tarjeta
+            + Nueva tarjeta
         </button>
+        )}
       </div>
 
       <div className="td-stat-row d-flex gap-4 p-3 mb-4">
@@ -97,9 +102,11 @@ export function CollectionDetail({ collection, onBack, onUpdate }: {
         <div className="td-empty text-center py-5 px-3">
           <div className="td-empty-icon mb-2">🃏</div>
           <p className="mb-3">Esta colección no tiene tarjetas todavía.</p>
-          <button className="btn td-btn-acento px-3 py-2" onClick={() => setShowCardForm(true)}>
-            Crear primera tarjeta
-          </button>
+            {canCreate && (
+            <button className="btn td-btn-acento px-3 py-2" onClick={() => setShowCardForm(true)}>
+                Crear primera tarjeta
+            </button>
+            )}
         </div>
       ) : (
         <div className="d-flex flex-column gap-2">
