@@ -74,4 +74,14 @@ async create(data: CreateThemeDto, creatorId: number) {
       where: { id },
     });
   }
+
+    async countByUser(userId: number) {
+    const total = await this.prisma.theme.count({
+      where: {
+        creatorId: userId
+      }
+    })
+
+    return {total}
+  }
 }

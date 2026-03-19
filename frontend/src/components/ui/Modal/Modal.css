@@ -1,4 +1,56 @@
+/* OVERLAY */
 .tabu-modal-overlay {
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1050;
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  background: rgba(0, 0, 0, 0.6);
+
+  z-index: 99999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* MODAL */
+.tabu-modal .modal-content {
+  border-radius: var(--radio-borde);
+  border: 1px solid var(--color-borde);
+  background-color: var(--color-primario);
+  color: var(--color-claro);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* HEADER */
+.tabu-modal .modal-header {
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.tabu-modal .modal-title {
+  font-family: var(--font-varela-round);
+  color: var(--color-acento);
+}
+
+/* BODY */
+.tabu-modal .modal-body {
+  padding-top: 10px;
+}
+
+/* FOOTER */
+.tabu-modal .modal-footer {
+  border-top: 1px solid var(--color-borde);
+}
+
+/* CLOSE BUTTON */
+.tabu-modal .btn-close {
+  filter: invert(1);
+  opacity: 0.7;
+}
+
+.tabu-modal .btn-close:hover {
+  opacity: 1;
 }

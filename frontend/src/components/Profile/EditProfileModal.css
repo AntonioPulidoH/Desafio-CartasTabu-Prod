@@ -1,0 +1,48 @@
+.edit-profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* SECCION TITLE */
+.edit-profile-form h6 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-texto-suave);
+    border-bottom: 1px solid var(--color-borde);
+    padding-bottom: 4px;
+}
+
+/* LABELS */
+.edit-profile-form .form-label {
+    font-size: 0.85rem;
+    color: var(--color-texto-suave);
+    margin-bottom: 4px;
+}
+
+/* INPUTS */
+.edit-profile-form input,
+.edit-profile-form select {
+    border-radius: var(--radio-borde);
+    border: 1px solid var(--color-borde);
+    background-color: rgba(40, 25, 82,  0.45);
+    color: var(--color-claro);
+    padding: 8px 10px;
+    transition: all 0.15s ease;
+}
+
+.edit-profile-form input:focus,
+.edit-profile-form select:focus {
+    border-color: var(--color-acento);
+    box-shadow: 0 0 0 2px rgba(255, 89, 77, 0.2);
+    outline: none;
+}
+
+.edit-profile-form input::placeholder {
+    color: var(--color-texto-suave);
+}
+
+/* SELECT */
+.edit-profile-form select {
+    cursor: pointer;
+}

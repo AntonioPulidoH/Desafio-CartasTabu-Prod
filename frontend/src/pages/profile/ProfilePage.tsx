@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { getProfile } from "../../api/user";
 import { EditProfileModal } from "../../components/Profile/EditProfileModal";
 import { AdminSidebar } from "../../components/AdminSidebar/AdminSidebar";
+import { getMyCardsCount } from "../../api/cards";
+import { getMyThemesCount } from "../../api/themes";
 
 type Role = "ADMIN" | "CREATOR" | "USER";
 
@@ -25,14 +27,12 @@ type UserProfile = {
 
   role: Role;
 
-  //mock temporal
   stats: {
     generatedCards: number;
     createdThemes: number;
   };
 };
 
-//mock temporal
 const rolePermissions = {
   ADMIN: {
     canGenerateCard: true,
@@ -54,12 +54,17 @@ const rolePermissions = {
 export default function ProfilePage() {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState(true)
   const [editOpen, setEditOpen] = useState(false);
 
   useEffect(() => {
     async function loadProfile() {
       try {
         const data = await getProfile();
+
+        const cardsCount = await getMyCardsCount()
+        const themesCount = await getMyThemesCount()
+
         const formattedProfile: UserProfile = {
           id: data.id,
           name: data.name,
@@ -69,10 +74,9 @@ export default function ProfilePage() {
           vocationalFamily: data.vocationalFamily?.name ?? null,
           role: data.role.name as Role,
 
-          //mock temporal
           stats: {
-            generatedCards: 12,
-            createdThemes: 3,
+            generatedCards: cardsCount.total,
+            createdThemes: themesCount.total,
           },
         };
 
@@ -81,11 +85,29 @@ export default function ProfilePage() {
         console.error(error);
         navigate("/auth");
       }
+
+      setTimeout(() => {
+        setLoading(false)
+      }, 400)
     }
     loadProfile();
   }, [navigate]);
 
-  if (!profile) return <p>Cargando perfil...</p>;
+  if (loading || !profile) {
+    return (
+      <div className="d-flex flex-column flex-md-row profile-layout-wrapper">
+        <BarraNavegacion></BarraNavegacion>
+        <AdminSidebar></AdminSidebar>
+
+        <main className="flex-grow-1 p-4 p-md-5 profile-layout-main d-flex justify-content-center align-items-center">
+          <div className="profile-loading">
+            <div className="spinner-border text-light"></div>
+            <p className="mt-3">Cargando perfil...</p>
+          </div>
+        </main>
+      </div>
+    )
+  }
 
   return (
     <div className="d-flex flex-column flex-md-row profile-layout-wrapper">
@@ -96,11 +118,8 @@ export default function ProfilePage() {
       {/* Contenedor principal */}
       <main className="flex-grow-1 p-4 p-md-5 profile-layout-main">
         <div className="mx-auto" style={{ maxWidth: "1100px" }}>
-          <div className="d-flex align-items-center gap-3 mb-4">
-            <h2
-              className="mb-0 fw-bold"
-              style={{ color: "var(--tabu-primary)" }}
-            >
+          <div className="profile-title-row">
+            <h2 className="profile-title">
               Mi Perfil
             </h2>
             <span
@@ -112,26 +131,32 @@ export default function ProfilePage() {
 
           <div className="profile-grid">
             <Card title="Información de perfil">
-              <p>
-                <strong>Nombre: </strong>
-                {profile.name}
-              </p>
-              <p>
-                <strong>Apellido: </strong>
-                {profile.lastName}
-              </p>
-              <p>
-                <strong>Email: </strong>
-                {profile.email}
-              </p>
-              <p>
-                <strong>Centro educativo: </strong>
-                {profile.educationalCenter}
-              </p>
-              <p>
-                <strong>Familia Profesional: </strong>
-                {profile.vocationalFamily}
-              </p>
+              <ul className="list-group list-group-flush">
+                <li className="list-group-item d-flex justify-content-between">
+                  <span>Nombre</span>
+                  <strong>{profile.name}</strong>
+                </li>
+
+                <li className="list-group-item d-flex justify-content-between">
+                  <span>Apellido</span>
+                  <strong>{profile.lastName}</strong>
+                </li>
+
+                <li className="list-group-item d-flex justify-content-between">
+                  <span>Email</span>
+                  <strong>{profile.email}</strong>
+                </li>
+
+                <li className="list-group-item d-flex justify-content-between">
+                  <span>Centro educativo</span>
+                  <strong>{profile.educationalCenter}</strong>
+                </li>
+
+                <li className="list-group-item d-flex justify-content-between">
+                  <span>Familia profesional</span>
+                  <strong>{profile.vocationalFamily}</strong>
+                </li>
+              </ul>
 
               <button
                 className="btn btn-primary mt-3"
@@ -142,18 +167,37 @@ export default function ProfilePage() {
             </Card>
 
             <Card title="Permisos">
-              <p>
-                {rolePermissions[profile.role].canGenerateCard ? "✔" : "✖"}{" "}
-                Generar tarjetas
-              </p>
-              <p>
-                {rolePermissions[profile.role].canCreateThemes ? "✔" : "✖"}{" "}
-                Generar temas
-              </p>
-              <p>
-                {rolePermissions[profile.role].canManageUser ? "✔" : "✖"}{" "}
-                Gestionar usuarios
-              </p>
+              <ul className="list-group profile-list">
+                <li className="list-group-item">
+                  <span className="permission-label">
+                    <i className="bi bi-card-text"></i>
+                    Generar tarjetas
+                  </span>
+                  <strong className={rolePermissions[profile.role].canGenerateCard ? 'permission-yes' : 'permission-no'}>
+                    <i className={rolePermissions[profile.role].canGenerateCard ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill'}></i>
+                  </strong>
+                </li>
+
+                <li className="list-group-item">
+                  <span className="permission-label">
+                    <i className="bi bi-collection"></i>
+                    Generar temas
+                  </span>
+                  <strong className={rolePermissions[profile.role].canCreateThemes ? 'permission-yes' : 'permission-no'}>
+                    <i className={rolePermissions[profile.role].canCreateThemes ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill'}></i>
+                  </strong>
+                </li>
+
+                <li className="list-group-item">
+                  <span className="permission-label">
+                    <i className="bi bi-people"></i>
+                    Gestionar usuarios
+                  </span>
+                  <strong className={rolePermissions[profile.role].canManageUser ? 'permission-yes' : 'permission-no'}>
+                    <i className={rolePermissions[profile.role].canManageUser ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill'}></i>
+                  </strong>
+                </li>
+              </ul>
             </Card>
 
             <Card
@@ -167,11 +211,29 @@ export default function ProfilePage() {
                 </button>
               }
             >
-              <p>Tarjetas generadas: {profile.stats.generatedCards}</p>
+              <div className="profile-stats">
+                <div className="stat-box">
+                  <span className="stat-value">
+                    {profile.stats.generatedCards}
+                  </span>
 
-              {(profile.role === "CREATOR" || profile.role === "ADMIN") && (
-                <p>Temas creados: {profile.stats.createdThemes}</p>
-              )}
+                  <span className="stat-label">
+                    Tarjetas generadas
+                  </span>
+                </div>
+
+                {(profile.role === "CREATOR" || profile.role === "ADMIN") && (
+                  <div className="stat-box">
+                    <span className="stat-value">
+                      {profile.stats.createdThemes}
+                    </span>
+
+                    <span className="stat-label">
+                      Temas creados
+                    </span>
+                  </div>
+                )}
+              </div>
             </Card>
           </div>
         </div>

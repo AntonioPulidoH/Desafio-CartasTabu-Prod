@@ -64,4 +64,14 @@ export class CardsService {
       where: {id}
     })
   }
+
+  async countByUser(userId: number) {
+    const total = await this.prisma.card.count({
+      where: {
+        creatorId: userId
+      }
+    })
+
+    return {total}
+  }
 }
