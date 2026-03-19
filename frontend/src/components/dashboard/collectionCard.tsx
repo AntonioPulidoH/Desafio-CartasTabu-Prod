@@ -10,9 +10,9 @@ export function CollectionCard({ collection, onOpen, onEdit, onDelete, onShare }
 }) {
   return (
     <div className="td-card p-3 d-flex flex-column gap-3 bg-light" onClick={onOpen}>
-      <div className="d-flex justify-content-between align-items-start">
+      <div className="td-card-header">
         <span className="td-badge">{collection.vocationalFamily?.name}</span>
-        <div className="d-flex gap-1" onClick={(e) => e.stopPropagation()}>
+        <div className="td-card-actions" onClick={(e) => e.stopPropagation()}>
           <button className="td-btn-icon text-dark" onClick={onShare} title="Compartir">
             <Share2 size={16} strokeWidth={2} />
           </button>
