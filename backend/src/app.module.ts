@@ -7,6 +7,7 @@ import { CardsModule } from './cards/cards.module';
 import { ThemesModule } from './themes/themes.module';
 import { FamiliesModule } from './families/families.module';
 import { VocationalFamiliesModule } from './vocational-families/vocational-families.module';
+import { AiModule } from './ai/ai.module';
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { VocationalFamiliesModule } from './vocational-families/vocational-famil
     CardsModule,
     ThemesModule,
     FamiliesModule,
-    VocationalFamiliesModule
+    VocationalFamiliesModule,
+    AiModule
   ],
 })
 export class AppModule {}
