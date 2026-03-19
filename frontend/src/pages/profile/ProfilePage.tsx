@@ -148,18 +148,37 @@ export default function ProfilePage() {
             </Card>
 
             <Card title="Permisos">
-              <p>
-                {rolePermissions[profile.role].canGenerateCard ? "✔" : "✖"}{" "}
-                Generar tarjetas
-              </p>
-              <p>
-                {rolePermissions[profile.role].canCreateThemes ? "✔" : "✖"}{" "}
-                Generar temas
-              </p>
-              <p>
-                {rolePermissions[profile.role].canManageUser ? "✔" : "✖"}{" "}
-                Gestionar usuarios
-              </p>
+              <ul className="list-group profile-list">
+                <li className="list-group-item">
+                  <span className="permission-label">
+                    <i className="bi bi-card-text"></i>
+                    Generar tarjetas
+                  </span>
+                  <strong className={rolePermissions[profile.role].canGenerateCard ? 'permission-yes' : 'permission-no'}>
+                    <i className={rolePermissions[profile.role].canGenerateCard ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill'}></i>
+                  </strong>
+                </li>
+
+                <li className="list-group-item">
+                  <span className="permission-label">
+                    <i className="bi bi-collection"></i>
+                    Generar temas
+                  </span>
+                  <strong className={rolePermissions[profile.role].canCreateThemes ? 'permission-yes' : 'permission-no'}>
+                    <i className={rolePermissions[profile.role].canCreateThemes ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill'}></i>
+                  </strong>
+                </li>
+
+                <li className="list-group-item">
+                  <span className="permission-label">
+                    <i className="bi bi-people"></i>
+                    Gestionar usuarios
+                  </span>
+                  <strong className={rolePermissions[profile.role].canManageUser ? 'permission-yes' : 'permission-no'}>
+                    <i className={rolePermissions[profile.role].canManageUser ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill'}></i>
+                  </strong>
+                </li>
+              </ul>
             </Card>
 
             <Card

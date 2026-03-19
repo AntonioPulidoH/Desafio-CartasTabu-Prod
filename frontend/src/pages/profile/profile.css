@@ -144,6 +144,36 @@
   text-align: right;
 }
 
+.profile-list .permission-yes i {
+  color: #4ade80;
+}
+
+.profile-list .permission-no i {
+  color: #f87171;
+}
+
+.profile-list strong i {
+  font-size: 1.2rem;
+}
+
+.profile-list .list-group-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.permission-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.permission-label i {
+  width: 18px;
+  text-align: center;
+  font-size: 1.05rem;
+}
+
 .profile-stats {
   display: flex;
   gap: 16px;
