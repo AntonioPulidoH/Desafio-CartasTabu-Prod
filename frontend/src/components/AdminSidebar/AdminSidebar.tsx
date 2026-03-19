@@ -56,7 +56,7 @@ export const AdminSidebar = () => {
             </>
           )}
 
-          {/* Rutas para 'USER CREATOR' y 'USER' */}
+          {/* Rutas para 'CREATOR' y 'USER' */}
           <li className="nav-item">
             <NavLink
               to="/dashboard"
