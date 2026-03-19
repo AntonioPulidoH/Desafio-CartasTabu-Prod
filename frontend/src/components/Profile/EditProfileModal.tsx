@@ -51,7 +51,9 @@ export const EditProfileModal = ({isOpen, onClose, profile, onUpdated}: Props) =
 
             toast.success('Perfil actualizado correctamente.')
             onUpdated()
-            onClose()
+            setTimeout(() => {
+                onClose()
+            }, 300)
         } catch {
             toast.error('Error al actualizar el perfil.')
         }
