@@ -50,6 +50,8 @@ export class CardsService {
     })
     
     this.wsGateway.notifyCardCreated(data);
+
+    return card
   }
 
   private getRank(level: number) {
