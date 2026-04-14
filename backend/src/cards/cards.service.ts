@@ -9,19 +9,60 @@ export class CardsService {
   constructor(private readonly prisma: PrismaService, private readonly wsGateway: WebsocketsGateway) {}
 
   async create(data: CreateCardDto, creatorId: number) {
-    this.wsGateway.notifyCardCreated(data);
-  return this.prisma.card.create({
-    data: {
-      keyword:data.keyword,
-      themeId:data.themeId,
-      creatorId:creatorId,
-        forbiddenWords: {
-        create: data.forbiddenWords.map(word => ({ word })),
+    const card = await this.prisma.card.create({
+      data: {
+        keyword:data.keyword,
+        themeId:data.themeId,
+        creatorId:creatorId,
+          forbiddenWords: {
+          create: data.forbiddenWords.map(word => ({ word })),
+          }
+        },
+    });
+
+    //obtenemos el usuario para subir 1xp por crear la carta
+    const user = await this.prisma.user.findUnique({
+      where: {id: creatorId}
+    })
+
+    if(!user) return card
+
+    let newXp = user.xp + 1
+    let newLevel = user.level
+
+    //subida de nivel si hay suficiente xp y se resta la xp utilizada para la subida
+    while(newXp >= newLevel * 10) {
+      newXp -= newLevel * 10
+      newLevel++
+    }
+
+    //cálculo de rango
+    const newRank = this.getRank(newLevel)
+
+    //actualización de user
+    await this.prisma.user.update({
+      where: {id: creatorId},
+      data: {
+        xp: newXp,
+        level: newLevel,
+        rank: newRank
       }
-      
-    },
-  });
-}
+    })
+    
+    this.wsGateway.notifyCardCreated(data);
+  }
+
+  private getRank(level: number) {
+    if(level >= 50) return 'Maestro del Tabú'
+    if(level >= 30) return 'Gran Maestro'
+    if(level >= 20) return 'Maestro'
+    if(level >= 16) return 'Experto'
+    if(level >= 10) return 'Estratega'
+    if(level >= 7) return 'Pensador'
+    if(level >= 4) return 'Estudiante'
+    return 'Aprendiz'
+  }
+
   findAll() {
     return this.prisma.card.findMany()
   }
