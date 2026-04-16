@@ -27,6 +27,10 @@ type UserProfile = {
 
   role: Role;
 
+  level: number
+  xp: number
+  rank: number
+
   stats: {
     generatedCards: number;
     createdThemes: number;
@@ -73,6 +77,9 @@ export default function ProfilePage() {
           educationalCenter: data.educationalCenter,
           vocationalFamily: data.vocationalFamily?.name ?? null,
           role: data.role.name as Role,
+          level: data.level,
+          xp: data.xp,
+          rank: data.rank,
 
           stats: {
             generatedCards: cardsCount.total,
@@ -108,6 +115,9 @@ export default function ProfilePage() {
       </div>
     )
   }
+
+  const xpNecesaria = profile.level * 10
+  const progress = (profile.xp / xpNecesaria) * 100
 
   return (
     <div className="d-flex flex-column flex-md-row profile-layout-wrapper">
@@ -166,6 +176,25 @@ export default function ProfilePage() {
               </button>
             </Card>
 
+            <Card title="Progreso">
+              <div className="profile-progress">
+                <div className="profile-progress-header">
+                  <div>
+                    <h5 className="mb-0">Nivel {profile.level}</h5>
+                    <span className="profile-rank">{profile.rank}</span>
+                  </div>
+
+                  <div className="profile-xp">
+                    {profile.xp} / {xpNecesaria} XP
+                  </div>
+                </div>
+                  
+                <div className="profile-xp-bar">
+                  <div className="profile-xp-fill" style={{width: `${progress}%`}}></div>
+                </div>
+              </div>
+            </Card>
+
             <Card title="Permisos">
               <ul className="list-group profile-list">
                 <li className="list-group-item">
@@ -207,7 +236,7 @@ export default function ProfilePage() {
                   className="btn btn-primary"
                   onClick={() => navigate("/dashboard")}
                 >
-                  Ver mis colecciones
+                  Ver colecciones
                 </button>
               }
             >
@@ -253,6 +282,9 @@ export default function ProfilePage() {
             educationalCenter: data.educationalCenter,
             vocationalFamily: data.vocationalFamily?.name ?? null,
             role: data.role.name as Role,
+            level: data.level,
+            xp: data.xp,
+            rank: data.rank,
             stats: profile.stats,
           });
         }}
