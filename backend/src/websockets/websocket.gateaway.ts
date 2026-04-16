@@ -8,7 +8,7 @@ import { Injectable, Logger } from '@nestjs/common';
 @Injectable()
 export class WebsocketsGateway {
   @WebSocketServer()
-  server: Server; 
+  server!: Server; 
 
   private logger = new Logger('WebsocketsGateway');
 

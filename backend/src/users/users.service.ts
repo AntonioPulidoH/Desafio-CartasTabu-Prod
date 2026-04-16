@@ -94,6 +94,9 @@ export class UsersService {
         educationalCenter: true,
         role: true,
         vocationalFamily: true,
+        level: true,
+        xp: true,
+        rank: true,
         createdAt: true,
       },
     });

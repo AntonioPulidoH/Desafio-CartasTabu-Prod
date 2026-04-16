@@ -54,6 +54,10 @@ model User {
   createdThemes Theme[]
   createdCards  Card[]
 
+  level         Int     @default(1)
+  xp            Int     @default(0)
+  rank          String  @default("Aprendiz")
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
