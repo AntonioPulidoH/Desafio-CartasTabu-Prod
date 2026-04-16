@@ -32,10 +32,25 @@ export class ThemesController {
     return this.themesService.findOne(+id);  
   }
 
-  @Get()
-  findAll() {
-    return this.themesService.findAll();
-  }
+@Get()
+@UseGuards(JwtAuthGuard)
+findAll(@Request() req) {
+  return this.themesService.findAll(req.user.userId);
+}
+
+@Get('public')
+findAllPublic() {
+  return this.themesService.findAll();
+}
+
+@Patch(':id/visibility')
+@UseGuards(JwtAuthGuard)
+toggleVisibility(
+  @Param('id', ParseIntPipe) id: number,
+  @Request() req,
+) {
+  return this.themesService.toggleVisibility(id, req.user.userId);
+}
 
   @Get(":id")
   findOne(@Param("id", ParseIntPipe) id: number) {

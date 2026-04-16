@@ -64,12 +64,12 @@ export default function TabuDashboard() {
   });
 
   useWebSocket({
-    onThemeCreated: () => { fetchCollections(); toast.success("Nueva colección creada"); },
-    onThemeUpdated: () => { fetchCollections(); toast("Colección actualizada"); },
-    onThemeDeleted: () => { fetchCollections(); toast.error("Colección eliminada"); },
-    onCardCreated:  () => { fetchCollections(); toast.success("Nueva tarjeta creada"); },
-    onCardUpdated:  () => { fetchCollections(); toast("Tarjeta actualizada"); },
-    onCardDeleted:  () => { fetchCollections(); toast.error("Tarjeta eliminada"); },
+    onThemeCreated: () => { fetchCollections();},
+    onThemeUpdated: () => { fetchCollections();},
+    onThemeDeleted: () => { fetchCollections();},
+    onCardCreated:  () => { fetchCollections(); },
+    onCardUpdated:  () => { fetchCollections();},
+    onCardDeleted:  () => { fetchCollections(); },
   });
 
   useEffect(() => {
@@ -132,6 +132,13 @@ export default function TabuDashboard() {
       toast.error("Error al guardar la colección.");
     }
   };
+
+  const toggleVisibility = async (id: string) => {
+  const updated = await themeService.toggleVisibility(id);
+  setCollections(collections.map((c) => (c.id === updated.id ? updated : c)));
+  toast.success(updated.isPublic ? "Colección publicada 🌍" : "Colección privada 🔒");
+  await fetchCollections();
+};
 
   return (
     <div className="tabu-dashboard">
@@ -244,6 +251,7 @@ export default function TabuDashboard() {
                       onOpen={() => setSelectedId(col.id)}
                       onEdit={canCreate ? () => setEditingCollection(col) : undefined}
                       onDelete={canCreate ? () => deleteCollection(col.id) : undefined}
+                      onToggleVisibility={toggleVisibility} 
                       onShare={() => {
                         const url = `${window.location.origin}/collection/${col.id}`;
                         navigator.clipboard.writeText(url);

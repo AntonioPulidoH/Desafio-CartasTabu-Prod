@@ -39,4 +39,12 @@ export const themeService = {
     const response = await apiClient.delete(`/themes/${id}`);
     return response.data;
   },
+
+  toggleVisibility: async (id: string) => {
+    const response = await apiClient.patch(`/themes/${id}/visibility`);
+    return response.data;
+  },
+
+  
 };
+

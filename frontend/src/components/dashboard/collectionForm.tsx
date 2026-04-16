@@ -74,7 +74,7 @@ export default function CollectionForm({ initial, onSave, onCancel }: {
           value={vocationalFamilyId}
           onChange={(e) => setFamily(Number(e.target.value))}
         >
-        <option value="" selected>Selecciona la familia profesional</option>
+        <option value="">Selecciona la familia profesional</option>
           {families.map((f) => (
             <option key={f.id} value={f.id}>{f.name}</option>
           ))}

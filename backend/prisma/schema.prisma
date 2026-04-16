@@ -69,6 +69,7 @@ model Theme {
   id          Int     @id @default(autoincrement())
   name        String  
   description String? 
+  isPublic    Boolean @default(false)
 
   vocationalFamilyId Int
   vocationalFamily   VocationalFamily @relation(fields: [vocationalFamilyId], references: [id])

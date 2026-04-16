@@ -90,15 +90,12 @@ export function CollectionDetail({
   useWebSocket({
     onCardCreated: () => {
       fetchCards();
-      toast.success("Nueva tarjeta creada");
     },
     onCardUpdated: () => {
       fetchCards();
-      toast("Tarjeta actualizada");
     },
     onCardDeleted: () => {
       fetchCards();
-      toast.error("Tarjeta eliminada");
     },
   });
 

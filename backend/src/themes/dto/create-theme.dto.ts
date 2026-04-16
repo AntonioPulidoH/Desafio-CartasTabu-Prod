@@ -23,4 +23,6 @@ export class CreateThemeDto {
   @IsInt()
   @IsNotEmpty({ message: "El ID del creador es obligatorio" })
   creatorId: number;
+
+  isPublic?: boolean;
 }

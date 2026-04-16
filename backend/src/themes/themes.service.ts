@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateThemeDto } from './dto/create-theme.dto';
 import { UpdateThemeDto } from './dto/update-theme.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -23,23 +23,39 @@ async create(data: CreateThemeDto, creatorId: number) {
     })
   }
 
-  async findAll() {
-    return this.prisma.theme.findMany({
-      include: {
-        vocationalFamily: {
-          select: { id: true, name: true },
+    async findAll(userId?: number) {
+      return this.prisma.theme.findMany({
+        where: userId
+          ? {
+              OR: [
+                { creatorId: userId },       
+                { isPublic: true },       
+              ],
+            }
+          : { isPublic: true },            
+        include: {
+          vocationalFamily: { select: { id: true, name: true } },
+          creator: { select: { id: true, name: true, lastName: true } },
+          _count: { select: { cards: true } },
         },
-        creator: {
-          select: { id: true, name: true, lastName: true },
-        },
-        _count: {
-          select: { cards: true },
-        },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
+        orderBy: { createdAt: 'desc' },
+      });
+    }
+
+  async toggleVisibility(id: number, userId: number) {
+    const theme = await this.prisma.theme.findUnique({ where: { id } });
+
+    if (!theme) throw new NotFoundException(`Temática ${id} no existe`);
+    if (theme.creatorId !== userId)
+      throw new ForbiddenException('No puedes modificar esta colección');
+
+    const updatedTheme = await this.prisma.theme.update({
+      where: { id },
+      data: { isPublic: !theme.isPublic },
     });
+    this.wsGateway.notifyThemeUpdated(updatedTheme);
+
+    return updatedTheme;
   }
 
   async findOne(id: number) {
