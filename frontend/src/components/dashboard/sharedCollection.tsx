@@ -14,14 +14,17 @@ export function SharedCollection() {
 
 useEffect(() => {
   themeService.getPublic(Number(id))
-    .then(data => setCollection({
-      ...data,
-      cards: (data.cards ?? []).map((c: any) => ({
-        ...c,
-        word: c.keyword,
-        forbiddenWords: c.forbiddenWords ?? []
-      }))
-    }))
+    .then(data => {
+      console.log("Primera carta raw:", data.cards?.[0]); 
+      setCollection({
+        ...data,
+        cards: (data.cards ?? []).map((c: any) => ({
+          ...c,
+          word: c.keyword,
+          forbiddenWords: c.forbiddenWords ?? []
+        }))
+      });
+    })
     .catch(err => setError(err.message));
 }, [id]);
 

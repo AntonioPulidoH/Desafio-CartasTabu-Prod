@@ -5,6 +5,7 @@ export interface Collection {
   name: string;
   description: string;
   creatorId:number;
+  isPublic?: boolean;
   vocationalFamilyId:number;
   vocationalFamily?: { id: number; name: string };
   cards?:TabuCard[]
