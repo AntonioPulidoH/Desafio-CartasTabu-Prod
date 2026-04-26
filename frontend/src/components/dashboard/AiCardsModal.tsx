@@ -36,7 +36,9 @@ export function AiCardsModal({
       toast.success("Cartas generadas con éxito");
     } catch (error) {
       console.error(error);
-      toast.error("El Asistente IA falló al generar las cartas. Inténtalo de nuevo.");
+      toast.error(
+        "El Asistente IA falló al generar las cartas. Inténtalo de nuevo.",
+      );
     } finally {
       setIsGenerating(false);
     }
@@ -45,6 +47,12 @@ export function AiCardsModal({
   const handleSave = async () => {
     if (!generatedCards) return;
     await onSaveGenerated(generatedCards);
+  };
+
+  const handleRemoveCard = (indexToRemove: number) => {
+    setGeneratedCards((prev) =>
+      prev ? prev.filter((_, idx) => idx !== indexToRemove) : null,
+    );
   };
 
   return (
@@ -84,9 +92,7 @@ export function AiCardsModal({
             </div>
 
             <div className="mb-4">
-              <label className="form-label td-suave">
-                Contexto (Opcional)
-              </label>
+              <label className="form-label td-suave">Contexto (Opcional)</label>
               <textarea
                 className="form-control td-input"
                 rows={3}
@@ -127,9 +133,24 @@ export function AiCardsModal({
               {generatedCards.map((card, idx) => (
                 <div
                   key={idx}
-                  className="p-3 border rounded"
+                  className="p-3 border rounded position-relative"
                   style={{ borderColor: "var(--color-borde)" }}
                 >
+                  {/* <-- Botón de descartar --> */}
+                  <button
+                    onClick={() => handleRemoveCard(idx)}
+                    className="btn btn-sm btn-outline-danger position-absolute"
+                    style={{
+                      top: "8px",
+                      right: "8px",
+                      padding: "0 6px",
+                      border: "none",
+                    }}
+                    title="Descartar esta carta"
+                  >
+                    ✕
+                  </button>
+
                   <div className="fw-bold mb-2 text-primary">
                     {card.keyword}
                   </div>
@@ -154,7 +175,11 @@ export function AiCardsModal({
               >
                 Descartar y probar otra vez
               </button>
-              <button className="btn td-btn-acento" onClick={handleSave}>
+              <button
+                className="btn td-btn-acento"
+                onClick={handleSave}
+                disabled={generatedCards.length === 0}
+              >
                 Añadir a Colección
               </button>
             </div>

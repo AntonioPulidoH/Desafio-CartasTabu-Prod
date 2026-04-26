@@ -78,6 +78,16 @@ export function AiCollectionModal({
     onClose();
   };
 
+  const handleRemoveCard = (indexToRemove: number) => {
+    setGeneratedData((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        cards: prev.cards.filter((_, idx) => idx !== indexToRemove),
+      };
+    });
+  };
+
   return (
     <div className="td-overlay" onClick={onClose}>
       <div
@@ -199,9 +209,24 @@ export function AiCollectionModal({
               {generatedData.cards.map((card, idx) => (
                 <div
                   key={idx}
-                  className="p-3 border rounded"
+                  className="p-3 border rounded position-relative"
                   style={{ borderColor: "var(--color-borde)" }}
                 >
+                  {/* <-- Botón de descartar --> */}
+                  <button
+                    onClick={() => handleRemoveCard(idx)}
+                    className="btn btn-sm btn-outline-danger position-absolute"
+                    style={{
+                      top: "8px",
+                      right: "8px",
+                      padding: "0 6px",
+                      border: "none",
+                    }}
+                    title="Descartar esta carta"
+                  >
+                    ✕
+                  </button>
+
                   <div className="fw-bold mb-2 text-primary">
                     {card.keyword}
                   </div>
@@ -226,7 +251,11 @@ export function AiCollectionModal({
               >
                 Volver a intentar
               </button>
-              <button className="btn td-btn-acento" onClick={handleSave}>
+              <button
+                className="btn td-btn-acento"
+                onClick={handleSave}
+                disabled={generatedData.cards.length === 0}
+              >
                 Guardar Colección
               </button>
             </div>
