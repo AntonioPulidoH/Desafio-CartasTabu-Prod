@@ -12,13 +12,13 @@ export class AiController {
   constructor(private readonly aiService: AiService) {}
 
   @Post("generate-cards")
-  @Roles(1, 2, 3)
+  @Roles('ADMIN', 'CREATOR', 'USER')
   async generateCards(@Body() generateCardsDto: GenerateCardsDto) {
     return this.aiService.generateCards(generateCardsDto);
   }
 
   @Post("generate-collection")
-  @Roles(1, 2)
+  @Roles('ADMIN', 'CREATOR')
   async generateCollection(
     @Body() generateCollectionDto: GenerateCollectionDto,
   ) {
