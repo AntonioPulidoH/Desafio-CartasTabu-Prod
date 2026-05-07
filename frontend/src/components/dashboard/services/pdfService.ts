@@ -3,124 +3,188 @@ import html2canvas from "html2canvas";
 import type { Collection } from "../types/colection.interface";
 import { cardService } from "./cardService";
 
-//Paleta de coloers
+// ─── Paleta ────────────────────────────────────────────────────────────────
 const C = {
-  primario:   "#281952",
-  fondo:      "#1e1245",
-  acento:     "#ff594d",
-  secundario: "#746baa",
-  claro:      "#fdfbf7",
-  borde:      "rgba(255,255,255,0.25)",     
-  bordeLight: "rgba(255, 255, 255, 0.75)",  
-  suave:      "rgba(255, 255, 255, 0.87)",  
-  muySuave:   "rgba(255, 255, 255, 0.62)",  
+  primario:    "#281952",
+  acento:      "#ff594d",
+  secundario:  "#746baa",
+  claro:       "#ffffff",
+  bordeOsc:    "#281952",
+  bordeLight:  "rgba(40,25,82,0.18)",
+  suave:       "rgba(40,25,82,0.55)",
+  muySuave:    "rgba(40,25,82,0.35)",
+  fondoPagina: "#ffffff",
 };
-
-
 const hCutLine = `
-  <div style="display:flex;align-items:center;gap:6px;padding:0 32px;height:16px;">
-    <span style="color:${C.muySuave};font-size:12px;line-height:1;">✂</span>
+  <div style="display:flex;align-items:center;gap:6px;padding:0 16px;height:1px;flex-shrink:0;">
     <div style="flex:1;border-top:1.5px dashed ${C.muySuave};"></div>
   </div>
 `;
 
 const vCutLine = `
-  <div style="width:16px;display:flex;justify-content:center;">
+  <div style="width:1px;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
     <div style="border-left:1.5px dashed ${C.muySuave};height:100%;"></div>
   </div>
 `;
 
-// Parte de delante
+// Cara delantera
 const renderFront = (word: string, forbiddenWords: string[]) => `
   <div style="
     width:100%;height:100%;
-    background:${C.primario};
-    border-radius:10px;border:1.5px solid ${C.borde};
-    display:flex;flex-direction:column;overflow:hidden;
+    background:#ffffff;
+    border-radius:10px;
+    border:3px solid ${C.acento};
+    display:flex;flex-direction:column;
+    overflow:hidden;
   ">
-    <div style="padding:8px 10px 6px;text-align:center;border-bottom:1px solid ${C.bordeLight};">
-      <span style="font-family:'Varela Round',sans-serif;font-size:9px;color:${C.suave};letter-spacing:1.5px;text-transform:uppercase;">
-        ¿Qué palabra se esconde?
-      </span>
+
+
+    <!-- Palabra principal -->
+    <div style="
+      background:${C.primario};
+      margin:8px 10px 6px;
+      border-radius:8px;
+      padding:10px 8px;
+      text-align:center;
+    ">
+      <span style="
+        font-family:'Open Sans',sans-serif;
+        font-size:16px;font-weight:700;
+        color:#ffffff;line-height:1.2;
+      ">${word}</span>
     </div>
 
-    <div style="background:${C.fondo};margin:8px 10px;border-radius:6px;padding:8px 6px;text-align:center;border:1px solid ${C.bordeLight};">
-      <span style="font-family:'Varela Round',sans-serif;font-size:16px;font-weight:700;color:${C.claro};line-height:1.2;">
-        ${word}
-      </span>
-    </div>
-
-    <div style="flex:1;padding:0 10px;display:flex;flex-direction:column;gap:4px;justify-content:center;">
+    <!-- Palabras prohibidas -->
+    <div style="flex:1;padding:4px 10px;display:flex;flex-direction:column;justify-content:center;gap:3px;">
       ${forbiddenWords.map(w => `
-        <div style="font-family:'Open Sans',sans-serif;font-size:11px;color:${C.acento};text-align:center;padding:3px 0;">
-          ${w}
-        </div>
+        <div style="
+          font-family:'Open Sans',sans-serif;
+          font-size:13px;font-weight:600;
+          color:${C.acento};
+          text-align:center;
+          padding:3px 0;
+        ">${w}</div>
       `).join("")}
     </div>
 
-    <div style="padding:6px;text-align:center;border-top:1px solid ${C.bordeLight};">
-      <span style="color:${C.acento};font-size:14px;">✕</span>
+    <!-- Footer -->
+    <div style="
+      padding:6px;
+      text-align:center;
+      border-top:2px solid ${C.bordeLight};
+    ">
+      <span style="color:${C.acento};font-size:18px;font-weight:900;line-height:1;">✕</span>
     </div>
   </div>
 `;
 
-// Parte de atrás
-const renderBack = (collectionName: string, familyName: string) => `
+//Cara trasera
+const renderBack = (
+  collectionName: string,
+  familyName: string,
+  backImageUrl?: string
+) => `
   <div style="
     width:100%;height:100%;
-    background:${C.primario};
-    border-radius:10px;border:1.5px solid ${C.borde};
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    gap:10px;padding:16px 12px;
+    background:#ffffff;
+    border-radius:10px;
+    border:3px solid ${C.acento};
+    display:flex;flex-direction:column;
+    overflow:hidden;
+    position:relative;
   ">
-    <div style="display:flex;gap:5px;">
-      ${Array(5).fill(`<div style="width:4px;height:4px;border-radius:50%;background:${C.borde};"></div>`).join("")}
-    </div>
+    ${backImageUrl ? `
+      <div style="
+        position:absolute;inset:0;
+        background:url('${backImageUrl}') center/contain no-repeat;
+        opacity:0.25;
+        border-radius:8px;
+      "></div>
+    ` : ""}
 
-    <div style="background:${C.acento};color:${C.claro};font-family:'Open Sans',sans-serif;font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:3px 10px;border-radius:20px;">
-      ${familyName}
-    </div>
-
-    <div style="width:30px;height:1.5px;background:${C.secundario};"></div>
-
-    <div style="font-family:'Varela Round',sans-serif;font-size:13px;color:${C.claro};text-align:center;line-height:1.4;">
-      ${collectionName}
-    </div>
-
-    <div style="width:30px;height:1.5px;background:${C.secundario};"></div>
-
-    <div style="display:flex;gap:5px;">
-      ${Array(5).fill(`<div style="width:4px;height:4px;border-radius:50%;background:${C.borde};"></div>`).join("")}
-    </div>
-  </div>
-`;
-
-//Fila con las cartas
-const renderRow = (
-  row: { word: string; forbiddenWords?: string[] }[],
-  isFront: boolean,
-  collectionName: string,
-  familyName: string
-) => `
-  <div style="display:flex;align-items:stretch;padding:0 32px;height:190px;">
-    ${row.map((card, i) => `
-      ${i > 0 ? vCutLine : ""}
-      <div style="flex:1;padding:4px;">
-        ${isFront
-          ? renderFront(card.word, card.forbiddenWords ?? [])
-          : renderBack(collectionName, familyName)
-        }
+    <div style="
+      position:relative;z-index:1;
+      flex:1;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;
+      gap:10px;padding:16px 10px;
+    ">
+      <!-- Puntitos decorativos -->
+      <div style="display:flex;gap:5px;">
+        ${Array(5).fill(`<div style="width:5px;height:5px;border-radius:50%;background:${C.acento};"></div>`).join("")}
       </div>
-    `).join("")}
-    ${row.length < 3
-      ? Array(3 - row.length).fill(`${vCutLine}<div style="flex:1;"></div>`).join("")
-      : ""
-    }
+
+      <!-- Familia -->
+      <div style="
+        background:${C.acento};
+        color:#ffffff;
+        font-family:'Open Sans',sans-serif;
+        font-size:8px;font-weight:700;
+        letter-spacing:2px;text-transform:uppercase;
+        padding:4px 12px;border-radius:20px;
+      ">${familyName}</div>
+
+      <!-- Línea -->
+      <div style="width:35px;height:2px;background:${C.secundario};border-radius:2px;"></div>
+
+      <!-- Nombre colección -->
+      <div style="
+        font-family:'Open Sans',sans-serif;
+        font-size:13px;font-weight:700;
+        color:${C.primario};
+        text-align:center;line-height:1.3;
+        padding:0 8px;
+      ">${collectionName}</div>
+
+      <!-- Línea -->
+      <div style="width:35px;height:2px;background:${C.secundario};border-radius:2px;"></div>
+
+      <!-- Puntitos decorativos -->
+      <div style="display:flex;gap:5px;">
+        ${Array(5).fill(`<div style="width:5px;height:5px;border-radius:50%;background:${C.acento};"></div>`).join("")}
+      </div>
+    </div>
   </div>
 `;
 
+const renderCardRow = (
+  pair1: { word: string; forbiddenWords?: string[] } | null,
+  pair2: { word: string; forbiddenWords?: string[] } | null,
+  collectionName: string,
+  familyName: string,
+  backImageUrl?: string,
+) => {
+  const CARD_H = "185px";
 
-export const generateCollectionPDF = async (collection: Collection) => {
+  const slot = (
+    card: { word: string; forbiddenWords?: string[] } | null,
+    isFront: boolean
+  ) => `
+    <div style="flex:1;padding:2px;height:${CARD_H};">
+      ${card
+        ? (isFront
+            ? renderFront(card.word, card.forbiddenWords ?? [])
+            : renderBack(collectionName, familyName, backImageUrl))
+        : `<div style="width:100%;height:100%;"></div>`
+      }
+    </div>
+  `;
+
+  return `
+    <div style="display:flex;align-items:stretch;padding:0 16px;">
+      ${slot(pair1, true)}
+      ${vCutLine}
+      ${slot(pair1, false)}
+      ${vCutLine}
+      ${slot(pair2, true)}
+      ${vCutLine}
+      ${slot(pair2, false)}
+    </div>
+  `;
+};
+
+export const generateCollectionPDF = async (
+  collection: Collection & { backImageUrl?: string }
+) => {
   let cards = collection.cards ?? [];
   if (cards.length === 0) {
     try {
@@ -130,12 +194,17 @@ export const generateCollectionPDF = async (collection: Collection) => {
     }
   }
 
-  const familyName = collection.vocationalFamily?.name ?? "Colección";
-  const rows: typeof cards[] = [];
-  for (let i = 0; i < cards.length; i += 3) {
-    rows.push(cards.slice(i, i + 3));
-  }
+  const familyName   = collection.vocationalFamily?.name ?? "Colección";
+  const backImageUrl = collection.backImageUrl;
 
+//Para agrupar pedí ayuda a la IA
+  const rows: [
+    typeof cards[0] | null,
+    typeof cards[0] | null
+  ][] = [];
+  for (let i = 0; i < cards.length; i += 2) {
+    rows.push([cards[i] ?? null, cards[i + 1] ?? null]);
+  }
 
   const A4_HEIGHT_PX = 1122;
 
@@ -144,7 +213,7 @@ export const generateCollectionPDF = async (collection: Collection) => {
     position:fixed;left:-9999px;top:0;
     width:794px;
     min-height:${A4_HEIGHT_PX}px;
-    background:${C.fondo};
+    background:${C.fondoPagina};
     font-family:'Open Sans',sans-serif;
   `;
 
@@ -155,33 +224,37 @@ export const generateCollectionPDF = async (collection: Collection) => {
     </style>
 
     <!-- Cabecera -->
-    <div style="padding:36px 32px 20px;">
-      <div style="display:inline-block;background:${C.acento};color:${C.claro};font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:3px 12px;border-radius:20px;margin-bottom:8px;">
-        ${familyName}
-      </div>
-      <h1 style="font-family:'Varela Round',sans-serif;font-size:22px;color:${C.claro};margin-bottom:4px;">
-        ${collection.name}
-      </h1>
-      <p style="color:${C.suave};font-size:11px;">
+    <div style="padding:28px 16px 14px;">
+      <div style="
+        display:inline-block;
+        background:${C.acento};color:${C.claro};
+        font-size:8px;font-weight:700;
+        letter-spacing:2px;text-transform:uppercase;
+        padding:3px 12px;border-radius:20px;margin-bottom:7px;
+      ">${familyName}</div>
+      <h1 style="
+        font-family:'Varela Round',sans-serif;
+        font-size:22px;color:${C.primario};
+        margin-bottom:3px;line-height:1.2;
+      ">${collection.name}</h1>
+      <p style="color:${C.suave};font-size:10px;">
         ${cards.length} tarjetas · recorta por las líneas punteadas
       </p>
     </div>
 
     ${hCutLine}
 
-    ${rows.map(row => `
-      ${renderRow(row, true,  collection.name, familyName)}
-      ${hCutLine}
-      ${renderRow(row, false, collection.name, familyName)}
+    ${rows.map(([c1, c2]) => `
+      ${renderCardRow(c1, c2, collection.name, familyName, backImageUrl)}
       ${hCutLine}
     `).join("")}
 
     <!-- Pie -->
-    <div style="padding:12px 32px 0;display:flex;justify-content:space-between;">
-      <span style="color:${C.muySuave};font-size:10px;letter-spacing:1px;text-transform:uppercase;">
+    <div style="padding:8px 16px 16px;display:flex;justify-content:space-between;">
+      <span style="color:${C.muySuave};font-size:9px;letter-spacing:1px;text-transform:uppercase;">
         Tabú · ${collection.name}
       </span>
-      <span style="color:${C.muySuave};font-size:10px;">
+      <span style="color:${C.muySuave};font-size:9px;">
         ${new Date().toLocaleDateString("es-ES")}
       </span>
     </div>
@@ -193,22 +266,22 @@ export const generateCollectionPDF = async (collection: Collection) => {
     const canvas = await html2canvas(container, {
       scale: 2,
       useCORS: true,
-      backgroundColor: C.fondo,
+      backgroundColor: C.fondoPagina,
       height: Math.max(container.scrollHeight, A4_HEIGHT_PX),
       windowHeight: Math.max(container.scrollHeight, A4_HEIGHT_PX),
     });
 
-    const imgData  = canvas.toDataURL("image/png");
-    const pdf      = new jsPDF({ orientation: "portrait", unit: "px", format: "a4" });
-    const pgW      = pdf.internal.pageSize.getWidth();
-    const pgH      = pdf.internal.pageSize.getHeight();
-    const imgH     = (canvas.height * pgW) / canvas.width;
+    const imgData = canvas.toDataURL("image/png");
+    const pdf     = new jsPDF({ orientation: "portrait", unit: "px", format: "a4" });
+    const pgW     = pdf.internal.pageSize.getWidth();
+    const pgH     = pdf.internal.pageSize.getHeight();
+    const imgH    = (canvas.height * pgW) / canvas.width;
 
     let y = 0;
     while (y < imgH) {
       if (y > 0) {
         pdf.addPage();
-        pdf.setFillColor(30, 18, 69);
+        pdf.setFillColor(255, 255, 255);
         pdf.rect(0, 0, pgW, pgH, "F");
       }
       pdf.addImage(imgData, "PNG", 0, -y, pgW, imgH);
