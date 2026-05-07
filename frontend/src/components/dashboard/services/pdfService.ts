@@ -16,7 +16,7 @@ const C = {
   fondoPagina: "#ffffff",
 };
 const hCutLine = `
-  <div style="display:flex;align-items:center;gap:6px;padding:0 16px;height:1px;flex-shrink:0;">
+  <div style="display:flex;align-items:center;gap:6px;padding:0;height:1px;flex-shrink:0;">
     <div style="flex:1;border-top:1.5px dashed ${C.muySuave};"></div>
   </div>
 `;
@@ -73,7 +73,6 @@ const renderFront = (word: string, forbiddenWords: string[]) => `
       text-align:center;
       border-top:2px solid ${C.bordeLight};
     ">
-      <span style="color:${C.acento};font-size:18px;font-weight:900;line-height:1;">✕</span>
     </div>
   </div>
 `;
@@ -97,7 +96,7 @@ const renderBack = (
       <div style="
         position:absolute;inset:0;
         background:url('${backImageUrl}') center/contain no-repeat;
-        opacity:0.25;
+        opacity:0.55;
         border-radius:8px;
       "></div>
     ` : ""}
@@ -153,13 +152,13 @@ const renderCardRow = (
   familyName: string,
   backImageUrl?: string,
 ) => {
-  const CARD_H = "185px";
+  const CARD_H = "260px";
 
   const slot = (
     card: { word: string; forbiddenWords?: string[] } | null,
     isFront: boolean
   ) => `
-    <div style="flex:1;padding:2px;height:${CARD_H};">
+    <div style="flex:1;padding:0;height:${CARD_H};">
       ${card
         ? (isFront
             ? renderFront(card.word, card.forbiddenWords ?? [])
@@ -170,7 +169,7 @@ const renderCardRow = (
   `;
 
   return `
-    <div style="display:flex;align-items:stretch;padding:0 16px;">
+    <div style="display:flex;align-items:stretch;padding:0;">
       ${slot(pair1, true)}
       ${vCutLine}
       ${slot(pair1, false)}
