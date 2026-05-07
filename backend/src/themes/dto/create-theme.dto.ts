@@ -4,6 +4,7 @@ import {
   IsOptional,
   IsInt,
   MinLength,
+  MaxLength,
 } from "class-validator";
 
 export class CreateThemeDto {
@@ -25,4 +26,10 @@ export class CreateThemeDto {
   creatorId: number;
 
   isPublic?: boolean;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  backImageUrl?: string;
+  
 }
