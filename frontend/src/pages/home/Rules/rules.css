@@ -1,0 +1,149 @@
+.rules-section {
+    margin-top: 4rem;
+}
+
+.rules-section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-claro);
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-borde);
+}
+
+/* GRID */
+.rules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(2, 1fr));
+    gap: 24px;
+}
+
+.rules-card-wide {
+    grid-column: span 2;
+}
+
+/* CARD */
+.rules-card {
+    background: rgba(116, 107, 170, 0.12);
+    border: 1px solid var(--color-borde);
+    border-radius: 20px;
+    padding: 24px;
+    backdrop-filter: blur(10px);
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+    height: 100%;
+}
+
+/* HOVER */
+.rules-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 89, 77, 0.4);
+    background: rgba(116, 107, 170, 0.18);
+    box-shadow: 0 12px 32px rgba(255, 89, 77, 0.12);
+}
+
+/* TITULOS */
+.rules-number {
+    font-size: 4rem;
+    font-weight: 800;
+    line-height: 1;
+    color: rgba(255,255,255,0.06);
+    margin-bottom: 12px;
+}
+
+.rules-card h4 {
+    color: var(--color-acento);
+    font-weight: 700;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* TEXTO */
+.rules-card p {
+    color: var(--color-claro);
+    line-height: 1.7;
+    margin-bottom: 16px;
+}
+
+/* LISTAS */
+.rules-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.rules-card li {
+    position: relative;
+    padding-left: 28px;
+    margin-bottom: 14px;
+    line-height: 1.6;
+}
+
+.rules-card li::before {
+    content: "✦";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--color-acento);
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+/* CARD DESTACADA */
+.rules-highlight-card {
+    background: linear-gradient(
+        135deg,
+        rgba(255, 89, 77, 0.18),
+        rgba(116, 107, 170, 0.18)
+    );
+    border-color: rgba(255, 89, 77, 0.35);
+}
+
+/* HERO */
+.rules-hero {
+    text-align: center;
+    padding-top: 5rem;
+}
+
+.rules-hero h1 {
+    font-size: clamp(3rem, 8vw, 5rem);
+    font-weight: 800;
+    color: var(--color-claro);
+    margin-bottom: 1rem;
+}
+
+.rules-hero h2 {
+    color: var(--color-acento);
+    font-weight: 700;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+/* CONTENEDOR */
+.rules-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .rules-section-title {
+        font-size: 1.6rem;
+    }
+
+    .rules-card {
+        padding: 20px;
+    }
+
+    .rules-card h4 {
+        font-size: 1.2rem;
+    }
+
+    .rules-grid {
+        grid-template-columns: 1fr;
+    }
+}

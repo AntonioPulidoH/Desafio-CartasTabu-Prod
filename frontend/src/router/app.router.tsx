@@ -2,7 +2,7 @@ import AuthPage from "../pages/home/AuthPage";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import HomePage from "../pages/home/HomePage";
 import Register from "../pages/home/RegisterPage";
-import Rules from "../pages/home/RulesPage";
+import Rules from "../pages/home/Rules/RulesPage";
 import ProfilePage from "../pages/profile/ProfilePage";
 import PrivateRoute from "./PrivateRoute";
 import { AdminLayout } from "../components/AdminLayout/AdminLayout";
