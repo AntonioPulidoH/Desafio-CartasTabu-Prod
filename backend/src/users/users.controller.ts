@@ -27,7 +27,7 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   async create(@Body() createUserDto: CreateUserDto) {
     const user = await this.usersService.create(createUserDto)
-    const userWithRole = await this.usersService.findEmail(user.email)
+    const userWithRole = await this.usersService.findOne(user.id)
     return this.authService.login(userWithRole);
   }
 

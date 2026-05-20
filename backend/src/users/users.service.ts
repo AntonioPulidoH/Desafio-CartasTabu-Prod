@@ -14,40 +14,37 @@ import { UpdateUserDto, UpdateUserRoleDto } from "./dto/update-user-dto";
 export class UsersService {
     constructor(private readonly prisma: PrismaService, private jwtService: JwtService) {}
 
-  async findEmail(email: string) {
-    return this.prisma.user.findUnique({
-      where: { email },
-      include: { role: true },
-    });
-  }
-
   async create(data: CreateUserDto) {
-    const isValidEmail = (email: string): boolean => {
-      const emailVerified = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-      return emailVerified.test(email)
-    }
 
     const isValidPassword = (password: string): boolean => {
       const passwordVerified = /^(?=.*[A-Z])(?=.*\d).{8,}$/
       return passwordVerified.test(password)
     }
 
-    if(!data.email || !isValidEmail(data.email)) {
-      throw new BadRequestException("EMAIL_INVALIDO");
+    const registerCode = await this.prisma.registerCode.findUnique({
+      where: { code: data.registerCode }
+    })
+
+    if(!registerCode) {
+      throw new BadRequestException("CODIGO_INVALIDO")
     }
 
     if (!data.password || !isValidPassword(data.password)) {
       throw new BadRequestException("PASSWORD_INVALIDA");
     }
 
+    if(!data.username || data.username.length < 3) {
+      throw new BadRequestException('USERNAME_INVALIDO')
+    }
+
     if (!data.name || !data.lastName) {
       throw new BadRequestException("DATOS_OBLIGATORIOS");
     }
 
-    const userExists = await this.findEmail(data.email);
+    const userExists = await this.findUsername(data.username);
 
     if (userExists) {
-      throw new ConflictException("EMAIL_YA_REGISTRADO");
+      throw new ConflictException("USERNAME_YA_REGISTRADO");
     }
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
@@ -56,7 +53,8 @@ export class UsersService {
       data: {
         name: data.name,
         lastName: data.lastName,
-        email: data.email,
+        username: data.username,
+        registerCodeId: registerCode.id,
         password: hashedPassword,
         educationalCenter: data.educationalCenter ?? null,
         roleId: 3,
@@ -71,7 +69,7 @@ export class UsersService {
         id: true,
         name: true,
         lastName: true,
-        email: true,
+        username: true,
         educationalCenter: true,
         role: true,
         vocationalFamily: true,
@@ -90,7 +88,7 @@ export class UsersService {
         id: true,
         name: true,
         lastName: true,
-        email: true,
+        username: true,
         educationalCenter: true,
         role: true,
         vocationalFamily: true,
@@ -133,7 +131,7 @@ export class UsersService {
       select: {
         id: true,
         name: true,
-        email: true,
+        username: true,
         role: true,
       },
     });
@@ -157,7 +155,7 @@ export class UsersService {
 
   async updateMe(userId: number, data: UpdateUserDto) {
     const updateData: any = {
-      email: data.email,
+      username: data.username,
       educationalCenter: data.educationalCenter,
       vocationalFamilyId: data.vocationalFamilyId
     }
@@ -174,7 +172,7 @@ export class UsersService {
         id: true,
         name: true,
         lastName: true,
-        email: true,
+        username: true,
         educationalCenter: true,
         vocationalFamily: {
           select: {
@@ -187,6 +185,13 @@ export class UsersService {
           }
         }
       }
+    })
+  }
+
+  async findUsername(username: string) {
+    return this.prisma.user.findUnique({
+      where: { username },
+      include: { role: true }
     })
   }
 }

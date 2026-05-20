@@ -14,15 +14,27 @@ async function seedAdmin(prisma) {
     );
   }
 
-  const adminUser = await prisma.user.upsert({
-    where: { email: "admin@app.com" },
+  const adminRegisterCode = await prisma.registerCode.upsert({
+    where: { code: 'ADMIN-0001' },
     update: {},
     create: {
-      email: "admin@app.com",
+      code: 'ADMIN-0001',
+      roleId: adminRole.id,
+      expiresAt: new Date('2030-01-01'),
+      used: true
+    }
+  })
+
+  const adminUser = await prisma.user.upsert({
+    where: { username: "admin" },
+    update: {},
+    create: {
+      username: "admin",
       name: "Super",
       lastName: "Admin",
       password: hashedPassword,
       roleId: adminRole.id,
+      registerCodeId: adminRegisterCode.id
     },
   });
 
