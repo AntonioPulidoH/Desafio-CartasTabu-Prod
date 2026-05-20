@@ -251,4 +251,10 @@ export class UsersService {
       include: { role: true }
     })
   }
+
+  async getRoles() {
+    return this.prisma.role.findMany({
+      select: { id: true, name: true }
+    });
+  }
 }

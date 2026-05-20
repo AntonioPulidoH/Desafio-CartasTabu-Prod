@@ -52,6 +52,11 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @Get('roles/list')
+  async getRoles() {
+    return this.usersService.getRoles();
+  }
+
   @Get(":id")
   findOne(@Param("id", ParseIntPipe) id: number) {
     return this.usersService.findOne(id);
