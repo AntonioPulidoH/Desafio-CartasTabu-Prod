@@ -58,18 +58,29 @@ export class UsersService {
     }
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
+    const prismaAny = this.prisma as any;
 
-    return this.prisma.user.create({
-      data: {
-        name: data.name,
-        lastName: data.lastName,
-        username: data.username,
-        registerCodeId: registerCode.id,
-        password: hashedPassword,
-        educationalCenter: data.educationalCenter ?? null,
-        roleId: 3,
-        vocationalFamilyId: data.vocationalFamilyId ?? null,
-      },
+    return prismaAny.$transaction(async (tx: any) => {
+      const rc = await tx.registerCode.findUnique({ where: { code: data.registerCode } });
+      if (!rc) throw new BadRequestException("CODIGO_INVALIDO");
+      if (rc.used) throw new BadRequestException("CODIGO_USADO");
+      if (rc.expiresAt < new Date()) throw new BadRequestException("CODIGO_EXPIRADO");
+
+      const user = await tx.user.create({
+        data: {
+          name: data.name,
+          lastName: data.lastName,
+          username: data.username,
+          registerCodeId: rc.id,
+          password: hashedPassword,
+          educationalCenter: data.educationalCenter ?? null,
+          roleId: rc.roleId ?? 3,
+          vocationalFamilyId: data.vocationalFamilyId ?? null,
+        },
+      });
+
+      await tx.registerCode.update({ where: { id: rc.id }, data: { used: true } });
+      return user;
     });
   }
 
