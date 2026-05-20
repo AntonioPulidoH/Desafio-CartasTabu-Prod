@@ -6,9 +6,19 @@ import {
 } from "@nestjs/common";
 import { PrismaService } from "src/prisma/prisma.service";
 import { CreateUserDto } from "./dto/user-create.dto";
+import { CreateRegisterCodeDto } from "./dto/create-register-code.dto";
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from "bcryptjs";
+import { randomUUID } from 'crypto';
 import { UpdateUserDto, UpdateUserRoleDto } from "./dto/update-user-dto";
+
+type RegisterCodeRecord = {
+  id: number;
+  code: string;
+  roleId: number;
+  expiresAt: Date;
+  used: boolean;
+};
 
 @Injectable()
 export class UsersService {
@@ -21,7 +31,7 @@ export class UsersService {
       return passwordVerified.test(password)
     }
 
-    const registerCode = await this.prisma.registerCode.findUnique({
+    const registerCode = await (this.prisma as any).registerCode.findUnique({
       where: { code: data.registerCode }
     })
 
@@ -59,6 +69,42 @@ export class UsersService {
         educationalCenter: data.educationalCenter ?? null,
         roleId: 3,
         vocationalFamilyId: data.vocationalFamilyId ?? null,
+      },
+    });
+  }
+
+  async createRegisterCode(data: CreateRegisterCodeDto) {
+    const roleExists = await this.prisma.role.findUnique({
+      where: { id: data.roleId },
+    });
+
+    if (!roleExists) {
+      throw new BadRequestException("ROL_NO_VALIDO");
+    }
+
+    const code = data.code?.trim() || `RC-${randomUUID().slice(0, 8).toUpperCase()}`;
+    const expiresAt = data.expiresAt
+      ? new Date(data.expiresAt)
+      : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+
+    if (Number.isNaN(expiresAt.getTime())) {
+      throw new BadRequestException("FECHA_INVALIDA");
+    }
+
+    const existingCode = await (this.prisma as any).registerCode.findUnique({
+      where: { code },
+    });
+
+    if (existingCode) {
+      throw new ConflictException("CODIGO_YA_EXISTE");
+    }
+
+    return (this.prisma as any).registerCode.create({
+      data: {
+        code,
+        roleId: data.roleId,
+        expiresAt,
+        used: false,
       },
     });
   }
