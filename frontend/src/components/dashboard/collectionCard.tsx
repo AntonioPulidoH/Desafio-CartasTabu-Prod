@@ -1,6 +1,7 @@
 import { Download, Pencil, Share2, Trash2, Globe, Lock } from "lucide-react";
 import type { Collection } from "./types/colection.interface";
 import { generateCollectionPDF } from "./services/pdfService";
+import toast from "react-hot-toast";
 
 function getCurrentUserId(): number | null {
   const token = sessionStorage.getItem("access_token");
@@ -55,7 +56,14 @@ export function CollectionCard({ collection, onOpen, onEdit, onDelete, onShare, 
             className="td-btn-icon text-dark"
             onClick={(e) => {
               e.stopPropagation();
-              generateCollectionPDF(collection);
+              toast.promise(
+                generateCollectionPDF(collection),
+                {
+                  loading: "Generando PDF...",
+                  success: "PDF descargado",
+                  error: "Error al generar el PDF",
+                }
+              );
             }}
             title="Descargar PDF"
           >
