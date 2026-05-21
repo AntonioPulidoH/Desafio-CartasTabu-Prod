@@ -6,12 +6,10 @@ ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
 RUN corepack enable && corepack prepare yarn@4.12.0 --activate
 
 COPY frontend/package.json frontend/yarn.lock ./
-
 RUN yarn config set nodeLinker node-modules
-
 RUN yarn install
-
-COPY frontend ./
+RUN cp -r /app/node_modules /app_modules
 
 EXPOSE 5173
+
 CMD ["yarn", "dev", "--host", "0.0.0.0", "--port", "5173"]
