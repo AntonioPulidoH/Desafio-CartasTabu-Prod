@@ -64,7 +64,11 @@ async create(data: CreateThemeDto, creatorId: number) {
       include: {
         vocationalFamily: true,
         creator: true,
-        cards: true,
+        cards: {
+          include: {
+            forbiddenWords: true  
+          }
+        }
       },
     });
 
@@ -73,6 +77,7 @@ async create(data: CreateThemeDto, creatorId: number) {
     }
     return theme;
   }
+
 
   async update(id: number, updateThemeDto: UpdateThemeDto) {
     await this.findOne(id);

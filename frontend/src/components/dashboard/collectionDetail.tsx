@@ -197,10 +197,20 @@ const handleSelectImage = async (imageUrl: string) => {
         </div>
         <button
           className="btn td-btn-sec px-3 py-2"
-          onClick={() => generateCollectionPDF(collection)}
+          onClick={() =>
+            toast.promise(
+              generateCollectionPDF(collection),
+              {
+                loading: "Generando PDF...",
+                success: "PDF descargado",
+                error: "Error al generar el PDF",
+              }
+            )
+          }
         >
           ⬇ Descargar PDF
         </button>
+
         <button
   className="btn td-btn-sec px-3 py-2"
   onClick={() => setShowImageSelector(true)}
@@ -235,12 +245,7 @@ const handleSelectImage = async (imageUrl: string) => {
               Crear primera tarjeta
             </button>
           )}
-          <button
-            className="btn td-btn-acento px-3 py-2"
-            onClick={() => setShowCardForm(true)}
-          >
-            Crear primera tarjeta
-          </button>
+
         </div>
       ) : (
         <div className="d-flex flex-column gap-2">
