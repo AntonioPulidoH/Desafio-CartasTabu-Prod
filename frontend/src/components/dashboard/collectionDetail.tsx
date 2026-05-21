@@ -7,7 +7,6 @@ import { cardService } from "./services/cardService";
 import { AiCardsModal } from "./AiCardsModal";
 import toast from "react-hot-toast";
 import { generateCollectionPDF } from "./services/pdfService";
-import { useRef } from "react";
 
 const role = sessionStorage.getItem("user_role") ?? "{}";
 const canCreate = role === "ADMIN" || role === "CREATOR";
@@ -50,7 +49,6 @@ export function CollectionDetail({
 }) {
   const [showCardForm, setShowCardForm] = useState(false);
   const [showAiModal, setShowAiModal] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const [showImageSelector, setShowImageSelector] = useState(false);
   const BACK_IMAGES = [
   "/fondo1.png",

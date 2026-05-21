@@ -1,8 +1,9 @@
 export type RegisterRequest = {
     name: string
     lastName: string
-    email: string
+    username: string
     password: string
+    registerCode: string
     educationalCenter?: string | null
 }
 

@@ -6,7 +6,7 @@ export const useAddUserModal = () => {
   const initialForm = {
     name: "",
     lastName: "",
-    email: "",
+    username: "",
     password: "",
     roleId: 3,
     educationalCenter: "",

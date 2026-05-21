@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { register } from "../api/register";
 
 type RegisterFormProps = {
@@ -8,17 +8,25 @@ type RegisterFormProps = {
 
 export default function RegisterForm({ onSuccess }: RegisterFormProps) {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [registerCode, setRegisterCode] = useState("")
   const [password, setPassword] = useState("");
   const [educationalCenter, setEducationalCenter] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Prefiller código desde la query string
+  useEffect(() => {
+    const code = searchParams.get("code");
+    if (code) {
+      setRegisterCode(code);
+    }
+  }, [searchParams]);
+
   // Validaciones
-  const isValidEmail = (email: string) =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const isValidPassword = (password: string) =>
     /^(?=.*[A-Z])(?=.*\d).{8,}$/.test(password); // 8 caracteres, mayúscula y número
 
@@ -26,16 +34,21 @@ export default function RegisterForm({ onSuccess }: RegisterFormProps) {
     e.preventDefault();
     setError("");
 
-    if (!isValidEmail(email)) {
-      setError("El email no tiene un formato válido.");
-      return;
-    }
-
     if (!isValidPassword(password)) {
       setError(
         "La contraseña debe tener al menos 8 caracteres, una mayúscula y un número.",
       );
       return;
+    }
+
+    if(username.length < 3) {
+      setError('El nombre de usuario debe tener al menos 3 caracteres.')
+      return
+    }
+
+    if(!registerCode) {
+      setError('Debes introducir un código de registro.')
+      return
     }
 
     if (!name || !lastName) {
@@ -49,8 +62,9 @@ export default function RegisterForm({ onSuccess }: RegisterFormProps) {
       const result = await register({
         name,
         lastName,
-        email,
+        username,
         password,
+        registerCode,
         educationalCenter: educationalCenter || null,
       });
 
@@ -64,7 +78,7 @@ export default function RegisterForm({ onSuccess }: RegisterFormProps) {
           const payload = JSON.parse(atob(tokenParts[1]));
 
           sessionStorage.setItem("user_role", payload.role);
-          sessionStorage.setItem("user_email", payload.email);
+          sessionStorage.setItem("username", payload.username);
 
           assignedRole = payload.role;
         }
@@ -79,12 +93,6 @@ export default function RegisterForm({ onSuccess }: RegisterFormProps) {
       }
     } catch (err: any) {
       switch (err.message) {
-        case "EMAIL_INVALIDO":
-          setError("El email no tiene un formato válido.");
-          break;
-        case "EMAIL_YA_REGISTRADO":
-          setError("Este email ya está registrado.");
-          break;
         case "PASSWORD_INVALIDA":
           setError(
             "La contraseña debe tener al menos 8 caracteres, una mayúscula y un número.",
@@ -136,10 +144,10 @@ export default function RegisterForm({ onSuccess }: RegisterFormProps) {
                   <div className="mb-3">
                     <input
                       className="form-control"
-                      type="email"
-                      placeholder="Email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      type="text"
+                      placeholder="Nombre de usuario"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
                       required
                     />
                   </div>
@@ -151,6 +159,17 @@ export default function RegisterForm({ onSuccess }: RegisterFormProps) {
                       placeholder="Contraseña"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  <div className="mb-3">
+                    <input
+                      className="form-control"
+                      type="text"
+                      placeholder="Código de registro"
+                      value={registerCode}
+                      onChange={(e) => setRegisterCode(e.target.value)}
                       required
                     />
                   </div>

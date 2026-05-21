@@ -8,7 +8,7 @@ type LoginFormProps = {
 
 export default function LoginForm({ onSuccess }: LoginFormProps) {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -19,7 +19,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
     setLoading(true);
 
     try {
-      const data = await login({ email, password });
+      const data = await login({ username, password });
 
       sessionStorage.setItem("access_token", data.access_token);
 
@@ -29,14 +29,14 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
         const payload = JSON.parse(atob(tokenParts[1]));
 
         sessionStorage.setItem("user_role", payload.role);
-        sessionStorage.setItem("user_email", payload.email);
+        sessionStorage.setItem("username", payload.username);
       }
 
       if (onSuccess) onSuccess();
 
       navigate("/dashboard");
     } catch (error) {
-      setError("Email o contraseña incorrectos.");
+      setError("Usuario o contraseña incorrectos.");
     } finally {
       setLoading(false);
     }
@@ -55,12 +55,12 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
                 <form className="auth-form" onSubmit={handleSubmit}>
                   <div className="mb-3">
                     <input
-                      id="email"
+                      id="username"
                       className="form-control"
-                      type="email"
-                      placeholder="Introduce tu email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      type="text"
+                      placeholder="Nombre de usuario"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
                       required
                     ></input>
                   </div>

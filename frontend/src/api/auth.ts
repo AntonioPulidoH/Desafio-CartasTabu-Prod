@@ -1,12 +1,13 @@
 export type LoginRequest = {
-    email: string,
+    username: string,
     password: string
 }
 
 export type LoginResponse = {
     access_token: string,
     role:string,
-    sub:string
+    sub:string,
+    username: string
 }
 
 const API_BASE_URL = import.meta.env.VITE_API_URL

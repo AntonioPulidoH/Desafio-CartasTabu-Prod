@@ -17,7 +17,7 @@ export async function getProfile() {
 }
 
 export async function updateProfile(payload: {
-    email?: string
+    username?: string
     password?: string
     educationalCenter?: string | null
     vocationalFamilyId?: number | null

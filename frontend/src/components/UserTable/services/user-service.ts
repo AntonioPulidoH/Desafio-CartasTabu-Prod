@@ -17,7 +17,7 @@ export interface User {
   id: number;
   name: string;
   lastName: string;
-  email: string;
+  username: string;
   educationalCenter: string | null;
   role: Role;
   vocationalFamily: VocationalFamily | null;

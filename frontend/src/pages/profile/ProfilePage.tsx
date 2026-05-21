@@ -21,12 +21,11 @@ type UserProfile = {
   id: number;
   name: string;
   lastName: string;
-  email: string;
   educationalCenter: string | null;
   vocationalFamily: string | null;
 
   role: Role;
-
+  username: string;
   level: number
   xp: number
   rank: number
@@ -69,11 +68,11 @@ export default function ProfilePage() {
         const cardsCount = await getMyCardsCount()
         const themesCount = await getMyThemesCount()
 
-        const formattedProfile: UserProfile = {
+          const formattedProfile: UserProfile = {
           id: data.id,
           name: data.name,
           lastName: data.lastName,
-          email: data.email,
+          username: data.username,
           educationalCenter: data.educationalCenter,
           vocationalFamily: data.vocationalFamily?.name ?? null,
           role: data.role.name as Role,
@@ -153,8 +152,8 @@ export default function ProfilePage() {
                 </li>
 
                 <li className="list-group-item d-flex justify-content-between">
-                  <span>Email</span>
-                  <strong>{profile.email}</strong>
+                  <span>Nombre de usuario</span>
+                  <strong>{profile.username}</strong>
                 </li>
 
                 <li className="list-group-item d-flex justify-content-between">
@@ -278,7 +277,7 @@ export default function ProfilePage() {
             id: data.id,
             name: data.name,
             lastName: data.lastName,
-            email: data.email,
+            username: data.username,
             educationalCenter: data.educationalCenter,
             vocationalFamily: data.vocationalFamily?.name ?? null,
             role: data.role.name as Role,
