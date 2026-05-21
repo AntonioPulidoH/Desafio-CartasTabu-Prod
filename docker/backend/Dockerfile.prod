@@ -1,0 +1,37 @@
+# CONSTRUCCIÓN
+FROM node:24.13.0-bookworm-slim AS builder
+
+WORKDIR /app
+RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
+
+ENV COREPACK_ENABLE_DOWNLOAD_PROMPT=0
+RUN corepack enable && corepack prepare yarn@4.12.0 --activate
+
+# Copia solo los archivos de dependencias primero (aprovechando la caché de Docker)
+COPY backend/package.json backend/yarn.lock ./
+RUN yarn config set nodeLinker node-modules
+RUN yarn install --frozen-lockfile
+
+# Copia el resto del código
+COPY backend ./
+
+# Genera el cliente de Prisma y compila NestJS
+RUN yarn prisma generate
+RUN yarn build
+
+# PRODUCCIÓN
+FROM node:24.13.0-bookworm-slim
+
+WORKDIR /app
+RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
+
+# Copia solo lo necesario desde la etapa de construcción
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/prisma ./prisma
+
+EXPOSE 3000
+
+# Ejecuta el servidor de producción
+CMD ["yarn", "start:prod"]
