@@ -5,9 +5,7 @@ export function BannerPrincipal() {
       <div className="banner-fondo-glow-2" />
 
       <div className="banner-contenido position-relative z-2 text-center mx-auto px-3">
-        <div className="badge etiqueta-badge d-inline-flex align-items-center gap-2 px-3 py-2 mb-4">
-          <span className="small">Generador de tarjetas</span>
-        </div>
+
 
         <h1 className="banner-titulo display-1 fw-bold">
           Tabu<span className="acento">-</span>Studio
