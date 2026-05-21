@@ -5,6 +5,7 @@ import type { Collection } from "./types/colection.interface";
 import { themeService } from "./services/themeService";
 import { generateCollectionPDF } from "./services/pdfService";
 import { Download } from "lucide-react";
+import toast from "react-hot-toast";
 
 export function SharedCollection() {
   const { id } = useParams();
@@ -21,7 +22,7 @@ useEffect(() => {
         cards: (data.cards ?? []).map((c: any) => ({
           ...c,
           word: c.keyword,
-          forbiddenWords: c.forbiddenWords ?? []
+          forbiddenWords: (c.forbiddenWords ?? []).map((fw: any) => fw.word)
         }))
       });
     })
@@ -55,12 +56,24 @@ useEffect(() => {
         )}
       </div>
       <div className="td-stat-row d-flex gap-4 p-3 mb-4">
-            <button
-            className="td-btn-icon text-white"
-            onClick={(e) => { e.stopPropagation(); generateCollectionPDF(collection); }}
-            title="Descargar PDF">
-            <Download size={16} strokeWidth={2} />
-            </button>
+        <button
+          className="td-btn-icon text-white"
+          onClick={(e) => {
+            e.stopPropagation();
+            toast.promise(
+              generateCollectionPDF(collection),
+              {
+                loading: "Generando PDF...",
+                success: "PDF descargado",
+                error: "Error al generar el PDF",
+              }
+            );
+          }}
+          title="Descargar PDF"
+        >
+          <Download size={16} strokeWidth={2} />
+        </button>
+
         <div>
           <div className="td-stat-label">Tarjetas</div>
           <div className="td-stat-value">{(collection.cards ?? []).length}</div>
