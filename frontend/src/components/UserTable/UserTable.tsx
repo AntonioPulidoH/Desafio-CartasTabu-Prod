@@ -96,7 +96,7 @@ export const UserTable = () => {
           <thead>
             <tr>
               <th>Nombre Completo</th>
-              <th>Email</th>
+              <th>Nombre de usuario</th>
               <th>Rol</th>
               <th className="text-center">Acciones</th>
             </tr>
@@ -105,7 +105,7 @@ export const UserTable = () => {
             {currentUsers.map((user) => (
               <tr key={user.id}>
                 <td className="fw-medium">{`${user.name} ${user.lastName}`}</td>
-                <td>{user.email}</td>
+                <td>{user.username}</td>
                 <td>{user.role?.name || "Sin Rol"}</td>
                 <td>
                   <div className="d-flex justify-content-center gap-2">
@@ -286,7 +286,7 @@ export const UserTable = () => {
               disabled={
                 !formData.name ||
                 !formData.lastName ||
-                !formData.email ||
+                !formData.username ||
                 !formData.password
               }
             >
@@ -319,14 +319,14 @@ export const UserTable = () => {
             />
           </div>
           <div className="col-12">
-            <label className="form-label fw-medium">Email *</label>
+            <label className="form-label fw-medium">Nombre de usuario *</label>
             <input
-              type="email"
+              type="text"
               className="form-control"
-              name="email"
-              value={formData.email}
+              name="username"
+              value={formData.username}
               onChange={handleInputChange}
-              placeholder="correo@ejemplo.com"
+              placeholder="nombre_usuario"
             />
           </div>
           <div className="col-md-6">

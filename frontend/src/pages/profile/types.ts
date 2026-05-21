@@ -2,7 +2,7 @@ export type UserProfile = {
     id: number
     name: string
     lastName: string
-    email: string
+    username: string
     educationalCenter?: string | null
     role: 'USUARIO' | 'CREADOR' | 'ADMIN'
     permissions: {

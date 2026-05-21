@@ -10,6 +10,7 @@ export interface Collection {
   vocationalFamily?: { id: number; name: string };
   cards?:TabuCard[]
   createdAt:string;
+  backImageUrl?: string;
   _count?: {        
     cards: number;
   };

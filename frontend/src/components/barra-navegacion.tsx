@@ -4,13 +4,13 @@ import { Link, useNavigate } from "react-router-dom";
 export function BarraNavegacion() {
   const navigate = useNavigate();
   const token = sessionStorage.getItem("access_token");
-  const userEmail = sessionStorage.getItem("user_email");
+  const username = sessionStorage.getItem("username");
 
   // Función cerrar sesión
   const handleLogout = () => {
     sessionStorage.removeItem("access_token");
     sessionStorage.removeItem("user_role");
-    sessionStorage.removeItem("user_email");
+    sessionStorage.removeItem("username");
 
     navigate("/");
   };
@@ -82,7 +82,7 @@ export function BarraNavegacion() {
                     title="Ir a mi Perfil"
                   >
                     <User size={18} />
-                    {userEmail}
+                    {username}
                   </span>
                 </li>
                 <li className="nav-item ms-lg-2 mt-2 mt-lg-0">

@@ -1,4 +1,4 @@
-import { Users, Globe, Menu, X, LayoutGrid, User } from "lucide-react";
+import { Users, Globe, Menu, X, LayoutGrid, User, Key } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { useAdminSidebar } from "./hooks/useAdminSidebar";
 import "./AdminSidebar.css";
@@ -51,6 +51,19 @@ export const AdminSidebar = () => {
                 >
                   <Globe className="me-3" size={20} />
                   Gestión de Categorías
+                </NavLink>
+              </li>
+
+              <li className="nav-item">
+                <NavLink
+                  to="/admin/codigos"
+                  onClick={closeMenu}
+                  className={({ isActive }) =>
+                    `tabu-menu-item d-flex align-items-center w-100 text-start text-decoration-none ${isActive ? "is-active" : ""}`
+                  }
+                >
+                  <Key className="me-3" size={20} />
+                  Códigos de Registro
                 </NavLink>
               </li>
             </>

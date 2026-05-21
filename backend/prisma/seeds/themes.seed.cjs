@@ -1,6 +1,6 @@
 async function seedThemes(prisma) {
   const adminUser = await prisma.user.findUnique({
-    where: { email: "admin@app.com" },
+    where: { username: "admin" },
   });
 
   if (!adminUser) {

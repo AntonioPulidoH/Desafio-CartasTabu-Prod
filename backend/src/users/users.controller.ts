@@ -1,4 +1,6 @@
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/roles/roles.guard';
+import { Roles } from 'src/auth/roles/roles.decorator';
 import {
   Body,
   Controller,
@@ -15,6 +17,7 @@ import {
   Put
 } from "@nestjs/common";
 import { CreateUserDto } from "./dto/user-create.dto";
+import { CreateRegisterCodeDto } from "./dto/create-register-code.dto";
 import { UsersService } from "./users.service";
 import { UpdateUserRoleDto, UpdateUserDto } from "./dto/update-user-dto";
 import { AuthService } from 'src/auth/auth.service';
@@ -27,8 +30,15 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   async create(@Body() createUserDto: CreateUserDto) {
     const user = await this.usersService.create(createUserDto)
-    const userWithRole = await this.usersService.findEmail(user.email)
+    const userWithRole = await this.usersService.findOne(user.id)
     return this.authService.login(userWithRole);
+  }
+
+  @Post('register-code')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('ADMIN')
+  async createRegisterCode(@Body() createRegisterCodeDto: CreateRegisterCodeDto) {
+    return this.usersService.createRegisterCode(createRegisterCodeDto);
   }
 
   @Get('me')
@@ -40,6 +50,11 @@ export class UsersController {
   @Get()
   findAll() {
     return this.usersService.findAll();
+  }
+
+  @Get('roles/list')
+  async getRoles() {
+    return this.usersService.getRoles();
   }
 
   @Get(":id")

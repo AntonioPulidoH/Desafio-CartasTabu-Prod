@@ -8,6 +8,7 @@ import PrivateRoute from "./PrivateRoute";
 import { AdminLayout } from "../components/AdminLayout/AdminLayout";
 import { UserTable } from "../components/UserTable/UserTable";
 import { ThemeTable } from "../components/ThemeTable/ThemeTable";
+import { RegisterCodeTable } from "../components/RegisterCodeTable/RegisterCodeTable";
 import DashboardPage from "../pages/Dashboard";
 import { SharedCollection } from "../components/dashboard/sharedCollection";
 
@@ -43,6 +44,7 @@ export const appRouter = createBrowserRouter([
       { index: true, element: <Navigate to="usuarios" replace /> },
       { path: "usuarios", element: <UserTable /> },
       { path: "tematicas", element: <ThemeTable /> },
+      { path: "codigos", element: <RegisterCodeTable /> },
     ],
   },
   {
