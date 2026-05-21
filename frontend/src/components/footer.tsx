@@ -35,7 +35,7 @@ export function Footer() {
             <h4 className="footer-titulo-seccion small fw-bold mb-3">Legal</h4>
             <ul className="footer-enlaces p-0 m-0 d-flex flex-column gap-2">
               <li>
-                <a href="#" className="small">Privacidad</a>
+                <a href="/privacy-policy" className="small">Privacidad</a>
               </li>
               <li>
                 <a href="#" className="small">Términos de uso</a>
