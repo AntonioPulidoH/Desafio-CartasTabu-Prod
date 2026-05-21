@@ -11,6 +11,7 @@ import { ThemeTable } from "../components/ThemeTable/ThemeTable";
 import { RegisterCodeTable } from "../components/RegisterCodeTable/RegisterCodeTable";
 import DashboardPage from "../pages/Dashboard";
 import { SharedCollection } from "../components/dashboard/sharedCollection";
+import PrivacyPolicyPage from "../pages/privacy-policy/privacy-policyPage";
 
 export const appRouter = createBrowserRouter([
   {
@@ -55,4 +56,8 @@ export const appRouter = createBrowserRouter([
     path: "/collection/:id",
     element: <SharedCollection />,
   },
+  {
+    path: "/privacy-policy",
+    element: <PrivacyPolicyPage></PrivacyPolicyPage>
+  }
 ]);
