@@ -1,0 +1,27 @@
+# Dependencias 
+**/node_modules
+**/.yarn/cache
+**/.yarn/install-state.gz
+
+# Builds generados
+**/dist
+**/.next
+**/build
+
+# Git
+.git
+.gitignore
+
+# Logs
+**/*.log
+**/npm-debug.log*
+
+# Variables de entorno 
+**/.env*.local
+
+# Editor / OS
+.DS_Store
+**/.DS_Store
+Thumbs.db
+.vscode
+.idea
