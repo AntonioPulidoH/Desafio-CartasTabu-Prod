@@ -28,6 +28,7 @@ services:
         condition: service_healthy
     command: >
       sh -c "yarn prisma migrate deploy && 
+             yarn seed && 
              yarn start:prod"
     restart: unless-stopped
 
