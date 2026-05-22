@@ -103,7 +103,13 @@ Para construir y levantar todo el ecosistema (incluyendo la ejecución interna d
 docker compose up --build -d
 ```
 
-### 4. Limpieza Completa (Opcional)
+### 4. Cuentas de Acceso por Defecto
+
+Una vez que el entorno esté corriendo y la base de datos se haya inicializado, puedes utilizar el usuario administrador por defecto para acceder al panel. 
+
+Consulta los datos de acceso detallados y los códigos de registro en [docs/credentials.md](./docs/credentials.md).
+
+### 5. Limpieza Completa (Opcional)
 
 Si deseas eliminar cualquier contenedor, imagen o volumen anterior antes de comenzar de cero, ejecuta el siguiente bloque:
 
@@ -111,7 +117,7 @@ Si deseas eliminar cualquier contenedor, imagen o volumen anterior antes de come
 docker compose down --rmi all --volumes --remove-orphans
 ```
 
-### 5. Inicialización Manual de la Base de Datos (Opcional)
+### 6. Inicialización Manual de la Base de Datos (Opcional)
 
 Si por algún motivo la base de datos no se inicializa o no se aplican los datos de ejemplo de manera automática, puedes forzar la ejecución ejecutando este bloque completo:
 
