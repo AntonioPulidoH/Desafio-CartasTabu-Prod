@@ -62,7 +62,7 @@ Contiene la configuración de la base de datos para levantar el contenedor Postg
 * **`POSTGRES_PASSWORD`**: Contraseña segura elegida para dicho usuario.
 * **`POSTGRES_DB`**: Nombre de la base de datos a crear (por ejemplo, `desafioTabu`).
 
-![alt text](image-1.png)
+![Estructura del archivo .env en la raíz](docs/assets/env-root.png)
 
 ---
 
@@ -82,7 +82,7 @@ Configuración necesaria para que NestJS se conecte a la base de datos usando Pr
   > 5. Copia la API Key generada (que suele empezar por `AIzaSy...`) y pégala en esta variable.
   >
 
-![alt text](image-2.png)
+![Estructura del archivo .env en el backend](docs/assets/env-backend.png)
 
 ---
 
@@ -91,7 +91,8 @@ Configuración para el cliente de React (Vite):
 * **`VITE_API_URL`**: Ruta base del proxy inverso de Nginx para el entorno contenerizado (por defecto `http://localhost/api`).
 * **`VITE_LOCAL_API_URL`**: Ruta del backend corriendo en desarrollo directo (por defecto `http://localhost:3000`).
 
-![alt text](image-3.png)
+![Estructura del archivo .env en el frontend](docs/assets/env-frontend.png)
+
 
 
 ### 3. Comando Único de Arranque
