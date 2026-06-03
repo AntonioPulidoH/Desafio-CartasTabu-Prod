@@ -4,12 +4,11 @@ export function BannerPrincipal() {
       <div className="banner-fondo-glow-1" />
       <div className="banner-fondo-glow-2" />
 
-      <div className="banner-contenido position-relative z-2 text-center mx-auto px-3">
+      <div className="banner-contenido position-relative z-2 text-center mx-auto px-3 mt-5">
 
 
-        <h1 className="banner-titulo display-1 fw-bold">
-          Tabu<span className="acento">-</span>Studio
-        </h1>
+          <img src="public/logo.png" alt="Desbloquéalo" className="img-fluid rounded" />
+   
 
         <p className="banner-descripcion mt-3 fs-5 mx-auto" style={{maxWidth: '600px', lineHeight: 1.7, color: 'var(--color-texto-suave)'}}>
           Crea, personaliza e imprime tarjetas del juego del Tabú adaptadas a

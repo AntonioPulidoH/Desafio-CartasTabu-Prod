@@ -89,7 +89,7 @@ export default function Rules() {
 
                 <div className="text-center mt-5">
                     <a
-                        href="/Tabu-Studio - REGLAS DEL JUEGO.pdf"
+                        href="/DESBLOQUEALO-Reglas del juego.png"
                         className="boton-acento fs-4 px-5 py-4 fw-bold shadow-lg d-inline-block text-decoration-none"
                         download="Tabu-Studio - REGLAS DEL JUEGO.pdf"
                     >

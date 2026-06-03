@@ -100,7 +100,6 @@ const renderFront = (word: string, forbiddenWords: string[]) => {
             font-family:'Open Sans',sans-serif;font-size:${forbFontSize};font-weight:700;
             color:${C.primario};text-align:center;padding:${forbPaddingV} 10px;
             border-bottom:${i < forbiddenWords.length - 1 ? `1px solid ${C.bordeLight}` : "none"};
-            line-height:1.3;word-break:break-word;letter-spacing:0.1px;
           ">${w}</div>
         `).join("")}
       </div>
@@ -123,6 +122,11 @@ const renderBack = (
   ">
     <div style="position:absolute;inset:9px;border:1px solid rgba(255,255,255,0.10);border-radius:9px;pointer-events:none;"></div>
     <div style="position:relative;z-index:1;flex:1;display:flex;flex-direction:column;align-items:center;padding:28px 18px;gap:0;">
+          <img
+        src="public/logo.png"
+        alt="Desbloquealo"
+        style="max-height:44px;max-width:150px;object-fit:contain;display:block;"
+      />
       <div style="
         background:${C.acento};color:#ffffff;font-family:'Open Sans',sans-serif;
         font-size:28px;font-weight:800;text-align:center;letter-spacing:2.2px;
@@ -138,15 +142,7 @@ const renderBack = (
           "></div>
         ` : ``}
       </div>
-      <div style="flex-shrink:0;text-align:center;padding:0 10px;">
-        <div style="width:40px;height:2px;margin:0 auto 10px;border-radius:1px;"></div>
-        <span style="
-          font-family:'Open Sans',sans-serif;font-size:28px;font-weight:700;
-          color:${C.primario};text-align:center;line-height:1.35;
-          letter-spacing:0.2px;word-break:break-word;
-        ">${collectionName}</span>
-      </div>
-    </div>
+
   </div>
 `;
 

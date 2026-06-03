@@ -25,10 +25,10 @@ export function BarraNavegacion() {
           className="navbar-brand d-flex align-items-center gap-2 fs-5 fw-bold text-light"
           to="/"
         >
-          <span className="icono-logo d-flex align-items-center justify-content-center">
-            <GraduationCap size={20} />
+          <span className="icono-logo bg-white d-flex align-items-center justify-content-center">
+            <img src="/public/logo.png" alt="Logo de Desbloquéalo" className="w-100 h-100 object-fit-contain" />
           </span>
-          Tabu-Studio
+          Desbloquéalo
         </Link>
 
         <button

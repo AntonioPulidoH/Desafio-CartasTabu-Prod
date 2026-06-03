@@ -4,12 +4,13 @@ export function Footer() {
       <div className="container">
         <div className="row">
           <div className="col-md-4 mb-4 mb-md-0">
-            <div className="footer-marca-logo d-flex align-items-center gap-2 mb-3">
-              <span className="icono-logo d-flex align-items-center justify-content-center">
-                {/*Aquí iría el logo*/}
+            <div className="footer-marca-logo d-flex align-items-center gap-3 mb-3 p-2">
+              <span className="icono-logo d-flex align-items-center justify-content-center bg-white" style={{ width: '50px', height: '50px' }}>
+                <img src="/public/logo.png" alt="Logo de Desbloquéalo" className="w-100 h-100 object-fit-contain" />
               </span>
-              <span className="fs-5 fw-bold">Tabu-Studio</span>
+              <span className="fs-4 fw-bold">Desbloquéalo</span>
             </div>
+
             <p className="footer-descripcion small mb-0" style={{color: 'var(--color-texto-suave)', lineHeight: 1.6}}>
               La herramienta definitiva para crear tarjetas del juego del Tabu
               personalizadas y listas para imprimir.
@@ -49,7 +50,7 @@ export function Footer() {
 
         <div className="footer-inferior mt-5 pt-4 border-top text-center" style={{borderColor: 'var(--color-borde)'}}>
           <p className="small mb-0" style={{color: 'var(--color-texto-suave)'}}>
-            {"© 2026 Tabu-Studio. Todos los derechos reservados."}
+            {"© 2026 Desbloquéalo. Todos los derechos reservados."}
           </p>
         </div>
       </div>
