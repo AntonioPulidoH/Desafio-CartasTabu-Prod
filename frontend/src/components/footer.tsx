@@ -6,7 +6,7 @@ export function Footer() {
           <div className="col-md-4 mb-4 mb-md-0">
             <div className="footer-marca-logo d-flex align-items-center gap-3 mb-3 p-2">
               <span className="icono-logo d-flex align-items-center justify-content-center bg-white" style={{ width: '50px', height: '50px' }}>
-                <img src="/public/logo.png" alt="Logo de Desbloquéalo" className="w-100 h-100 object-fit-contain" />
+                <img src="/logo.png" alt="Logo de Desbloquéalo" className="w-100 h-100 object-fit-contain" />
               </span>
               <span className="fs-4 fw-bold">Desbloquéalo</span>
             </div>
