@@ -170,14 +170,13 @@ const rotatedSlot = (inner: string) => `
 const renderSlot = (
   card: CardData,
   isFront: boolean,
-  collectionName: string,
   familyName: string,
   backImageUrl?: string,
 ) => {
   const inner = card
     ? (isFront
         ? renderFront(card.word, card.forbiddenWords ?? [])
-        : renderBack(collectionName, familyName, backImageUrl))
+        : renderBack(familyName, backImageUrl))
     : `<div style="width:${CARD_W_PX}px;height:${CARD_H_PX}px;"></div>`;
   return rotatedSlot(inner);
 };
