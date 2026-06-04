@@ -109,69 +109,41 @@ const renderFront = (word: string, forbiddenWords: string[]) => {
 
 //Carta trasera 
 const renderBack = (
-  collectionName: string,
   familyName: string,
-  backImageUrl?: string,
+  backImageUrl?: string
 ) => `
   <div style="
-    width:${CARD_W_PX}px;
-    height:${CARD_H_PX}px;
-    border:2px solid #1e1b4b;
-    border-radius:16px;
-    box-sizing:border-box;
-    overflow:hidden;
-    position:relative;
-    background:#24164f;
-    color:white;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    font-family:Arial, sans-serif;
+    width:${CARD_W_PX}px;height:${CARD_H_PX}px;
+    background:white;border-radius:14px;border:2.5px solid ${C.acento};
+    display:flex;flex-direction:column;overflow:hidden;
+    box-shadow:0 4px 18px rgba(26,15,60,0.22), 0 1px 4px rgba(26,15,60,0.15);
+    flex-shrink:0;position:relative;
   ">
-    ${
-      backImageUrl
-        ? `<img 
-            src="${backImageUrl}" 
-            style="
-              position:absolute;
-              inset:0;
-              width:100%;
-              height:100%;
-              object-fit:cover;
-              z-index:0;
-            "
-          />`
-        : ``
-    }
-
-    <div style="
-      position:absolute;
-      inset:0;
-      background:rgba(20, 10, 50, 0.45);
-      z-index:1;
-    "></div>
-
-    <div style="
-      position:relative;
-      z-index:2;
-      font-size:22px;
-      font-weight:bold;
-      margin-bottom:8px;
-    ">
-      ${collectionName}
-    </div>
-
-    <div style="
-      position:relative;
-      z-index:2;
-      font-size:16px;
-      opacity:0.95;
-    ">
-      ${familyName}
+    <div style="position:absolute;inset:9px;border:1px solid rgba(255,255,255,0.10);border-radius:9px;pointer-events:none;"></div>
+    <div style="position:relative;z-index:1;flex:1;display:flex;flex-direction:column;align-items:center;padding:28px 18px;gap:0;">
+          <img
+        src="/logo.png"
+        alt="Desbloquealo"
+        style="max-height:44px;max-width:150px;object-fit:contain;display:block;"
+      />
+      <div style="
+        background:${C.acento};color:#ffffff;font-family:'Open Sans',sans-serif;
+        font-size:28px;font-weight:800;text-align:center;letter-spacing:2.2px;
+        text-transform:uppercase;padding:6px 20px;border-radius:20px;flex-shrink:0;
+        text-shadow:0 1px 2px rgba(0,0,0,0.20);box-shadow:0 2px 8px rgba(232,64,42,0.35);
+      ">${familyName}</div>
+      <div style="flex:1;width:100%;display:flex;align-items:center;justify-content:center;padding:6px 8px;min-height:0;">
+        ${backImageUrl ? `
+          <div style="
+            width:100%;height:100%;max-height:220px;
+            background:url('${backImageUrl}') center/contain no-repeat;
+            opacity:0.80;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.30));
+          "></div>
+        ` : ``}
+      </div>
     </div>
   </div>
+
 `;
 
 
@@ -199,30 +171,30 @@ const rotatedSlot = (inner: string) => `
 const renderSlot = (
   card: CardData,
   isFront: boolean,
-  collectionName: string,
   familyName: string,
   backImageUrl?: string,
 ) => {
   const inner = card
-    ? isFront
-      ? renderFront(card.word, card.forbiddenWords ?? [])
-      : renderBack(collectionName, familyName, backImageUrl)
+    ? (isFront
+        ? renderFront(card.word, card.forbiddenWords ?? [])
+        : renderBack(familyName, backImageUrl))
     : `<div style="width:${CARD_W_PX}px;height:${CARD_H_PX}px;"></div>`;
-
   return rotatedSlot(inner);
 };
+
 //dos cartas rotadas en columnas
 const renderRow = (
   cardA: CardData,
   cardB: CardData,
   isFront: boolean,
-  collectionName: string,
   familyName: string,
   backImageUrl?: string,
 ) => `
-  ${renderSlot(cardA, isFront, collectionName, familyName, backImageUrl)}
-  ${vCutLine}
-  ${renderSlot(cardB, isFront, collectionName, familyName, backImageUrl)}
+  <div style="display:flex;align-items:stretch;padding:0 ${MARGIN_PX}px;flex-shrink:0;">
+    ${renderSlot(cardA, isFront, familyName, backImageUrl)}
+    ${vCutLine}
+    ${renderSlot(cardB, isFront, familyName, backImageUrl)}
+  </div>
 `;
 
 
@@ -231,22 +203,22 @@ const renderRow = (
 // Fila 3: F2 | F4   (frontales de cartas 2 y 4, rotadas)
 // Fila 4: R2 | R4   (reversos  de cartas 2 y 4, rotadas)
 const renderCardGroup = (
-  c1: CardData,
-  c2: CardData,
-  c3: CardData,
-  c4: CardData,
-  collectionName: string,
+  c1: CardData, c2: CardData,
+  c3: CardData, c4: CardData,
   familyName: string,
   backImageUrl?: string,
 ) => `
-  ${renderRow(c1, c3, true, collectionName, familyName, backImageUrl)}
-  ${hCutLine()}
-  ${renderRow(c1, c3, false, collectionName, familyName, backImageUrl)}
-  ${hCutLine()}
-  ${renderRow(c2, c4, true, collectionName, familyName, backImageUrl)}
-  ${hCutLine()}
-  ${renderRow(c2, c4, false, collectionName, familyName, backImageUrl)}
+  <div style="display:flex;flex-direction:column;flex-shrink:0;">
+    ${renderRow(c1, c3, true, familyName, backImageUrl)}
+    ${hCutLine()}
+    ${renderRow(c1, c3, false, familyName, backImageUrl)}
+    ${hCutLine()}
+    ${renderRow(c2, c4, true, familyName, backImageUrl)}
+    ${hCutLine()}
+    ${renderRow(c2, c4, false, familyName, backImageUrl)}
+  </div>
 `;
+
 
 export const generateCollectionPDF = async (
   collection: Collection & { backImageUrl?: string }
@@ -261,6 +233,7 @@ export const generateCollectionPDF = async (
   }
 
   const familyName   = collection.vocationalFamily?.name ?? "Colección";
+  const backImageUrl = collection.backImageUrl;
 
   // Agrupar de 4 en 4 (un grupo = una página A2)
   const groups: [CardData, CardData, CardData, CardData][] = [];
@@ -305,13 +278,14 @@ export const generateCollectionPDF = async (
     container.innerHTML = `
       ${gi === 0 ? sharedStyles : ""}
       ${hCutLine()}
-      ${renderCardGroup(c1, c2, c3, c4, collection.name, familyName,collection.backImageUrl)}
+      ${renderCardGroup(c1, c2, c3, c4, collection.name, familyName, backImageUrl)}
       ${hCutLine()}
     `;
 
     document.body.appendChild(container);
 
     try {
+     await waitForImages(container);
       const canvas = await html2canvas(container, {
         scale: 2,
         useCORS: true,
@@ -337,4 +311,18 @@ export const generateCollectionPDF = async (
   }
 
   pdf.save(`${collection.name}.pdf`);
+};
+const waitForImages = async (container: HTMLElement) => {
+  const images = Array.from(container.querySelectorAll("img"));
+
+  await Promise.all(
+    images.map((img) => {
+      if (img.complete) return Promise.resolve();
+
+      return new Promise<void>((resolve) => {
+        img.onload = () => resolve();
+        img.onerror = () => resolve();
+      });
+    })
+  );
 };
