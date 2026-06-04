@@ -176,7 +176,7 @@ const renderSlot = (
   const inner = card
     ? (isFront
         ? renderFront(card.word, card.forbiddenWords ?? [])
-        : renderBack(familyName, backImageUrl))
+        : renderBack( familyName, backImageUrl))
     : `<div style="width:${CARD_W_PX}px;height:${CARD_H_PX}px;"></div>`;
   return rotatedSlot(inner);
 };
@@ -188,12 +188,11 @@ const renderRow = (
   isFront: boolean,
   collectionName: string,
   familyName: string,
-  backImageUrl?: string,
 ) => `
   <div style="display:flex;align-items:stretch;padding:0 ${MARGIN_PX}px;flex-shrink:0;">
-    ${renderSlot(cardA, isFront, collectionName, familyName, backImageUrl)}
+    ${renderSlot(cardA, isFront, collectionName, familyName)}
     ${vCutLine}
-    ${renderSlot(cardB, isFront, collectionName, familyName, backImageUrl)}
+    ${renderSlot(cardB, isFront, collectionName, familyName)}
   </div>
 `;
 
@@ -207,16 +206,15 @@ const renderCardGroup = (
   c3: CardData, c4: CardData,
   collectionName: string,
   familyName: string,
-  backImageUrl?: string,
 ) => `
   <div style="display:flex;flex-direction:column;flex-shrink:0;">
-    ${renderRow(c1, c3, true,  collectionName, familyName, backImageUrl)}
+    ${renderRow(c1, c3, true,  collectionName, familyName)}
     ${hCutLine()}
-    ${renderRow(c1, c3, false, collectionName, familyName, backImageUrl)}
+    ${renderRow(c1, c3, false, collectionName, familyName)}
     ${hCutLine()}
-    ${renderRow(c2, c4, true,  collectionName, familyName, backImageUrl)}
+    ${renderRow(c2, c4, true,  collectionName, familyName)}
     ${hCutLine()}
-    ${renderRow(c2, c4, false, collectionName, familyName, backImageUrl)}
+    ${renderRow(c2, c4, false, collectionName, familyName)}
   </div>
 `;
 
@@ -234,7 +232,6 @@ export const generateCollectionPDF = async (
   }
 
   const familyName   = collection.vocationalFamily?.name ?? "Colección";
-  const backImageUrl = collection.backImageUrl;
 
   // Agrupar de 4 en 4 (un grupo = una página A2)
   const groups: [CardData, CardData, CardData, CardData][] = [];
@@ -279,7 +276,7 @@ export const generateCollectionPDF = async (
     container.innerHTML = `
       ${gi === 0 ? sharedStyles : ""}
       ${hCutLine()}
-      ${renderCardGroup(c1, c2, c3, c4, collection.name, familyName, backImageUrl)}
+      ${renderCardGroup(c1, c2, c3, c4, collection.name, familyName)}
       ${hCutLine()}
     `;
 
