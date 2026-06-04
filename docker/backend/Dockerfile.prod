@@ -35,4 +35,4 @@ COPY --from=builder /app/prisma.config.ts ./
 EXPOSE 3000
 
 # Ejecuta el servidor de producción
-CMD ["yarn", "start:prod"]
+CMD ["sh", "-c", "yarn prisma migrate deploy && node prisma/seeds/seed.cjs && yarn start:prod"]

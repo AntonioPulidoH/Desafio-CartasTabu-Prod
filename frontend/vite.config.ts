@@ -4,4 +4,9 @@ import react from '@vitejs/plugin-react-swc'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  server: {
+    allowedHosts: [
+      '604eb9e3-6b11-4837-b190.10e38dd8350b.cifpvdg.isard.online'
+    ]
+  }
 })
