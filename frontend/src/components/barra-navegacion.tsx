@@ -1,4 +1,4 @@
-import { GraduationCap, LogOut, User } from "lucide-react";
+import { LogOut, User } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
 export function BarraNavegacion() {

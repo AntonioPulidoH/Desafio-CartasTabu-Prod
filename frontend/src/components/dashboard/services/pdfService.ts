@@ -109,7 +109,6 @@ const renderFront = (word: string, forbiddenWords: string[]) => {
 
 //Carta trasera 
 const renderBack = (
-  collectionName: string,
   familyName: string,
   backImageUrl?: string
 ) => `
