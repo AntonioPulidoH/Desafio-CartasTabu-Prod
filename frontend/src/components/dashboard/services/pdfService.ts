@@ -278,7 +278,7 @@ export const generateCollectionPDF = async (
     container.innerHTML = `
       ${gi === 0 ? sharedStyles : ""}
       ${hCutLine()}
-      ${renderCardGroup(c1, c2, c3, c4, collection.name, familyName, backImageUrl)}
+      ${renderCardGroup(c1, c2, c3, c4, familyName, backImageUrl)}
       ${hCutLine()}
     `;
 
