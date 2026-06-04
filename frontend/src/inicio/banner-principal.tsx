@@ -7,7 +7,7 @@ export function BannerPrincipal() {
       <div className="banner-contenido position-relative z-2 text-center mx-auto px-3 mt-5">
 
 
-          <img src="public/logo.png" alt="Desbloquéalo" className="img-fluid rounded" />
+          <img src="/logo.png" alt="Desbloquéalo" className="img-fluid rounded" />
    
 
         <p className="banner-descripcion mt-3 fs-5 mx-auto" style={{maxWidth: '600px', lineHeight: 1.7, color: 'var(--color-texto-suave)'}}>
