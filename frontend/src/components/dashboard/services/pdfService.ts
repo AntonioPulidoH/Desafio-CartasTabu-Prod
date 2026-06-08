@@ -95,13 +95,12 @@ const renderFront = (word: string, forbiddenWords: string[]) => {
         ">${word}</span>
       </div>
       <div style="flex:1;padding:4px 16px 8px;display:flex;flex-direction:column;justify-content:center;gap:2px;overflow:hidden;">
-        ${forbiddenWords.map((w, i) => `
-          <div style="
-            font-family:'Open Sans',sans-serif;font-size:${forbFontSize};font-weight:700;
-            color:${C.primario};text-align:center;padding:${forbPaddingV} 10px;
-            border-bottom:${i < forbiddenWords.length - 1 ? `1px solid ${C.bordeLight}` : "none"};
-          ">${w}</div>
-        `).join("")}
+${forbiddenWords.map((w) => `
+  <div style="
+    font-family:'Open Sans',sans-serif;font-size:${forbFontSize};font-weight:700;
+    color:${C.primario};text-align:center;padding:${forbPaddingV} 10px;
+  ">${w}</div>
+`).join("")}
       </div>
     </div>
   `;
@@ -120,30 +119,88 @@ const renderBack = (
     flex-shrink:0;position:relative;
   ">
     <div style="position:absolute;inset:9px;border:1px solid rgba(255,255,255,0.10);border-radius:9px;pointer-events:none;"></div>
-    <div style="position:relative;z-index:1;flex:1;display:flex;flex-direction:column;align-items:center;padding:28px 18px;gap:0;">
-          <img
-        src="/logo.png"
-        alt="Desbloquealo"
-        style="max-height:44px;max-width:150px;object-fit:contain;display:block;"
-      />
+
+    <div style="
+      position:relative;
+      z-index:1;
+      height:100%;
+      display:flex;
+      flex-direction:column;
+      padding:22px 18px 14px;
+    ">
+<div style="
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-shrink:0;
+  min-height:150px;
+  padding:8px 0;
+">
+  <img
+    src="/logo-v5.png?=v2"
+    alt="Desbloquéalo"
+    style="
+      max-height:140px;
+      max-width:340px;
+      width:auto;
+      height:auto;
+      object-fit:contain;
+      display:block;
+    "
+  />
+</div>
+
       <div style="
-        background:${C.acento};color:#ffffff;font-family:'Open Sans',sans-serif;
-        font-size:28px;font-weight:800;text-align:center;letter-spacing:2.2px;
-        text-transform:uppercase;padding:6px 20px;border-radius:20px;flex-shrink:0;
-        text-shadow:0 1px 2px rgba(0,0,0,0.20);box-shadow:0 2px 8px rgba(232,64,42,0.35);
-      ">${familyName}</div>
-      <div style="flex:1;width:100%;display:flex;align-items:center;justify-content:center;padding:6px 8px;min-height:0;">
+        flex:1;
+        width:100%;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        padding:8px 8px 0;
+      ">
+        <div style="
+          background:${C.acento};
+          color:#ffffff;
+          font-family:'Open Sans',sans-serif;
+          font-size:24px;
+          font-weight:800;
+          text-align:center;
+          letter-spacing:1.4px;
+          text-transform:uppercase;
+          padding:10px 18px;
+          border-radius:20px;
+          text-shadow:0 1px 2px rgba(0,0,0,0.20);
+          box-shadow:0 2px 8px rgba(232,64,42,0.35);
+          width:88%;
+          min-height:58px;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          line-height:1.15;
+        ">${familyName}</div>
+      </div>
+
+      <div style="
+        height:240px;
+        width:100%;
+        display:flex;
+        align-items:flex-end;
+        justify-content:center;
+        padding:0 8px 4px;
+        flex-shrink:0;
+      ">
         ${backImageUrl ? `
           <div style="
-            width:100%;height:100%;max-height:220px;
-            background:url('${backImageUrl}') center/contain no-repeat;
-            opacity:0.80;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.30));
+            width:100%;
+            height:100%;
+            background:url('${backImageUrl}') center bottom/contain no-repeat;
+            opacity:0.85;
+            filter:drop-shadow(0 2px 8px rgba(0,0,0,0.30));
           "></div>
         ` : ``}
       </div>
     </div>
   </div>
-
 `;
 
 

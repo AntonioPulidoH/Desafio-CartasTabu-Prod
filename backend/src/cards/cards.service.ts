@@ -55,7 +55,7 @@ export class CardsService {
   }
 
   private getRank(level: number) {
-    if(level >= 50) return 'Maestro del Tabú'
+    if(level >= 50) return 'Maestro de Desbloquéalo'
     if(level >= 30) return 'Gran Maestro'
     if(level >= 20) return 'Maestro'
     if(level >= 16) return 'Experto'

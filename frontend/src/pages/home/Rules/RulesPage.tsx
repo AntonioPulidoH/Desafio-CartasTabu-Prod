@@ -89,9 +89,9 @@ export default function Rules() {
 
                 <div className="text-center mt-5">
                     <a
-                        href="/DESBLOQUEALO-Reglas del juego.png"
+                        href="/DESBLOQUEALO-Reglas del juego.pdf"
                         className="boton-acento fs-4 px-5 py-4 fw-bold shadow-lg d-inline-block text-decoration-none"
-                        download="Desbloquealo - REGLAS DEL JUEGO.png"
+                        download="Desbloquealo - REGLAS DEL JUEGO.pdf"
                     >
                         📥 Descargar Reglas (PDF)
                     </a>

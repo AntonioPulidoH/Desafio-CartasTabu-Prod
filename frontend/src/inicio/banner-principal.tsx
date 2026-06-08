@@ -7,11 +7,11 @@ export function BannerPrincipal() {
       <div className="banner-contenido position-relative z-2 text-center mx-auto px-3 mt-5">
 
 
-          <img src="/logo.png" alt="Desbloquéalo" className="img-fluid rounded" />
+          <img src="/logo-v5.png?=v2" alt="DESBLOQUÉALO" className="img-fluid rounded" />
    
 
         <p className="banner-descripcion mt-3 fs-5 mx-auto" style={{maxWidth: '600px', lineHeight: 1.7, color: 'var(--color-texto-suave)'}}>
-          Crea, personaliza e imprime tarjetas del juego del Tabú adaptadas a
+          Crea, personaliza e imprime tarjetas del juego DESBLOQUÉALO adaptadas a
           cualquier temática. Haz que aprender
           sea un juego.
         </p>

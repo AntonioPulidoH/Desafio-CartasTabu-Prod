@@ -43,16 +43,29 @@ export default function TabuDashboard() {
     ? (collections.find((c) => c.id === selectedId) ?? null)
     : null;
 
-  const fetchCollections = async () => {
-    try {
-      const data = await themeService.getAll();
-      setCollections(data);
-    } catch (err) {
-      console.error("Error al cargar las temáticas", err);
-    } finally {
-      setLoadingCollections(false);
-    }
-  };
+const fetchCollections = async () => {
+  try {
+    const data: Collection[] = await themeService.getAll();
+
+    setCollections((prev: Collection[]) =>
+      data.map((col: Collection) => {
+        const previous = prev.find((p) => p.id === col.id);
+
+        return {
+          ...col,
+          cards:
+            col.cards && col.cards.length > 0
+              ? col.cards
+              : previous?.cards ?? col.cards ?? [],
+        };
+      })
+    );
+  } catch (err) {
+    console.error("Error al cargar las temáticas", err);
+  } finally {
+    setLoadingCollections(false);
+  }
+};
 
   const filtered = collections.filter((c) => {
     const matchSearch =
@@ -93,8 +106,18 @@ export default function TabuDashboard() {
     setCollections(collections.filter((c) => c.id !== id));
   };
 
-  const updateFromDetail = (updated: Collection) =>
-    setCollections(collections.map((c) => (c.id === updated.id ? updated : c)));
+const updateFromDetail = (updated: Collection) =>
+  setCollections((prev: Collection[]) =>
+    prev.map((c) =>
+      c.id === updated.id
+        ? {
+            ...c,
+            ...updated,
+            cards: updated.cards ?? c.cards ?? [],
+          }
+        : c
+    )
+  );
 
   const handleSaveAiCollection = async (generatedData: any) => {
     try {
@@ -168,7 +191,7 @@ export default function TabuDashboard() {
               <div>
                 <h1 className="mb-1">Colecciones</h1>
                 <p className="td-suave mb-0">
-                  Gestiona tus temas y tarjetas del juego Tabú
+                  Gestiona tus temas y tarjetas del juego DESBLOQUÉALO
                 </p>
               </div>
               {canCreate && (

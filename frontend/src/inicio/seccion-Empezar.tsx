@@ -14,7 +14,7 @@ export function SeccionEmpezar() {
             </h2>
             <p className="empezar-descripcion mb-0" style={{maxWidth: '480px', color: 'var(--color-texto-suave)'}}>
               Registrate gratis y accede a cientos de temas. Personaliza,
-              genera e imprime tus propios mazos de Tabú en minutos.
+              genera e imprime tus propios mazos de Desbloqualó en minutos.
             </p>
             <button type="button" className="btn boton-acento d-inline-flex align-items-center gap-2 fs-5 fw-bold" style={{padding: '16px 36px'}}>
               Empezar ahora

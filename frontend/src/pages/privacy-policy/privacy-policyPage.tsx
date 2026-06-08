@@ -15,9 +15,9 @@ export default function PrivacyPolicyPage() {
                 <section className="privacy-card">
                     <h2>1. Responsable del tratamiento</h2>
                     <p>
-                        El responsable del tratamiento de los datos es Tabú-Studio,
+                        El responsable del tratamiento de los datos es Desbloqueélo,
                         plataforma destinada a la creación y gestión de tarjetas del juego
-                        Tabú.
+                        DESBLOQUÉALO.
                     </p>
                 </section>
 
@@ -33,7 +33,7 @@ export default function PrivacyPolicyPage() {
                     </ul>
 
                     <p className="privacy-highlight">
-                        Tabú-Studio no almacena direcciones de correo electrónico.
+                        DESBLOQUÉALO no almacena direcciones de correo electrónico.
                     </p>
                 </section>
 
@@ -86,7 +86,7 @@ export default function PrivacyPolicyPage() {
                     <h2>7. Cookies y almacenamiento local</h2>
 
                     <p>
-                        Tabú-Studio puede utilizar almacenamiento local del navegador para
+                        DESBLOQUÉALO puede utilizar almacenamiento local del navegador para
                         mantener la sesión iniciada y mejorar el funcionamiento de la
                         plataforma.
                     </p>
@@ -106,7 +106,7 @@ export default function PrivacyPolicyPage() {
 
                     <p>
                         Si tienes dudas relacionadas con privacidad o protección de datos,
-                        puedes contactar con el equipo responsable de Tabú-Studio.
+                        puedes contactar con el equipo responsable de DESBLOQUÉALO.
                     </p>
                 </section>
             </main>

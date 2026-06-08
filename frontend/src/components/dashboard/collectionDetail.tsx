@@ -62,15 +62,14 @@ export function CollectionDetail({
   "/fondo9.png"
 ];
 
-  const fetchCards = async () => {
-    try {
-      const cards = await cardService.getByTheme(Number(collection.id));
-      onUpdate({ ...collection, cards });
-    } catch (error) {
-      console.error("Error cargando tarjetas", error);
-    }
-  };
-
+const fetchCards = async (baseCollection = collection) => {
+  try {
+    const cards = await cardService.getByTheme(Number(baseCollection.id));
+    onUpdate({ ...baseCollection, cards });
+  } catch (error) {
+    console.error("Error cargando tarjetas", error);
+  }
+};
   // Función para guardar las cartas
   const handleSaveAiCards = async (generatedCards: any[]) => {
     try {
@@ -136,8 +135,7 @@ export function CollectionDetail({
 const handleSelectImage = async (imageUrl: string) => {
   try {
     const token = sessionStorage.getItem("access_token");
-    const API_URL =
-      import.meta.env.VITE_LOCAL_API_URL || import.meta.env.VITE_API_URL;
+    const API_URL = import.meta.env.VITE_LOCAL_API_URL || import.meta.env.VITE_API_URL;
 
     const res = await axios.patch(
       `${API_URL}/themes/${collection.id}`,
@@ -145,19 +143,25 @@ const handleSelectImage = async (imageUrl: string) => {
       { headers: { Authorization: `Bearer ${token}` } }
     );
 
-    onUpdate({
-  ...collection,
-  ...res.data,
-});
-    setShowImageSelector(false);
+    const updatedCollection = {
+      ...collection,
+      ...res.data,
+      backImageUrl: imageUrl,
+      cards: collection.cards ?? [],
+    };
 
+    onUpdate(updatedCollection);
+
+    // Reforzamos la recarga real de tarjetas tras cambiar la imagen
+    await fetchCards(updatedCollection);
+
+    setShowImageSelector(false);
     toast.success("Fondo actualizado");
   } catch (error) {
     console.error(error);
     toast.error("Error al guardar fondo");
   }
 };
-
   return (
     <div>
       <button className="btn td-btn-sec px-3 py-2 mb-4" onClick={onBack}>

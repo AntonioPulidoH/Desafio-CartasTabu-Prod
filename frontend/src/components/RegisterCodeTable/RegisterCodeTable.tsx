@@ -48,14 +48,14 @@ export const RegisterCodeTable = () => {
                         onClick={handleGenerateCode}
                         disabled={loading || !selectedRoleId}
                     >
-                        {loading ? (
-                            <>
-                                <Loader size={18} className="spinner-border spinner-border-sm" />
-                                Generando...
-                            </>
-                        ) : (
-                            "Generar Código"
-                        )}
+{loading ? (
+  <>
+    <Loader size={18} className="spinner-border spinner-border-sm" />
+    Generando...
+  </>
+) : (
+  "Generar Código"
+)}
                     </button>
                 </div>
             </div>

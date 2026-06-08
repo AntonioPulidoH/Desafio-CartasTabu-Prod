@@ -70,7 +70,7 @@ export function CarruselCaracteristicas() {
           </h2>
           <p className="seccion-subtitulo mt-3 mx-auto" style={{maxWidth: '560px', color: 'var(--color-texto-suave)'}}>
             Una plataforma completa para crear, gestionar y compartir mazos de
-            Tabú adaptados a cualquier situación.
+            DESBLOQUÉALO adaptados a cualquier situación.
           </p>
         </div>
 

@@ -26,9 +26,9 @@ export function BarraNavegacion() {
           to="/"
         >
           <span className="icono-logo bg-white d-flex align-items-center justify-content-center">
-            <img src="/logo.png" alt="Logo de Desbloquéalo" className="w-100 h-100 object-fit-contain" />
+            <img src="/logo-v5.png?=v2" alt="Logo de DESBLOQUÉALO" className="w-100 h-100 object-fit-contain" />
           </span>
-          Desbloquéalo
+          DESBLOQUÉALO
         </Link>
 
         <button
