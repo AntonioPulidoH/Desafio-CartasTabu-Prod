@@ -25,7 +25,7 @@ export function CardForm({ initial, themeId, onSave, onCancel }: {
   const valid = word.trim().length > 0 && forbiddenWords.length === TABU_WORDS;
 
   const handleSave = async () => {
-    if (!valid) return;
+    if (!valid || loading) return;
     setLoading(true);
     try {
     await cardService.create({      

@@ -20,22 +20,30 @@ export function useWebSocket(handlers: WebSocketHandlers) {
   }, [handlers]);
 
   useEffect(() => {
-    socket.on("connect", () => console.log("Conectado:", socket.id));
-    socket.on("theme-created", () => handlersRef.current.onThemeCreated?.());
-    socket.on("theme-updated", () => handlersRef.current.onThemeUpdated?.());
-    socket.on("theme-deleted", () => handlersRef.current.onThemeDeleted?.());
-    socket.on("card-created",  () => handlersRef.current.onCardCreated?.());
-    socket.on("card-updated",  () => handlersRef.current.onCardUpdated?.());
-    socket.on("card-deleted",  () => handlersRef.current.onCardDeleted?.());
+    const handleConnect = () => console.log("Conectado:", socket.id);
+    const handleThemeCreated = () => handlersRef.current.onThemeCreated?.();
+    const handleThemeUpdated = () => handlersRef.current.onThemeUpdated?.();
+    const handleThemeDeleted = () => handlersRef.current.onThemeDeleted?.();
+    const handleCardCreated = () => handlersRef.current.onCardCreated?.();
+    const handleCardUpdated = () => handlersRef.current.onCardUpdated?.();
+    const handleCardDeleted = () => handlersRef.current.onCardDeleted?.();
+
+    socket.on("connect", handleConnect);
+    socket.on("theme-created", handleThemeCreated);
+    socket.on("theme-updated", handleThemeUpdated);
+    socket.on("theme-deleted", handleThemeDeleted);
+    socket.on("card-created", handleCardCreated);
+    socket.on("card-updated", handleCardUpdated);
+    socket.on("card-deleted", handleCardDeleted);
 
     return () => {
-      socket.off("connect");
-      socket.off("theme-created");
-      socket.off("theme-updated");
-      socket.off("theme-deleted");
-      socket.off("card-created");
-      socket.off("card-updated");
-      socket.off("card-deleted");
+      socket.off("connect", handleConnect);
+      socket.off("theme-created", handleThemeCreated);
+      socket.off("theme-updated", handleThemeUpdated);
+      socket.off("theme-deleted", handleThemeDeleted);
+      socket.off("card-created", handleCardCreated);
+      socket.off("card-updated", handleCardUpdated);
+      socket.off("card-deleted", handleCardDeleted);
     };
   }, []);
 }

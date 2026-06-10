@@ -133,15 +133,15 @@ const renderBack = (
   justify-content:center;
   align-items:center;
   flex-shrink:0;
-  min-height:150px;
-  padding:8px 0;
+  min-height:190px;
+  padding:18px 0 0;
 ">
   <img
     src="/logo-v5.png?=v2"
     alt="Desbloquéalo"
     style="
-      max-height:140px;
-      max-width:340px;
+      max-height:176px;
+      max-width:405px;
       width:auto;
       height:auto;
       object-fit:contain;
@@ -151,12 +151,12 @@ const renderBack = (
 </div>
 
       <div style="
-        flex:1;
+        flex:0 0 auto;
         width:100%;
         display:flex;
         align-items:center;
         justify-content:center;
-        padding:8px 8px 0;
+        padding:4px 8px 8px;
       ">
         <div style="
           background:${C.acento};
@@ -181,10 +181,10 @@ const renderBack = (
       </div>
 
       <div style="
-        height:240px;
+        height:300px;
         width:100%;
         display:flex;
-        align-items:flex-end;
+        align-items:flex-start;
         justify-content:center;
         padding:0 8px 4px;
         flex-shrink:0;

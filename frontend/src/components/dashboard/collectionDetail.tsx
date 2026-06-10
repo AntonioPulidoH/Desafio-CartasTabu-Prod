@@ -45,7 +45,7 @@ export function CollectionDetail({
 }: {
   collection: Collection;
   onBack: () => void;
-  onUpdate: (col: Collection) => void;
+  onUpdate: (col: Partial<Collection> & Pick<Collection, "id">) => void;
 }) {
   const [showCardForm, setShowCardForm] = useState(false);
   const [showAiModal, setShowAiModal] = useState(false);
@@ -65,7 +65,7 @@ export function CollectionDetail({
 const fetchCards = async (baseCollection = collection) => {
   try {
     const cards = await cardService.getByTheme(Number(baseCollection.id));
-    onUpdate({ ...baseCollection, cards });
+    onUpdate({ id: baseCollection.id, cards });
   } catch (error) {
     console.error("Error cargando tarjetas", error);
   }
@@ -118,7 +118,7 @@ const fetchCards = async (baseCollection = collection) => {
 
   const addCard = async () => {
     const cards = await cardService.getByTheme(Number(collection.id));
-    onUpdate({ ...collection, cards });
+    onUpdate({ id: collection.id, cards });
     setShowCardForm(false);
   };
 
@@ -126,7 +126,7 @@ const fetchCards = async (baseCollection = collection) => {
     try {
       await cardService.delete(id);
       const cards = await cardService.getByTheme(Number(collection.id));
-      onUpdate({ ...collection, cards });
+      onUpdate({ id: collection.id, cards });
     } catch (error) {
       console.error("Error eliminando tarjeta", error);
     }
@@ -144,10 +144,9 @@ const handleSelectImage = async (imageUrl: string) => {
     );
 
     const updatedCollection = {
-      ...collection,
+      id: collection.id,
       ...res.data,
       backImageUrl: imageUrl,
-      cards: collection.cards ?? [],
     };
 
     onUpdate(updatedCollection);

@@ -106,7 +106,7 @@ const fetchCollections = async () => {
     setCollections(collections.filter((c) => c.id !== id));
   };
 
-const updateFromDetail = (updated: Collection) =>
+const updateFromDetail = (updated: Partial<Collection> & Pick<Collection, "id">) =>
   setCollections((prev: Collection[]) =>
     prev.map((c) =>
       c.id === updated.id
