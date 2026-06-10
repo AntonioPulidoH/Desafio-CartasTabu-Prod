@@ -133,15 +133,15 @@ const renderBack = (
   justify-content:center;
   align-items:center;
   flex-shrink:0;
-  min-height:190px;
-  padding:18px 0 0;
+  height:333px;
+  padding:22px 0 6px;
 ">
   <img
     src="/logo-v5.png?=v2"
     alt="Desbloquéalo"
     style="
-      max-height:176px;
-      max-width:405px;
+      max-height:305px;
+      max-width:440px;
       width:auto;
       height:auto;
       object-fit:contain;
@@ -156,23 +156,23 @@ const renderBack = (
         display:flex;
         align-items:center;
         justify-content:center;
-        padding:4px 8px 8px;
+        padding:0 8px 10px;
       ">
         <div style="
           background:${C.acento};
           color:#ffffff;
           font-family:'Open Sans',sans-serif;
-          font-size:24px;
+          font-size:18px;
           font-weight:800;
           text-align:center;
-          letter-spacing:1.4px;
+          letter-spacing:1px;
           text-transform:uppercase;
-          padding:10px 18px;
-          border-radius:20px;
+          padding:7px 14px;
+          border-radius:16px;
           text-shadow:0 1px 2px rgba(0,0,0,0.20);
           box-shadow:0 2px 8px rgba(232,64,42,0.35);
-          width:88%;
-          min-height:58px;
+          width:76%;
+          min-height:42px;
           display:flex;
           align-items:center;
           justify-content:center;
@@ -181,12 +181,12 @@ const renderBack = (
       </div>
 
       <div style="
-        height:300px;
+        height:225px;
         width:100%;
         display:flex;
         align-items:flex-start;
         justify-content:center;
-        padding:0 8px 4px;
+        padding:0 48px 16px;
         flex-shrink:0;
       ">
         ${backImageUrl ? `
