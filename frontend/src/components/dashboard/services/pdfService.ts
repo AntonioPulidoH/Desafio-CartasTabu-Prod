@@ -22,15 +22,20 @@ const A2_W_PX   = 1587;
 const A2_H_PX   = 2245;
 const CARD_W_PX = 476;   
 const CARD_H_PX = 666;  
-const MARGIN_PX = 155;  
 const COL_SEP   = 20;  
 const HCUT_H    = 20;   
+const ROW_W_PX = (CARD_H_PX * 2) + COL_SEP;
+const ROW_H_PX = CARD_W_PX;
+const GROUP_H_PX = (ROW_H_PX * 4) + (HCUT_H * 3);
+const SHEET_CONTENT_H_PX = GROUP_H_PX + (HCUT_H * 2);
+const PAGE_MARGIN_X_PX = (A2_W_PX - ROW_W_PX) / 2;
+const PAGE_MARGIN_Y_PX = (A2_H_PX - SHEET_CONTENT_H_PX) / 2;
 
 
 const hCutLine = () => `
   <div style="
     display:flex;align-items:center;
-    padding:0 ${MARGIN_PX}px;
+    padding:0 ${PAGE_MARGIN_X_PX}px;
     height:${HCUT_H}px;flex-shrink:0;
   ">
     <div style="flex:1;border-top:1px dashed ${C.corteLine};"></div>
@@ -140,8 +145,8 @@ const renderBack = (
     src="/logo-v5.png?=v2"
     alt="Desbloquéalo"
     style="
-      max-height:305px;
-      max-width:440px;
+      max-height:300px;
+      max-width:432px;
       width:auto;
       height:auto;
       object-fit:contain;
@@ -247,7 +252,7 @@ const renderRow = (
   familyName: string,
   backImageUrl?: string,
 ) => `
-  <div style="display:flex;align-items:stretch;padding:0 ${MARGIN_PX}px;flex-shrink:0;">
+  <div style="display:flex;align-items:stretch;padding:0 ${PAGE_MARGIN_X_PX}px;flex-shrink:0;">
     ${renderSlot(cardA, isFront, familyName, backImageUrl)}
     ${vCutLine}
     ${renderSlot(cardB, isFront, familyName, backImageUrl)}
@@ -334,9 +339,16 @@ export const generateCollectionPDF = async (
 
     container.innerHTML = `
       ${gi === 0 ? sharedStyles : ""}
-      ${hCutLine()}
-      ${renderCardGroup(c1, c2, c3, c4, familyName, backImageUrl)}
-      ${hCutLine()}
+      <div style="
+        height:100%;
+        padding:${PAGE_MARGIN_Y_PX}px 0;
+        display:flex;
+        flex-direction:column;
+      ">
+        ${hCutLine()}
+        ${renderCardGroup(c1, c2, c3, c4, familyName, backImageUrl)}
+        ${hCutLine()}
+      </div>
     `;
 
     document.body.appendChild(container);
